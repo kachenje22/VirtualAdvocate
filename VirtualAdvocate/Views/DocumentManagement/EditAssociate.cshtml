@@ -1,0 +1,235 @@
+﻿@model VirtualAdvocate.Models.EditDocumentUploadModel
+@{
+    ViewBag.MenuActive = "Templates";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>EDIT TEMPLATES</h2>
+
+@using (Html.BeginForm("EditAssociate", "DocumentManagement", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Edit Your Template</legend>
+                        <div class="row">
+                          
+                            @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                            {
+                                <div class="alert alert-danger">
+                                    <a href="#" class="close" data-dismiss="alert">×</a>
+                                    <h4>Validation Errors</h4>
+                                    @Html.ValidationSummary()
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="select" class="col-lg-2 control-label">Category</label>
+                                    <div class="col-lg-4">
+                                        @Html.HiddenFor(m => m.TemplateId)
+                                        @Html.HiddenFor(m => m.TemplateName)
+                                        @Html.DropDownListFor(m => m.DocumentCategoryId, new SelectList(Model.getAllCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.DocumentCategoryId, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                    <label for="select" class="col-lg-2 control-label">Sub Category</label>
+                                    <div class="col-lg-4">
+                                        @Html.DropDownListFor(m => m.DocumentSubCategoryId, new SelectList(Model.getAllSubCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.DocumentSubCategoryId, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="select" class="col-lg-2 control-label">Sub Sub Category</label>
+                                    <div class="col-lg-4">
+                                        @Html.DropDownListFor(m => m.DocumentSubSubCategoryId, new SelectList(Model.getAllSubSubCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.DocumentSubSubCategoryId, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="bottom-spacing-25">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Title</label>
+                                    <div class="col-lg-8">
+                                        @Html.TextBoxFor(m => m.DocumentTitle, new { @class = "form-control", @placeholder = "Title" })
+                                        @Html.ValidationMessageFor(m => m.DocumentTitle, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Description</label>
+                                    <div class="col-lg-8">
+                                        @Html.TextBoxFor(m => m.DocumentDescription, new { @class = "form-control", @placeholder = "Description" })
+                                        @Html.ValidationMessageFor(m => m.DocumentDescription, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">File Upload</label>
+                                    <div class="col-lg-8">
+                                        @Html.TextBoxFor(m => m.TemplateFile, new { type = "file", @placeholder = "File Upoad", @accept = ".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" })
+                                        @Html.ValidationMessageFor(m => m.TemplateFile, string.Empty, new { @class = "text-danger" })
+                                        @*<input class="form-control" placeholder="File Upoad" type="file">*@
+                                        <span>
+                                            <a href="@Url.Content("~/TemplateFiles/"+Model.TemplateName)" target="_blank">
+                                                @Model.TemplateName
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Document Type</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.DocumentType, new { @class = "form-control", @placeholder = "Document Type" })
+                                    @Html.ValidationMessageFor(m => m.DocumentType, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Cost</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.Cost, "{0:0.00}", new { @class = "form-control", @placeholder = "Cost", @maxlength = 10 })
+                                    @Html.ValidationMessageFor(m => m.Cost, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Associate Document</label>
+                                <div class="col-lg-8">
+                                    @Html.ListBoxFor(m => m.AssociateTemplateIds, Model.AssociateTemplateList, new { multiple = "multiple", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Mandatory</label>
+                                <div class="col-lg-8">
+                                    @Html.CheckBoxFor(m => m.Mandatory, new { @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-default" value="Save Changes" id="btnSubmit" />
+            </div>
+            <div class="class=" col-md-2"">
+                <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("Templates","DocumentManagement")'">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#AssociateTemplateIds").val() != null) {
+                $("#Mandatory").prop("disabled", false);
+            }
+            $("#DocumentCategoryId").change(function ()
+            {
+          
+            if ($("#DocumentCategoryId").val() != "") {              
+                var options = {};
+                options.url = "@Url.Content("~/DocumentManagement/GetSubCategoryById")";
+                options.type = "POST";
+                options.data = JSON.stringify({ id: $("#DocumentCategoryId").val(),TemplateId:@Model.TemplateId });
+                options.dataType = "json";
+                options.contentType = "application/json";
+                options.success = function (result) {
+
+                    $("#DocumentSubCategoryId").empty();
+                    for (var i = 0; i < result.DocumentSubCategory.length; i++) {
+                        if (i == 0)
+                        {
+                            $("#DocumentSubCategoryId").append("<option value=''>- Please Select -</option>");
+                        }
+                        $("#DocumentSubCategoryId").append("<option value=" + result.DocumentSubCategory[i].ID + ">" + result.DocumentSubCategory[i].Name + "</option>");
+                    }
+                    if (result.DocumentSubCategory.length == 0) { $("#DocumentSubCategoryId").prop("disabled", true); } else { $("#DocumentSubCategoryId").prop("disabled", false); }
+
+                   // alert(result.TemplateList.length);
+                    for (var j = 0; j < result.TemplateList.length; j++) {
+                        if (j == 0) {
+                            $("#AssociateTemplateIds").empty();
+                            $("#AssociateTemplateIds").append("<option value=''>- Please Select -</option>");
+                            $("#AssociateTemplateIds").prop("disabled", false);
+                        }
+                        $("#AssociateTemplateIds").append("<option value=" + result.TemplateList[j].ID + ">" + result.TemplateList[j].Name + "</option>");
+                    }
+                    if (result.TemplateList.length == 0) {
+                        $("#AssociateTemplateIds").empty();
+                        $("#AssociateTemplateIds").prop("disabled", true);
+                        $("#AssociateTemplateIds").append("<option value=''>- Please Select -</option>");
+                    } else { $("#AssociateTemplateIds").prop("disabled", false); }
+
+                };
+                options.error = function () { alert("Error retrieving Document Sub Category!"); };
+                $.ajax(options);
+            }
+            else {
+                $("#DocumentSubCategoryId").empty();
+                $("#DocumentSubCategoryId").prop("disabled", true);
+            }
+        });
+
+        $("#DocumentSubCategoryId").change(function () {
+            if ($("#DocumentSubCategoryId").val() != "") {
+                var options = {};
+                options.url = "@Url.Content("~/DocumentManagement/GetSubSubCategoryById")";
+                options.type = "POST";
+                options.data = JSON.stringify({ id: $("#DocumentSubCategoryId").val() });
+                options.dataType = "json";
+                options.contentType = "application/json";
+                options.success = function (DocumentSubSubCategory) {
+                   // alert(DocumentSubSubCategory.length);
+                    $("#DocumentSubSubCategoryId").empty();
+                    if (DocumentSubSubCategory.length > 0)
+                    {
+                        for (var i = 0; i < DocumentSubSubCategory.length; i++) {
+                            if (i == 0) {
+                                $("#DocumentSubSubCategoryId").append("<option value=''>- Please Select -</option>");
+                            }
+                            $("#DocumentSubSubCategoryId").append("<option value=" + DocumentSubSubCategory[i].ID + ">" + DocumentSubSubCategory[i].Name + "</option>");
+                        }
+                        $("#DocumentSubSubCategoryId").prop("disabled", false);
+                    } else {
+                        $("#DocumentSubSubCategoryId").empty();
+                        $("#DocumentSubSubCategoryId").prop("disabled", true);
+                    }
+
+                };
+                options.error = function () { alert("Error retrieving Document Sub Category!"); };
+                $.ajax(options);
+            }
+            else {
+                $("#DocumentSubSubCategoryId").empty();
+                $("#DocumentSubSubCategoryId").prop("disabled", true);
+            }
+        });
+
+        $("#AssociateTemplateIds").click(function () {
+            // alert($("#AssociateTemplateIds").val());
+            if ($("#AssociateTemplateIds").val() != null) {
+                $("#Mandatory").prop("disabled", false);
+            } else {
+                $("#Mandatory").prop("disabled", true);
+            }
+        });
+    });
+
+    </script>
+
+}

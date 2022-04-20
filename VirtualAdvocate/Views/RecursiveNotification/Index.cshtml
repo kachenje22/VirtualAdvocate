@@ -1,0 +1,104 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.RecursiveNotificationModel>
+
+@{
+    ViewBag.MenuActive = "Recursive";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Recursive Notification Details</h2>
+<br>
+
+@*<div class="modal-body">
+        @Html.Partial("AddInsurance")
+    </div>*@
+<div>
+    @if (!(Model.Count() > 0))
+    {
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Create", "RecursiveNotification")'">Add Recursive Notification</button>
+    }
+    @*<button class="btn btn-default" id="partialDiv" data-toggle="modal" data-target="#mdlWarning">Add Insurance</button>*@
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RecurrsBeforeDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecurrsAfterDays)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecurrsBeforeDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecurrsAfterDays)
+            </td>
+            <td>
+            <td>
+                <a href="/RecursiveNotification/Edit/@item.Id"><i class="fa fa-edit" style="font-size:15px;"></i></a>
+                &nbsp;&nbsp;
+                <a><i id="Del-@item.Id" class="fa fa-trash" style="font-size:15px;"></i></a>
+            </td>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdlDelete" role="dialog">
+    <div class="modal-dialog" style="margin-top: 12%;">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Warning</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want delete this details?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnYes" class="btn btn-default" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<button type="button" id="btnShowModal" data-toggle="modal" data-target="#mdlDelete" style="display:none"></button>
+
+@Scripts.Render("~/bundles/jquery")
+<script>
+    $('.fa-trash').click(function () {
+        var id = $(this)[0].id.split('-')[1];
+        IdToDelete = id;
+
+        $('#btnShowModal').click();
+
+    });
+
+    $('#btnYes').click(function () {
+
+        $.ajax({
+            url: '/RecursiveNotification/Delete?id=' + IdToDelete,
+            type: 'GET',
+            contentType: 'json',
+            success: function (response) {
+                if (response == 200) {
+                    alert('Recursive notification detail has been succesfully deleted.');
+                    window.location.href = '/RecursiveNotification';
+                }
+            },
+            error: function () {
+                console.log('error');
+            }
+        });
+    });
+</script>

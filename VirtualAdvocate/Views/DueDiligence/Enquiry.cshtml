@@ -1,0 +1,271 @@
+﻿@model VirtualAdvocate.Models.DueDiligenceUserEnquiryViewModel
+@{
+    ViewBag.MenuActive = "DueDiligence";
+
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Enquiry Form</h2>
+
+
+@using (Html.BeginForm("Enquiry", "DueDiligence", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Select Enquiry Type", new { @class = "col-lg-6 control-label" })
+                        <div class="col-lg-6">
+                            @Html.DropDownListFor(m => m.EnquiryTypeId, new SelectList(Model.getAllEnquiryType, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EnquiryTypeId, string.Empty, new { @class = "text-danger" })                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well bs-component" id="company" style="display:none" >
+                <fieldset>
+                    <legend>Enquiry For Companies</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Company Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", @placeholder = "Company Name" })
+                                    @Html.ValidationMessageFor(m => m.CompanyName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Company Incorporation Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CompanyRegName, new { @class = "form-control", @placeholder = "Company Incorporation Number" })
+                                    @Html.ValidationMessageFor(m => m.CompanyRegName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                    </div>
+                
+            </div>
+        <div class="col-lg-12" id="business" style="display:none">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Enquiry For Business</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Business Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BusinessName, new { @class = "form-control", @placeholder = "Business Name" })
+                                    @Html.ValidationMessageFor(m => m.BusinessName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>  
+                            <div class="form-group">
+                                @Html.Label("Business Registration Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BusinessRegistrationNumber, new { @class = "form-control", @placeholder = "Business Registration Number" })
+                                    @Html.ValidationMessageFor(m => m.BusinessRegistrationNumber, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="col-lg-12" id="land" style="display:none">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Enquiry For Land</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Certificate Title Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CertificateTitleNo, new { @class = "form-control", @placeholder = "Certificate Title Number" })
+                                    @Html.ValidationMessageFor(m => m.CertificateTitleNo, string.Empty, new { @class = "text-danger" })
+                                  
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Plot Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.PlotNumber, new { @class = "form-control", @placeholder = "Plot Number" })
+                                    @Html.ValidationMessageFor(m => m.PlotNumber, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Block Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BlockNumber, new { @class = "form-control", @placeholder = "Block Number" })
+                                    @Html.ValidationMessageFor(m => m.BlockNumber, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Area", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @placeholder = "Area" })
+                                    @Html.ValidationMessageFor(m => m.Area, string.Empty, new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Municipality", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Municipality, new { @class = "form-control", @placeholder = "Municipality" })
+                                    @Html.ValidationMessageFor(m => m.Municipality, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Region", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Region, new { @class = "form-control", @placeholder = "Region" })
+                                    @Html.ValidationMessageFor(m => m.Region, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" id="Submit" class="btn btn-default" value="Submit" />
+                </div>
+                @*<div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("Index","DocumentManagement")'">Cancel</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#EnquiryTypeId").change(function () {
+
+            if ($("#EnquiryTypeId").val() == 1) {
+                $("#business").show();
+                $("#company").hide(); 
+                $("#land").hide();    
+            } else if ($("#EnquiryTypeId").val() == 2) {
+                $("#business").hide();
+                $("#company").show(); 
+                $("#land").hide();    
+            } else if ($("#EnquiryTypeId").val() == 3) {
+                $("#business").hide();
+                $("#company").hide(); 
+                $("#land").show();    
+            }
+            else {
+                $("#business").hide();
+                $("#company").hide();
+                $("#land").hide();
+            }
+        });
+
+        $("#Submit").click(function () {
+            var type = $("#EnquiryTypeId").val();
+            if (type == "1") {
+                $('input[name="BusinessName"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter business name"
+                    }
+                });
+
+                $('input[name="BusinessRegistrationNumber"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Business Registration Number"
+                    }
+                });
+            }
+
+            if (type == "2") {
+                $('input[name="CompanyName"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Company Name"
+                    }
+                });
+
+                $('input[name="CompanyRegName"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Company Incorporation Number"
+                    }
+                });
+            }
+
+            if (type == "3") {
+                $('input[name="CertificateTitleNo"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Certificate Title No"
+                    }
+                });
+
+                $('input[name="PlotNumber"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Plot Number"
+                    }
+                });
+
+                $('input[name="BlockNumber"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Block Number"
+                    }
+                });
+                $('input[name="Area"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Area"
+                    }
+                });
+                $('input[name="Municipality"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Municipality"
+                    }
+                });
+                $('input[name="Region"]').rules('add', {
+                    required: true,
+                    messages: {
+                        required: "Please enter Region"
+                    }
+                });
+            }
+
+
+        })
+
+        $(function () {
+
+            $('input[name="EnquiryTypeId"]').rules('add', {
+                required: true,
+                messages: {
+                    required: "Please Select The Enquiry Type"
+                }
+            });
+           
+            
+
+        });
+    });
+
+    </script>
+
+}

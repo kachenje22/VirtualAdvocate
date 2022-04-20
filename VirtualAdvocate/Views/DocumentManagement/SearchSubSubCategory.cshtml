@@ -1,0 +1,46 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.DocumentSubSubCategory>
+
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Sub Sub Category</h2>
+
+<div id="page-wrapper">
+    <!-- /.row -->
+    <div class="row">
+
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-6 col-xs-6">
+
+                <div class="row">
+                    <div class="dashboard-box text-center col-md-11 margin-bottom-15 col-xs-11">
+                        <div class="icon-box margin-bottom-10">
+                          @if (item.ImagePath != "" && item.ImagePath != null)
+                          {
+                                <img src="@item.ImagePath" alt="image" height="42" width="33" />
+                            }
+                            else
+                            {
+                                <i class="fa fa-user fa-3x fa-gray-color"></i>
+                            }
+
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <a href="@Url.Action("FillTemplateAction", "DocumentManagement",new { orgId=0,categoryId=0,subCategoryID=@item.DocumentSubCategoryId, subsubCategoryID = @item.DocumentSubSubCategoryId})" title="View Details">@item.SubDocumentCategoryName </a>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+          
+        }
+
+
+    </div>
+</div>
+

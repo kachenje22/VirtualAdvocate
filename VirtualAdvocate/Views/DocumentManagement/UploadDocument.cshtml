@@ -1,0 +1,361 @@
+﻿@model VirtualAdvocate.Models.DocumentUploadModel
+@{
+    ViewBag.MenuActive = "Templates";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+<style>
+    scrollit {
+        overflow: scroll;
+        height: 100px;
+    }
+</style>
+<h2>Upload Document</h2>
+<link rel="stylesheet" href="~/Content/chosen.css">
+@using (Html.BeginForm("UploadDocument", "DocumentManagement", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Upload Your Template</legend>
+                    <div class="row">
+
+                        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                        {
+                            <div class="alert alert-danger">
+                                <a href="#" class="close" data-dismiss="alert">×</a>
+                                <h4>Validation Errors</h4>
+                                @Html.ValidationSummary()
+                            </div>
+                        }
+                        @Html.ValidationMessage("PageError")
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Category</label>
+                                <div class="col-lg-4">
+                                    @Html.DropDownListFor(m => m.DocumentCategoryId, new SelectList(Model.getAllCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DocumentCategoryId, string.Empty, new { @class = "text-danger" })
+                                </div>
+                                <label for="select" class="col-lg-2 control-label">Sub Category</label>
+                                <div class="col-lg-4">
+                                    @Html.DropDownListFor(m => m.DocumentSubCategoryId, new SelectList(Model.getAllSubCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DocumentSubCategoryId, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Sub Sub Category</label>
+                                <div class="col-lg-4">
+                                    @Html.DropDownListFor(m => m.DocumentSubSubCategoryId, new SelectList(Model.getAllSubSubCategory, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DocumentSubSubCategoryId, string.Empty, new { @class = "text-danger" })
+                                </div>
+
+                                <label for="select" class="col-lg-2 control-label">Department</label>
+                                <div class="col-lg-4">
+                                    @Html.DropDownListFor(m => m.DepartmentID, new SelectList(Model.getDepartmentlist, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DepartmentID, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="bottom-spacing-25">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Title</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.DocumentTitle, new { @class = "form-control", @placeholder = "Title" })
+                                    @Html.ValidationMessageFor(m => m.DocumentTitle, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Description</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.DocumentDescription, new { @class = "form-control", @placeholder = "Description" })
+                                    @Html.ValidationMessageFor(m => m.DocumentDescription, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">File Upload</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.TemplateFile, new { type = "file", @placeholder = "File Upoad" })
+                                    @Html.ValidationMessageFor(m => m.TemplateFile, string.Empty, new { @class = "text-danger" })
+                                    @*<input class="form-control" placeholder="File Upoad" type="file">*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Document Type</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.DocumentType, new { @class = "form-control", @placeholder = "Document Type" })
+                                    @Html.ValidationMessageFor(m => m.DocumentType, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Cost</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.Cost, new { @class = "form-control", @placeholder = "Cost", @maxlength = 10 })
+                                    @Html.ValidationMessageFor(m => m.Cost, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                           
+                        </div>
+
+                        
+                            
+                        </div>
+                    <hr class="bottom-spacing-25">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="divPartialView"></div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Upload" id="btnSubmit" />
+                </div>
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("Templates","DocumentManagement")'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/chosen.jquery.js" type="text/javascript"></script>
+    <script src="~/Scripts/chosen.order.jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+           
+           disableDropdownList();
+
+
+           function associateDocument()
+           {
+               $.ajax({
+                   url: '@Url.Action("GetPartialview", "DocumentManagement")',
+                   data: {
+                       id: $("#DocumentCategoryId").val(), TemplateId: 0, /* add other additional parameters */
+                   
+                       DepartmentID: $("#DepartmentID").val()
+                   },
+                   cache: false,
+                   type: "POST",
+                   dataType: "html",
+                   success: function (data, textStatus, XMLHttpRequest) {
+                       SetData(data);
+                   }
+               });
+           }
+            function disableDropdownList()
+            {
+                if ($("#AssociateTemplateIds").val() != null) {
+                    $("#Mandatory").prop("disabled", false);
+                } else {
+                    $("#AssociateTemplateIds").prop("disabled", true);
+                }
+                if ($("#DocumentSubCategoryId").val() != null) {
+                    $("#DocumentSubCategoryId").prop("disabled", false);
+                } else {
+                    $("#DocumentSubCategoryId").prop("disabled", true);
+                }
+                if ($("#DocumentSubSubCategoryId").val() != null) {
+                    $("#DocumentSubSubCategoryId").prop("disabled", false);
+                } else {
+                    $("#DocumentSubSubCategoryId").prop("disabled", true);
+                }
+
+            }
+
+            function validate(e) {
+            debugger;
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            }
+
+            $("#DepartmentID").change(function () {
+                debugger;
+                associateDocument();
+            });
+
+            $("#DocumentCategoryId").change(function () {
+                associateDocument();
+            if ($("#DocumentCategoryId").val() != "") {
+
+                $.ajax({
+                    url: '@Url.Action("GetPartialview", "DocumentManagement")',
+                    data: { id: $("#DocumentCategoryId").val(), TemplateId: 0 /* add other additional parameters */, DepartmentID: $("#DepartmentID").val() },
+                    cache: false,
+                    type: "POST",
+                    dataType: "html",
+                    success: function (data, textStatus, XMLHttpRequest) {
+                        SetData(data);
+                    }
+                    });
+
+                var options = {};
+                options.url = "@Url.Content("~/DocumentManagement/GetSubCategoryById")";
+                options.type = "POST";
+                options.data = JSON.stringify({ id: $("#DocumentCategoryId").val(), TemplateId: 0 });
+                options.dataType = "json";
+                options.contentType = "application/json";
+                options.success = function (result) {
+
+                    $("#DocumentSubCategoryId").empty();
+                    for (var i = 0; i < result.DocumentSubCategory.length; i++) {
+                        if (i == 0)
+                        {
+                            $("#DocumentSubCategoryId").append("<option value=''>- Please Select -</option>");
+                        }
+                        $("#DocumentSubCategoryId").append("<option value=" + result.DocumentSubCategory[i].ID + ">" + result.DocumentSubCategory[i].Name + "</option>");
+                    }
+                    if (result.DocumentSubCategory.length == 0)
+                    {
+                        $("#DocumentSubCategoryId").prop("disabled", true);
+
+                        $("#DocumentSubSubCategoryId").empty();
+                        $("#DocumentSubSubCategoryId").prop("disabled", true);
+                    }
+                    else {
+                        $("#DocumentSubCategoryId").prop("disabled", false);
+                    }
+
+                   // alert(result.TemplateList.length);
+                    for (var j = 0; j < result.TemplateList.length; j++) {
+                        if (j == 0) {
+                            $("#AssociateTemplateIds").empty();
+                            //$("#AssociateTemplateId").append("<option value=''>- Please Select -</option>");
+                            $("#AssociateTemplateIds").prop("disabled", false);
+                        }
+                        $("#AssociateTemplateIds").append("<option value=" + result.TemplateList[j].ID + ">" + result.TemplateList[j].Name + "</option>");
+                        $('ul.chosen-results').append('<li class="active-result">' + result.TemplateList[j].Name + '</li>');
+                    }
+                    if (result.TemplateList.length == 0) {
+                        $("#AssociateTemplateIds").empty();
+                        $("#AssociateTemplateIds").prop("disabled", true);
+                        $('.chosen-select').trigger('chosen:updated');
+                    }
+                    else
+                    {
+
+                        $("#AssociateTemplateIds").prop("disabled", false);
+                        $('.chosen-select').trigger('chosen:updated');
+                    }
+
+                };
+                options.error = function () { alert("Error retrieving Document Sub Category!"); };
+                $.ajax(options);
+            }
+            else {
+                $("#DocumentSubCategoryId").empty();
+                $("#DocumentSubCategoryId").prop("disabled", true);
+            }
+        });
+
+        $("#DocumentSubCategoryId").change(function () {
+            if ($("#DocumentSubCategoryId").val() != "") {
+                //alert($("#DocumentSubCategoryId").val());
+                var options = {};
+                options.url = "@Url.Content("~/DocumentManagement/GetSubSubCategoryById")";
+                options.type = "POST";
+                options.data = JSON.stringify({ id: $("#DocumentSubCategoryId").val() });
+                options.dataType = "json";
+                options.contentType = "application/json";
+                options.success = function (DocumentSubSubCategory) {
+                   // alert(DocumentSubSubCategory.length);
+                    $("#DocumentSubSubCategoryId").empty();
+                    if (DocumentSubSubCategory.length > 0)
+                    {
+                        for (var i = 0; i < DocumentSubSubCategory.length; i++) {
+                            if (i == 0) {
+                                $("#DocumentSubSubCategoryId").append("<option value=''>- Please Select -</option>");
+                            }
+                            $("#DocumentSubSubCategoryId").append("<option value=" + DocumentSubSubCategory[i].ID + ">" + DocumentSubSubCategory[i].Name + "</option>");
+                        }
+                        $("#DocumentSubSubCategoryId").prop("disabled", false);
+                    } else {
+                        $("#DocumentSubSubCategoryId").empty();
+                        $("#DocumentSubSubCategoryId").prop("disabled", true);
+                    }
+
+                };
+                options.error = function () { alert("Error retrieving Document Sub Category!"); };
+                $.ajax(options);
+            }
+            else {
+                $("#DocumentSubSubCategoryId").empty();
+                $("#DocumentSubSubCategoryId").prop("disabled", true);
+            }
+        });
+
+        $("#AssociateTemplateIds").click(function () {
+            if ($("#AssociateTemplateIds").val() != null) {
+                $("#Mandatory").prop("disabled", false);
+            } else {
+                $("#Mandatory").prop("disabled", true);
+            }
+        });
+
+
+    });
+
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+        $(".chosen-select").chosen().change(function () {
+
+            if ($("#AssociateTemplateIds").val() != null) {
+                $("#Mandatory").prop("disabled", false);
+            } else {
+                $("#Mandatory").prop("disabled", true);
+            }
+            var selection = $('#AssociateTemplateIds').getSelectionOrder();
+            //alert(selection);
+           // $('#AssociateTemplateIds').setSelectionOrder(selection, false);
+            $('#OrderIds').val(selection);          
+        });
+
+        function SetData(data) {
+            debugger;
+            $("#divPartialView").html(data); // HTML DOM replace
+        }
+
+    </script>
+
+}

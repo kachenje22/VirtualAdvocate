@@ -1,0 +1,129 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.DueDiligenceEnquiryListViewModel>
+@{
+    ViewBag.MenuActive = "DueDiligenceList";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+    var Access = false;
+    if(Convert.ToInt32(Session["RoleId"])==7)
+    {
+        Access = true;
+    }
+}
+
+<h2>Enquiry List</h2>
+
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<div class="row">   
+    <div class="col-md-9">
+        <div class="navbar-form navbar-right" role="search">
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-striped table-hover dataTable table-custom-border" id="tblTemplateList">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayName("Inquiry Type")</th>
+            <th>@Html.DisplayName("Created Date")</th>       
+            @if (!Access)
+            {
+            <th>@Html.DisplayName("Actions")</th>
+            <th>@Html.DisplayName("Attach Report")</th>
+            }           
+            <th>Report</th>
+            <th>Invoice</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 0;}
+        @foreach (var item in Model)
+        {
+            rowNo = rowNo + 1;
+
+            var msg = "";
+            var msg1 = "";
+            var msg2 = "";
+            
+            if (item.ReplyStatus==true)
+            {
+                msg = "View";
+            }
+            else
+            {
+                msg = "Reply";
+            }
+            if(item.ReportDocument == null)
+            {
+                msg1 = "Attach";
+                msg2 = "";
+            }
+            else
+            {
+                msg1 = "View/Edit";
+                msg2 = "Download";
+            }
+           
+            <tr>
+                <td>@rowNo</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnquiryType)                
+                </td>
+                <td>                    
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>   
+                @if (!Access)
+                {
+                    <td>
+                        <a href="@Url.Action("InquiryReply","DueDiligence",new { id = item.EnquiryId })" title="@msg">@msg</a>&nbsp;
+                    </td>
+                    <td>
+                        <a href="@Url.Action("AttachReport","DueDiligence",new { id = item.EnquiryId })" title="@msg1">@msg1</a>&nbsp;
+                    </td>
+                }
+                
+                    <td> 
+
+                        @if (item.ReportDocument != null)
+                        {
+                            <a href="~/DueReports/@item.ReportDocument" target="_blank" title="Download"><i class="fa fa-download"></i>Download</a>
+                        }
+                        else
+                        {
+                            <span>NA</span>
+                        }
+                                            
+                    </td>
+
+                    <td>                      
+                        <a href="~/DueInvoiceFiles/@item.InvoiceDocument" target="_blank" title="Download"><i class="fa fa-download"></i>Download</a>                      
+                    </td>
+               
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+@section Scripts {  
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+    <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#tblTemplateList').DataTable({
+                        "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                        responsive: true
+                    });
+
+                });
+
+    </script>
+}

@@ -1,0 +1,221 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.OrganizationUserList>
+@{
+    if (Convert.ToInt32(Session["RoleId"]) == 1)
+    {
+        ViewBag.MenuActive = "Organization";
+    }
+    else
+    {
+        ViewBag.MenuActive = "UserManagement";
+    }
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>MANAGE ORGANIZATION USERS</h2>
+<hr />
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="col-md-3">
+@if (ViewBag.AccountType == 2)
+{
+                            <button type = "button" class="btn btn-default" onclick="location.href='@Url.Action("AddOrgUser", "UsersManagement", new { id = Convert.ToInt32(Session["OrgId"]) })'" onsubmit = "showProgress()"><i class="fa fa-user-plus"></i> Add User</button>
+}
+    </div>
+    <div class="col-md-9">
+
+
+        <div class="navbar-form navbar-right" style="color:dodgerblue;font-weight:200">
+            @if (ViewBag.Enable == "Active")
+            {
+                <input type="radio" name="editList" id="Active" value="Active" checked="checked" />
+                <label for="Active" class="radio-color">Active</label>
+
+                <input type="radio" name="editList" id="Inactive" value="Inactive" />
+                <label for="Inactive" class="radio-color">In active</label>
+            }
+            else
+            {
+                <input type="radio" name="editList" id="Active" value="Active" />
+                    <label for="Active" class="radio-color">Active</label>
+
+                    <input type="radio" name="editList" id="Inactive" value="Inactive" checked="checked" />
+                    <label for="Inactive" class="radio-color">In active</label>
+            }
+
+        </div >
+
+        <div class="navbar-form navbar-right" role="search">
+
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-striped table-hover dataTable table-custom-border" id="tblUserList">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.EmailAddress)</th>
+            <th>@Html.DisplayNameFor(model => model.RoleDescription)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 0;
+}
+        @foreach(var item in Model)
+{
+    rowNo = rowNo + 1;
+    var css = "";
+    var ustatus = "";
+    var msg = "";
+    if (item.IsEnabled == true && item.IsLocked == false)
+    {
+        css = "fa fa-user green-color";
+        ustatus = "Active";
+        msg = "deactivate";
+    }
+    else
+    {
+        css = "fa fa-user red-color";
+        ustatus = "Inactive";
+        msg = "activate";
+    }
+            <tr>
+                <td> @rowNo </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleDescription)
+            </td>
+            <td>
+                <a href="@Url.Action("EditProfile","UsersManagement",new { id = item.UserID })" title="Edit" class="fa fa-edit gray-color"></a>|
+
+                @*<a href="@Url.Action("ActivateProfile","UsersManagement",new { id = item.UserID })" onclick="return confirm('Are you sure you want to @msg this user?')" title="@ustatus" class="@css"></a>*@
+                <a href="#" name="Edit" title="@ustatus" class="@css" onclick="ChangeStatus(@item.UserID,'@msg')"></a>
+            </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+@section Scripts {
+   @Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+   
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+<script type="text/javascript">
+                $(document).ready(function () {
+                    $('#tblUserList').DataTable({
+                        "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                        responsive: true
+                    });
+                    //$('a.Edit').click(OnDeleteClick);
+                });
+
+                function ChangeStatus(id, msg) {
+                    if (msg == "activate") {
+                        $.ajax({
+
+                            url: '@Url.Content("~/UsersManagement/UserActivation")',
+                            type: 'POST',
+                            data: { id: id },
+                            dataType: 'json'
+                        }).success(function (result) {
+                            if (result=="true") {
+
+                                bootbox.confirm({
+                                    title: 'Company User Activate / Deactivate',
+                                    message: 'Are you sure you want to ' + msg + ' this user?',
+                                    buttons: {
+                                        'cancel': {
+                                            label: 'No',
+                                            className: 'btn-cancel pull-left'
+                                        },
+                                        'confirm': {
+                                            label: 'Yes',
+                                            className: 'btn-default pull-right'
+                                        }
+                                    },
+                                    callback: function (result) {
+                                        if (result) {
+                                            $.ajax({
+                                                url: '@Url.Content("~/UsersManagement/ActivateProfile")',
+                                                type: 'POST',
+                                                data: { id: id },
+                                                dataType: 'json',
+                                                success: function (result) { location.reload(); },
+                                                error: function () { alert('Error!'); }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else if (result == "Department") {
+                                alert("Please assign Department before activating User!");
+                            }
+                            else { alert("Please activate Organization before activating the user"); }
+
+
+                        });
+                    }
+                    else {
+                        bootbox.confirm({
+                            title: 'User Activate / Deactivate',
+                            message: 'Are you sure you want to ' + msg + ' this customer?',
+                            buttons: {
+                                'cancel': {
+                                    label: 'No',
+                                    className: 'btn-cancel pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Yes',
+                                    className: 'btn-default pull-right'
+                                }
+                            },
+                            callback: function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: '@Url.Content("~/UsersManagement/ActivateProfile")',
+                                        type: 'POST',
+                                        data: { id: id },
+                                        dataType: 'json',
+                                        success: function (result) { location.reload(); },
+                                        error: function () { alert('Error!'); }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+
+                }
+                 $("input[name='editList']").change(function () {
+
+                var enable = $("input[name='editList']:checked").val();
+
+                var url = '@Url.Content("~/UsersManagement/OrgUserList")'+'?enable='+ enable;
+
+                location.href =url;
+
+            });
+</script>
+
+}

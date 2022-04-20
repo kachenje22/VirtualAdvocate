@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Header Carousel -->
+<header id="myCarousel" class="carousel slide">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <div class="pattern-overlay banner_1">
+
+                <div id="hd-intro" class="overlay-container text-center bg_main_br" style="background-image: url(~/Images/banner.jpg); background-position: center; overflow: hidden">
+                    <section id="block-block-126" class="block block-block" style="background: image()">
+
+
+                        <div class="block-content">
+                            <div class="hd-opaque-6">
+                                <!--<h1>Automated Document Assembly Software</h1>-->
+                                <div class="col-sm-10 col-sm-offset-1 font_wt20 centered">
+                                    <p style="color:black" class="lead smooth-fonts">With advancements in technology, in particular Information and Communication Technology (ICT), we painstakingly sought to integrate, as we have successfully done, state of the art systems into documentation and produced a robust document assembly system -VIRTUAL ADVOCATE.</p>
+
+                                    <p><a class="play-button tb_modal" data-lity="" href="Video/VA_Video_Final.mp4"><img alt="c" src="~/Images/play-button.png"></a></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section> <!-- /.block -->
+                </div>
+                @*<div class="col-lg-10 col-lg-offset-1">
+
+                     <div class="vdwrapper">
+
+                         <video class="video" width="100%" height="auto"  poster="~/../Images/video_poster1.png" preload="none">
+
+                             <source src="VA_Video_Final.mp4" type="video/mp4">
+                             <source src="VA_Video_Final.webm" type="video/webm">
+                             <source src="VA_Video_Final.ogv" type="video/ogg">
+                         </video>
+                         <div class="vdplaypause"></div>
+                    </div>
+
+
+
+                     </div>*@
+
+                <!--  <div onclick="actualNextSibling(this).style.display='block'; this.style.display='none'">
+                     <img class="img-responsive" src="~/images/video_poster1.png" alt="splash" style="cursor: pointer">
+                 </div>
+                 <div style="display: none">
+
+                     <iframe class="ma_video_w" src="VA_Video_Final.mp4?rel=false" frameborder="0" allowfullscreen></iframe>
+                 </div>
+                <div class="col-lg-10 col-lg-offset-1">
+                     <video width="100%" height="auto" poster="~/images/video_poster1.png">
+                         <source src="VA_Video_Final.mp4" type="video/mp4">
+                         <source src="VA_Video_Final.ogg" type="video/ogg">
+                         Your browser does not support the video tag.
+                     </video>
+
+                 </div>
+
+
+
+                           <video class="player"  width="100%" height="100%"  controls="">
+                     <source src="VA_Video_Final.mp4" type="video/mp4">
+                 </video>-->
+            </div>
+
+        </div>
+        <div class="item">
+            <div class="fill" style=" background-image: url('/Content/Images/Revenue.png'); background-position: right bottom; background-size: 28% auto; background-repeat: no-repeat"></div>
+            <div class="carousel-caption">
+                <h2>SIGNIFICANTLY INCREASE YOUR REVENUE</h2>
+                <p class="hidden-xs">Significantly reduce the man-hours spent on drafting documents. Respond to a few generic questions and the system will instantly and seamlessly generates the chain of required document in an instant, ready to be signed.</p>
+                <a class="btn btn-lg btn-default btn-block" href="/UsersRegistration/Registration">CREATE ACCOUNT</a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="fill" style="background-image:url('~/../Images/img2.png'); background-position:right bottom; background-size:30% auto; background-repeat:no-repeat"></div>
+            <div class="carousel-caption">
+                <h2>BOOST YOUR PRODUCTIVITY BY MORE THAN 80%</h2>
+                <p class="hidden-xs">Boost your productivity by more than 80%. Virtual Advocate allows you to streamline your document assembly process, speed up your documents life cycle and reduce inefficiencies.</p>
+                <a class="btn btn-lg btn-default btn-block" href="/UsersRegistration/Registration">CREATE ACCOUNT</a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="fill" style="background-image:url('/Content/Images/Avoid typo.png'); background-position:right bottom; background-size:26% auto; background-repeat:no-repeat"></div>
+            <div class="carousel-caption">
+                <h2>AVOID TYPOS</h2>
+                <p class="hidden-xs">Avoid typing errors and increase efficiency by getting better documents out to the relevant parties quicker.</p>
+                <a class="btn btn-lg btn-default btn-block" href="/UsersRegistration/Registration">CREATE ACCOUNT</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev"> <span class="icon-prev"></span> </a> <a class="right carousel-control" href="#myCarousel" data-slide="next"> <span class="icon-next"></span> </a>
+</header>
+
+<!-- Page Content -->
+@*<div class="col-lg-12 hidden-xs">
+        <div class="col-sm-3 col-lg-2  col-sm-offset-0 col-lg-offset-2">
+            <div class="  color_bg_wit1">
+                <i class="flaticon-file "></i>
+                <h4>Drafting</h4>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-2  ">
+            <div class="  color_bg_wit1">
+                <i class="flaticon-eye-tracking"></i>
+                <h4>Tracking</h4>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-2  ">
+            <div class=" color_bg_wit1">
+                <i class="flaticon-interface-2  "></i>
+                <h4>Monitoring</h4>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-2  ">
+            <div class=" color_bg_wit1">
+                <i class="flaticon-interface-6"></i>
+                <h4>Secure</h4>
+            </div>
+        </div>
+
+    </div>*@
+
+<div class="container innerpage">
+
+    <!-- Marketing Icons Section -->
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="col-sm-4  hidden-xs">
+                <img class="img-responsive" src="~/Content/Images/Home Page.png" alt="">
+            </div>
+            <div class="col-sm-8 ">
+                <h4>  WHAT IS VIRTUAL ADVOCATE   </h4>
+                <p>
+
+                    Virtual Advocate is a Revolutionary online Documents Solution that allows users to transform their frequently used documents and forms into intelligent templates enabling superfast production of customized documents.
+                </p>
+
+                <p>It allows accelerated drafting, monitoring, tracking and management of all your documents safely through the web. </p>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.row -->
+<!-- Script to Activate the Carousel -->
+<script type="text/javascript">
+    function actualNextSibling(el) {    // needed to smooth out default firefox/IE behavior
+        do { el = el.nextSibling } while (el && el.nodeType !== 1);
+        return el;
+    }
+</script>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $('.carousel').carousel({
+
+
+            interval: 90000 //changes the speed
+        })
+
+
+        $('.video').parent().click(function () {
+            if ($(this).children(".video").get(0).paused) {
+                $(this).children(".video").get(0).play();
+                $(this).children(".vdplaypause").fadeOut();
+            } else {
+                $(this).children(".video").get(0).pause();
+                $(this).children(".vdplaypause").fadeIn();
+            }
+        });
+
+    </script>
+}

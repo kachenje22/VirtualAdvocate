@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.GetAssociatedDocuments_Result>
+
+
+<style>
+table#tblServiceList{border-collapse:collapse;}
+table#tblServiceList tr th{text-align:left; padding:10px;}
+table#tblServiceList tr td{padding:10px;}
+table#tblServiceList tr th:nth-child(1){width:5%;}
+table#tblServiceList tr th:nth-child(2){width:40%;}
+table#tblServiceList tr th:nth-child(3){width:20%;}
+table#tblServiceList tr th:nth-child(4){width:5%;}
+
+table#tblServiceList tr td:nth-child(1){width:5%;}
+table#tblServiceList tr td:nth-child(2){width:40%;}
+table#tblServiceList tr td:nth-child(3){width:20%;}
+table#tblServiceList tr td:nth-child(4){width:5%;}
+table#tblServiceList tbody{height:200px; overflow-y:scroll!important; display:block; width:100%; overflow:hidden;}
+</style>
+
+    @if (Model != null)
+    {
+        int i = 0;
+    <div >
+        <h4>Associated Documents</h4>
+                <table id="tblServiceList">
+                   
+                    <tbody>
+                        <tr>
+                            <th>@Html.DisplayName("Select")</th>
+                            <th>@Html.DisplayName("Template")</th>
+                            <th>@Html.DisplayName("Display Order")</th>
+                            <th>@Html.DisplayName("Mandatory")</th>
+
+                        </tr>
+
+                      
+                           
+
+                            @foreach (var item in Model)
+                            {
+
+
+                                <tr>
+                                    <td>
+                                        @Html.TextBoxFor(modelItem => item.TemplateId, new { @Name = "associatedTemplate[" + i + "].TemplateId", id = "associatedTemplate_" + i + "__TemplateId", @style = "display:none" })
+                                        @Html.CheckBoxFor(modelItem => item.Selected, new { @Name = "associatedTemplate[" + i + "].Selected", id = "associatedTemplate_" + i + "__Selected" })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DocumentTitle, new { @Name = "associatedTemplate[" + i + "].DocumentTitle", id = "associatedTemplate_" + i + "__DocumentTitle" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(modelItem => item.DisplayOrder, new { @Name = "associatedTemplate[" + i + "].DisplayOrder", id = "associatedTemplate_" + i + "__DisplayOrder", onkeypress = "return isNumber(event)" })
+                                        @Html.ValidationMessageFor(modelItem => item.DisplayOrder, string.Empty, new { @class = "text-danger" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(modelItem => item.Mandatory, new { @Name = "associatedTemplate[" + i + "].Mandatory", id = "associatedTemplate_" + i + "__Mandatory" })
+                                    </td>
+
+                                </tr>
+                                i++;
+                            }
+                        
+
+                    </tbody>
+                </table>
+             
+    </div>
+    }

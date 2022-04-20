@@ -1,0 +1,237 @@
+﻿
+
+@model VirtualAdvocate.Models.NewTicket
+
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  
+    <div class="container-fluid color_bg">
+        <div class="col-lg-12">
+            <h2 class="page-header">SERVICES </h2>
+        </div>
+
+    </div>
+    <div class="container innerpage panel-heading">
+
+        <div class="col-md-7 ">
+
+            <!--.get-started -->
+            <div class="col-md-12 ">
+                <h4>Support</h4>
+                <p class="text-left">Virtual Advocate’s renowned Service Desk and support network ensures that everyone who uses and deploys our solutions gets their questions answered on-time, from anywhere. We have a variety of support channels and plans available; from 8/5 or 24/7.</p>
+
+            </div>
+            <div class="col-md-12 ">
+                <h4>Support Channels</h4>
+            </div>
+            <div class="col-sm-12 ">
+
+                <h2 class="text-left ">
+                    <i class="flaticon-directions"></i> Online
+                </h2>
+                <p class=" text-left">
+                    Get 24/7 help online <br>
+                    on how to use the solutions we provide <br>
+                    by visiting <a href="www://support.vitualadvocate.com">www://support.vitualadvocate.com</a>
+                </p>
+
+            </div>
+            <!--/.col-lg-4 -->
+
+            <div class="col-sm-12 ">
+                <h2 class="text-left ">
+                    <i class="flaticon-technology color-red "></i>
+                    Phone / Email
+                </h2>
+                <p class="text-left ">
+                    Contact the Service Desk by <br>
+                    phone at 022***** or <br>
+                    via email at <a href="mailto:support@virtualadvocate.com">support@virtualadvocate.com</a><br>
+                    during regular hours of 08:00am to 05:00 pm (closed on public holidays).
+                </p>
+
+            </div>
+            <!--/.col-lg-4 -->
+
+            <div class="col-sm-12 ">
+
+                <h2 class="text-left">
+                    <i class="flaticon-people"></i>
+                    Walk in
+                </h2>
+                <p class="text-left">
+                    Get walk-in support by visiting our Support Center from 08:00am to 05:00pm (Monday-Friday) located at
+                    Nuhu Kachenje House (Opposite Ushindi Primary School),
+                    Plot No: 149, Block B,
+                    Ushindi Street, Mikocheni B
+                </p>
+
+            </div>
+            <!--/.col-lg-4 -->
+            <!--/.get-started -->
+
+        </div>
+
+        <div class="col-md-5">
+            <div class="col-md-12  padd_top">
+
+                <h4>Support</h4>
+                <p class="text-left">Please fill the support form and indicate the severity of the business impact for your concern.</p>
+@using (Ajax.BeginForm("RaiseTicket", "Home", new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess" }))
+{@Html.AntiForgeryToken()
+                <div class="row contact-wrap">
+                    <div class="status alert alert-success" style="display: none"></div>
+                    <form id="main-contact-form" class="contact-form" name="contact-form" method="post" action="sendemail.php">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.Label("Contact Person")
+                                <div>
+                                    @Html.EditorFor(model => model.ContactPerson, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ContactPerson, "", new { @class = "text-danger" })
+                                </div>
+
+
+                            </div>
+
+                        
+                            <div class="form-group">
+                                @Html.Label("Email  Address")
+                                <div>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+
+                           
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Phone Number")
+                                <div>
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+
+
+                            </div>
+                           
+                            <div class="form-group">
+                                @Html.Label("Business Impact")
+                                <div>
+                                    <label>
+    @Html.RadioButtonFor(m => m.BusinessImpact, "Critical")Critical  <span></span>
+                                    </label>
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.BusinessImpact, "Serious")Serious  <span></span>
+                                        </label>
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.BusinessImpact, "None", new { @checked = "true" })None  
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BusinessImpact, "", new { @class = "text-danger" })
+</div>
+
+
+                            </div>
+
+                            
+
+                            @*<div class="form-group">
+                                <div>
+                                    <label>Business Impact</label>
+                                </div>
+                                <label class="checkbox-inline">
+                                    <input value="" data-toggle="tooltip" title="" data-original-title="Virtual Advocate support will receive an immediate notification by SMS (charges may apply)." type="checkbox">
+                                    Critical
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input value="" data-toggle="tooltip" title="" data-original-title="Virtual advocate support will get back to you within the next business day." type="checkbox">
+                                    Serious
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input value="" type="checkbox">
+                                    None
+                                </label>
+                            </div>*@
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.Label("Company")
+                                <div>
+                                    @Html.EditorFor(model => model.Organization, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Organization, "", new { @class = "text-danger" })
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Inquiry / Issue")
+                                <div>
+                                    @Html.TextAreaFor(model => model.Issue, new { @class = "form-control", @rows = "10" })
+                                    @Html.ValidationMessageFor(model => model.Issue, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" name="submit" class="btn btn-default btn-lg" required="required">Submit Message</button>
+                            </div>
+
+                           
+                            </div>
+</form>
+                </div>
+}
+            </div>
+
+        </div>
+        <!-- /Support form-->
+
+
+    </div>
+    <div>
+        <div class="container-fluid  color_bg innerpage">
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="col-md-7">
+                        <h4>Training</h4>
+                        <p>Change is often intimidating &ndash; especially when it comes to work. We understand that preparing your organization to adopt a new system can be so nerve-wrecking; we help your users get past the fear of the unknown by giving them the skills they need to get their job done using Virtual Advocate. Virtual Advocate training can be conducted onsite at Virtual Advocate’s premises, or via the web. </p>
+                        <p>Our training services give your users and technical team the hands-on skills to confidently configure, operate and support Virtual Advocate. Our expert trainers also offer valuable tips on how to run a successful project in conjunction with Virtual Advocate and how to maximize your investment, efficiency and cost benefit. </p>
+                        <p>Our training courses and plans are tailored to your business and working environment, focusing on the daily tasks of your team. We perform training sessions for groups, and also do role-based training for individuals. In addition, we also provide quick start guides and a comprehensive user manual for your reference.</p>
+                        <p>
+                            Training Resources
+                            [download user manual]
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <h4>Consultation </h4>
+                        <p>Our team of consultants can help you optimize the use of Virtual Advocate in your organization before, during and after implementation. Our expert staff are not only experts in our solutions, but come with a variety of expertise background such as APMP certification, Certified Change Management Certification, Certified Business Analysis Professional, Project Management, seasoned Advocates and provide best practice knowledge in industry specific areas. Our Client Service Experts are ready to help you improve your internal processes, create professional templates, and so much more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts
+{
+    
+ 
+    <script type="text/javascript">
+
+        function ajaxSuccess(data) {
+            alert('Ticket added successfully');
+
+            $("#ContactPerson").val("");
+            $("#Email").val("");
+            $("#Organization").val("");
+            $("#Phone").val("");
+            $("#Issue").val("");
+
+        }
+
+
+      
+
+</script>
+}

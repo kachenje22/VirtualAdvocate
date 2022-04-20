@@ -1,0 +1,139 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.FilledFormDetailModel>
+@{
+    ViewBag.MenuActive = "FormsHistory";
+    //ViewBag.Title = "Forms History";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Bulk Download</h2>
+
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("DownloadMultipleDocuments", "MultipleDocumentDownload", FormMethod.Get, new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+{
+    <div id="loading" style="display:none;">Generating Report...</div>
+<div class="row" id="result">
+    <div class="col-md-12">
+        <table class="table table-striped table-hover dataTable table-custom-border" id="tblTemplateKeyList">
+            <thead>
+                <tr>
+                    <th><input name="select_all" value="1" type="checkbox"></th>
+                   
+                    <th>
+                        Customer
+                    </th>
+                    <th>
+                        Document Title
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                    <th>
+                        Date Created
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+              @{int rowNo = 0;
+                  int tempGroupId = 0;
+                  var outlinecss = ""; }
+                @foreach (var item in Model)
+                {
+
+                    rowNo = rowNo + 1;
+                    if (rowNo == 1)
+                    {
+                        tempGroupId = item.GroupId;
+
+                    }
+                    if (rowNo > 1)
+                    {
+                        if (item.GroupId != tempGroupId)
+                        {
+
+                            outlinecss = "outline-table";
+
+                        }
+                        else { outlinecss = ""; }
+
+                    }
+
+                    <tr  class="@outlinecss">
+                        <td>
+                            <input type="checkbox" class="check" name="FilledTemplateName" id="FilledTemplateName" value=@item.FilledTemplateName.Replace(" ","_").Replace("docx","pdf") />
+                        </td>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                        </td>
+                      
+                    </tr>
+                    tempGroupId = item.GroupId;
+                   
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<input type="submit" value="Download selected documents" class="btn btn-default" id="submit" disabled='disabled'/>
+
+                  }
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('#tblTemplateKeyList').DataTable({
+                    "ordering": false,
+                    responsive: true
+                });
+
+            });
+
+           
+            // Handle click on "Select all" control
+            $("input[name='select_all']").on('click', function (e) {
+                var submit = document.getElementById('submit');
+                var table = $('#tblTemplateKeyList').DataTable();
+
+                if (this.checked) {
+                 
+                    $(':checkbox', table.rows({ page: 'current' }).nodes()).prop('checked', this.checked);
+                    submit.disabled = false;
+                  //  $('#tblTemplateKeyList tbody input[type="checkbox"]:not(:checked)').trigger('click');
+                } else {
+                    submit.disabled = true;
+                    $(':checkbox', table.rows({ page: 'current' }).nodes()).prop('checked', false);
+                   // $('#tblTemplateKeyList tbody input[type="checkbox"]:checked').trigger('click');
+                }
+
+                // Prevent click event from propagating to parent
+                e.stopPropagation();
+            });
+
+            $('.check').change(function () {
+                if ($('.check:checked').length) {
+                    $('#submit').removeAttr('disabled');
+                } else {
+                    $('#submit').attr('disabled', 'disabled');
+                }
+            });
+
+    </script>
+}

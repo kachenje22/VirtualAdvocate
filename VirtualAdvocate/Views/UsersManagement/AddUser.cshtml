@@ -1,0 +1,252 @@
+﻿@model VirtualAdvocate.Models.UserRegistrationModel
+@{
+    //ViewBag.Title = "AddOrganization";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>ADD USER</h2>
+<hr />
+@using (Html.BeginForm("Registration", "UsersRegistration", FormMethod.Post, new { @class = "form-horizontal", role = "form"  onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Organizational Membership Type</legend>
+                    <div class="form-group">
+                        <div class="col-lg-6 form-inline">
+                            <div class="radio col-lg-6">
+                                <label>
+                                    @*<input name="optionsRadios" id="optionsRadios1" value="option1" checked="" type="radio">*@
+                                    @Html.RadioButtonFor(m => m.UserAccountType, "1", new { @checked = "true" }) Single User Account
+                                </label>
+                            </div>
+                            <div class="radio col-lg-6">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.UserAccountType, "2") Multiple User Account
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Organizational Details</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgName, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgName, new { @class = "form-control", @placeholder = "Organization Name" })
+                                    @Html.ValidationMessageFor(m => m.OrgName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgEmail, new { @class = "col-lg-6 control-label" })
+                                @*<label for="inputEmail" class="col-lg-4 control-label">Email Address</label>*@
+                                <div class="col-lg-6">
+                                    @*<input class="form-control" id="inputEmail" placeholder = "Email" type="text">*@
+                                    @Html.TextBoxFor(m => m.OrgEmail, new { @class = "form-control", @placeholder = "Email Address" })
+                                    @Html.ValidationMessageFor(m => m.OrgEmail, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgPhoneNumber, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgPhoneNumber, new { @class = "form-control", @placeholder = "Phone Number" })
+                                    @Html.ValidationMessageFor(m => m.OrgPhoneNumber, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Select Organization Type", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.DropDownListFor(m => m.OrganizationTypeId, new SelectList(Model.getAllOrganizationTypes, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.OrganizationTypeId, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgStreetName, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgStreetName, new { @class = "form-control", @placeholder = "Street Name" })
+                                    @Html.ValidationMessageFor(m => m.OrgStreetName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgBuildingName, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgBuildingName, new { @class = "form-control", @placeholder = "Building Name" })
+                                    @Html.ValidationMessageFor(m => m.OrgBuildingName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgPlotNo, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgPlotNo, new { @class = "form-control", @placeholder = "Plot Number" })
+                                    @Html.ValidationMessageFor(m => m.OrgPlotNo, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgBlockNo, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgBlockNo, new { @class = "form-control", @placeholder = "Block number" })
+                                    @Html.ValidationMessageFor(m => m.OrgBlockNo, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgRegion, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgRegion, new { @class = "form-control", @placeholder = "Region" })
+                                    @Html.ValidationMessageFor(m => m.OrgRegion, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.OrgLandMark, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.OrgLandMark, new { @class = "form-control", @placeholder = "Land Mark" })
+                                    @Html.ValidationMessageFor(m => m.OrgLandMark, string.Empty, new { @class = "" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>User Details</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.FirstName, new { @class = "col-lg-6 control-label" })
+
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                    @Html.ValidationMessageFor(m => m.FirstName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.LastName, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                    @Html.ValidationMessageFor(m => m.LastName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>                           
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.EmailAddress, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @placeholder = "Email Address" })
+                                    @Html.ValidationMessageFor(m => m.EmailAddress, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Designation, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Designation, new { @class = "form-control", @placeholder = "Designation" })
+                                    @Html.ValidationMessageFor(m => m.Designation, string.Empty, new { @class = "" })
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.password, new { @class = "col-lg-6 control-label" })
+
+                                <div class="col-lg-6">
+                                    @Html.PasswordFor(m => m.password, new { @class = "form-control", @placeholder = "Password" })
+                                    @Html.ValidationMessageFor(m => m.password, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Confirmpassword, new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.PasswordFor(m => m.Confirmpassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                                    @Html.ValidationMessageFor(m => m.Confirmpassword, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset class="checkBoxListFor">
+                    <legend>Services Required</legend>
+                    <div class="form-group">
+                        <div class="col-lg-12 form-inline">
+                            @Html.CheckBoxListFor(model => model.PostedServices.ServiceIds, model => model.AvailableService, m => m.Id, m => m.Name, model => model.SelectedService)
+                            @Html.ValidationMessageFor(model => model.PostedServices.ServiceIds, string.Empty, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Preferred Payment Method</legend>
+                    <div class="form-group">
+                        <div class="col-lg-6 form-inline">
+                            @Html.CheckBoxListFor(model => model.PostedPaymentMethods.PaymentTypeIds, model => model.AvailablePaymentMethods, m => m.Id, m => m.Name, model => model.SelectedPaymentMethods)
+                            @Html.ValidationMessageFor(model => model.PostedPaymentMethods.PaymentTypeIds, string.Empty, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Submit" />
+                </div>
+                @{ var Controllername = "Login"; var action = "Index";}
+                @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2) { Controllername = "UsersManagement/UserList"; }
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action(action,Controllername)'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                    }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script type="text/javascript">
+    $(function () {
+
+        $('input[name="PostedPaymentMethods.PaymentTypeIds"]').rules('add', {
+    required: true,
+    messages: {
+        required: "Select Atleast One Payment Method"
+    }
+});
+
+});
+    $(function () {
+
+        $('input[name="PostedServices.ServiceIds"]').rules('add', {
+            required: true,
+            messages: {
+                required: "Select Atleast One Service"
+            }
+        });
+       
+    });    
+    </script>
+}
+
+

@@ -1,0 +1,47 @@
+﻿@model  VirtualAdvocate.Models.ClientWiseCustomerTemplate
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_addmultiplekeyvalue</title>
+</head>
+<body>
+    <div class="divElementSet">
+     
+            <div  class="form-group">
+                
+                @if (Model.KeyID > 0)
+                {
+                    @Html.Label("    ", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                }
+                <div>
+
+                    @if (Model.KeyID == 0)
+                    {
+                       
+                        @Html.TextBoxFor(m => Model.KeyName, new { @Name = "extraFields[" + Model.KeyID + "].KeyName", @id = "extraFields_" + Model.KeyID + "__KeyName", @class = "form-control col-lg-6", @placeholder = "Name" , @required = "required" })
+                      
+                    }
+                    else
+                    {
+                      
+                        @Html.TextBoxFor(m => Model.KeyName, new { @Name = "extraFields[" + Model.KeyID + "].KeyName", @id = "extraFields_" + Model.KeyID + "__KeyName", @class = "form-control col-lg-6", @placeholder = "Add New Key", @required = "required" })
+                       
+                    }
+                </div>
+                    <div class="col-lg-2">
+                        @Html.CheckBoxFor(m => Model.Show, new { @Name = "extraFields[" + Model.KeyID+ "].Show", @id = "extraFields_" + Model.KeyID + "Show" })
+                        @Html.Label("Show")
+                    </div>
+                  
+               
+            </div>
+        </div>
+</body>
+</html>

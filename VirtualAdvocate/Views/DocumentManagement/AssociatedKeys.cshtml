@@ -1,0 +1,220 @@
+﻿@model VirtualAdvocate.Models.AssociatedKeygroupModel
+
+@{
+    ViewBag.MenuActive = "AssociatedKey";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+@using (Html.BeginForm("SaveAssociatedKeys", "DocumentManagement", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", onsubmit = "showProgress()" }))
+{
+    <!-- DataTables CSS -->
+    <link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+    <!-- DataTables Responsive CSS -->
+    <link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/autocomplete.css")" rel="stylesheet" type="text/css" />
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Associated Key Group</legend>
+
+
+                    <div class="row">
+                       
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                @Html.Label("Select Template:", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+
+                                <div>
+
+                                    <input type="text" id="templatesearch" name="templatesearch" class="navbar-left form-control" />
+
+                                    @Html.HiddenFor(m => m.TemplateID)
+                                    <div id="results" class="ui-autocomplete"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("GroupName", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                                <div>
+                                    @Html.TextBoxFor(m => m.GroupName, new { @class = "form-control", @placeholder = "Title" })
+                                    @Html.ValidationMessageFor(m => m.GroupName, string.Empty, new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Design Type", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                                <div>
+                                    <label>
+
+                                        @Html.RadioButtonFor(m => m.DesignType, "1") Table
+                                    </label>
+                                    <label>
+
+                                        @Html.RadioButtonFor(m => m.DesignType, "2") Statement
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="divFirstColumn" style="display:none">
+                                @Html.Label("Serial Number", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                                <div>
+                                    <label>
+
+                                        @Html.RadioButtonFor(m => m.FirstColumn, "First") First Column
+                                    </label>
+                                    <label>
+
+                                       @Html.RadioButtonFor(m => m.FirstColumn, "All") All Column
+                                    </label>
+                                </div>
+                            </div>    
+                            <div class="form-group" id="divStatementColumn" style="display:none">
+                                @Html.Label("Serial Number Starts From", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                                <div>
+                                    <label>
+
+                                        @Html.TextBoxFor(m => m.AutoNumberStartsFrom, new { @class = "form-control", @placeholder = "Title" })
+                                        @Html.ValidationMessageFor(m => m.AutoNumberStartsFrom, string.Empty, new { @class = "text-danger" })
+                                    </label>
+                                  
+                                </div>
+                            </div>    
+
+                                    <div class="form-group">
+                                        <div id="divPartialView"></div>
+                                    </div>
+                                </div>
+                            </div>
+</fieldset>
+            </div>
+
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-default" value="Group" id="btnSubmit" />
+                    </div>
+                    <div class="">
+                        <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("AssociatedKeysGroup", "DocumentManagement")'">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+            }
+
+            @section Scripts {
+
+                @Scripts.Render("~/bundles/bootbox")
+                @Scripts.Render("~/bundles/jqueryUI")
+                <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+                <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+
+                <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('input[type=radio][name=DesignType]').change(function () {
+                if (this.value == '1') {
+                    $("#divFirstColumn").show();
+                    $("#divStatementColumn").hide();
+                    
+                }
+                else if (this.value == '2') {
+                    $("#divFirstColumn").hide();
+                    $("#divStatementColumn").show();
+                }
+            });
+
+
+            $("#templatesearch").autocomplete({
+                source: function (request, response) {
+                    var template = new Array();
+                    $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("TemplateSearch", "DocumentManagement"))",
+                        data: { "term": request.term },
+                        success: function (data) {
+                            for (var i = 0; i < data.length ; i++) {
+                                template[i] = { label: data[i].DocumentTitle, Id: data[i].TemplateId };
+                            }
+                        }
+                    });
+                    $("#results").html(response(template));
+
+                },
+                select: function (event, ui) {
+                    $("#templatesearch").val(ui.item.label)
+                    $("#templateId").val(ui.item.Id)
+                    templateKeys(ui.item.Id);
+                    return false;
+                },
+                minLength: 1
+            });
+                    function isNumber(evt) {
+                        evt = (evt) ? evt : window.event;
+                        var charCode = (evt.which) ? evt.which : evt.keyCode;
+                        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                            return false;
+                        }
+                        return true;
+                    }
+
+
+            @*$("#templatesearch").autocomplete({
+                source: function (request, response) {
+                    var customer = new Array();
+                    $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("CustomerSearch", "DocumentManagement"))",
+                        data: { "term": request.term },
+                    success: function (data) {
+                        for (var i = 0; i < data.length ; i++) {
+                            customer[i] = { label: data[i].CustomerName, Id: data[i].CustomerId };
+                        }
+                    }
+                    });
+               $("#results").html(response(customer));
+            //response(customer);
+        },
+                select: function (event, ui) {
+                    $("#customersearch").val(ui.item.label)
+                    $("#CustomerId").val(ui.item.Id)
+                return false;
+                },
+                minLength: 1
+        });*@
+
+            function templateKeys(id) {
+                $.ajax({
+                    async: true,
+                    url: '@Url.Action("GetTemplateKeys", "DocumentManagement")',
+                    data: {
+                        templateID: id /* add other additional parameters */
+                    },
+                    cache: false,
+                    type: "POST",
+                    dataType: "html",
+                    success: function (data, textStatus, XMLHttpRequest) {
+                        SetData(data);
+                    }
+                });
+            }
+
+            function SetData(data) {
+                debugger;
+                $("#divPartialView").html(data); // HTML DOM replace
+            }
+        });
+
+
+
+                </script>
+            }

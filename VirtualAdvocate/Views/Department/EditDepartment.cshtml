@@ -1,0 +1,56 @@
+﻿@model VirtualAdvocate.Models.DepartmentModel
+
+@{
+    ViewBag.MenuActive = "Department";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Edit Department</h2>
+
+@using (Html.BeginForm("UpdateDepartment", "Department", FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "showProgress()" }))
+{
+
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    @Html.HiddenFor(m => m.Id)
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.Label("Department", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                            <div>
+                                @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control col-lg-6", @placeholder = "Department" } })
+                                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Department Description", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+                            <div>
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control col-lg-6", @placeholder = "Department Description" } })
+
+                            </div>
+
+                        </div>
+
+                        
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Update" />
+                </div>
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("DepartmentList", "Department")'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

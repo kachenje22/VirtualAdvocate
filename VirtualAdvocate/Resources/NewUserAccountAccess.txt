@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+</head>
+<body>	
+	<div style="float:left; margin:0; padding:10px; width:600px; border:1px solid #D30B0D; font:normal 13px Verdana, Helvetica, Sans-Serif;">
+		<span style="float:left; margin:0; padding:0; width:100%; background:#FFF;">
+			<img src="cid:Header" alt="" />
+		</span>
+	    <br/>
+		<br/>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">Hi<br /><br /></p>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">You have been invited±INVITERNAME to join the “±COMPANY” Exxigo Job Safety account.<br /><br /></p>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">Click on the following link to signup!</p>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">±REGISTRATIONURL<br /><br /></p>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">Thank you for choosing Exxigo Job Safety!</p><br />
+		<span style="float:left; margin:0; padding:0; width:100%;">Regards<br />Exxigo Support Team</span><br />
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">Creating JHA/JSA’s just got easier with Exxigo Job Safety!</p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+</head>
+<body>	
+	<div style="float:left; margin:0; padding:10px; width:600px; border:1px solid #D30B0D; font:normal 13px Verdana, Helvetica, Sans-Serif;">
+		<span style="float:left; margin:0; padding:0; width:100%; background:#FFF;">
+			<img src="cid:Header" alt="" />
+		</span>
+	    <br/>
+		<br/>
+		<p style="float:left; margin:5px 0; padding:0; width:100%;">Dear <<ADMIN>>,</p><br />	
+		<br />New User has been Registered with Virtual Advocate Application.<br />
+			Please proceed with action by clicking the following link.:
+		</p><br />
+<p style="float:left; margin:5px 0; padding:0; width:100%;"><a href="<<APPLICATIONLOGINURL>>" style="text-decoration:none;"> <<APPLICATIONTITLE>> </a>.<br /><br /></p>
+		
+		
+ <br />Regards<br />
+ <<APPLICATIONTITLE>></span>
+	</div>
+</body>
+</html>

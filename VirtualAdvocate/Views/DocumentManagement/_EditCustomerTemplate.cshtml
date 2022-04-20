@@ -1,0 +1,49 @@
+﻿@model  IEnumerable<VirtualAdvocate.Models.ClientWiseCustomerTemplate>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<body>
+
+
+        @if (Model != null)
+        {
+            int i = 0;
+            foreach (VirtualAdvocate.Models.ClientWiseCustomerTemplate item in Model)
+            {
+                <div class="divElementSet">
+                    <div class="form-group">
+                        @if (i == 0)
+                        {
+                            @Html.Label("Add Customer Template", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+
+                        }
+                        else
+                        {
+                            @Html.Label("    ", htmlAttributes: new { @class = "col-lg-3 control-label", @maxlength = 10 })
+
+                        }
+
+                        <div>
+                            @Html.TextBoxFor(m => item.KeyName, new { @Name = "extraFields[" + i + "].KeyName", @id = "extraFields_" + i + "__KeyName", @class = "form-control col-lg-6", @placeholder = "Add New Key" })
+                           
+                          
+</div>
+                        <div class="col-lg-2">
+                            @Html.CheckBoxFor(m => item.Show, new { @Name = "extraFields[" + i + "].Show", @id = "extraFields_" + i + "Show" })
+                            @Html.Label("Show")
+                        </div>
+                    </div>
+                </div>
+                i++;
+            }
+        }
+
+
+</body>
+</html>

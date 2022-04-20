@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2> Cover Letter Confirmation</h2>
+
+<hr />
+@using (Html.BeginForm("CoverLetterConfirmed", "DocumentManagement", FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Cover Letter Confirmation</legend>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div>
+                                <label>
+                                    There is a Associate document. Would you like to fill those document? or Create cover letter for filled document?
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-4">
+                    @*<input type="submit" class="btn btn-default" value="Continue Associate Document" />*@
+                    @{ var Controllername1 = "DocumentManagement"; var action1 = "CreateDynamicForm"; var id = @ViewBag.AssociateId;}                    
+                    <button type="button" class="btn btn-default" value="Continue Associate Document" onclick="location.href='@Url.Action(action1,Controllername1, new { @id = id })'">Continue Associate Document</button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-default" value="Skip" onclick="location.href='@Url.Action("Skip","DocumentManagement", new { @id = id })'">Skip</button>
+
+                </div>
+                @if (ViewBag.lastdoc == "true")
+                {
+                 var Controllername = "DocumentManagement"; var action = "CoverLetterConfirmed";              
+                <div class="">
+                    <button type="button" value="Create CoverLetter" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action(action, Controllername)'">Create CoverLetter</button>
+                </div>
+                    }
+            </div>
+        </div>
+    </div>
+ }

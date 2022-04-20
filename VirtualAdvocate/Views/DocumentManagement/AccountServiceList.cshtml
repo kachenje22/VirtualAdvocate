@@ -1,0 +1,155 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.ServiceModel>
+@{
+    ViewBag.MenuActive = "Service";
+
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Client List</h2>
+
+<hr />
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="col-md-3">
+        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("AddService", "DocumentManagement")'"><i class="fa fa-user-plus"></i>Add Client</button>
+    </div>
+    <div class="col-md-9">
+        <div class="navbar-form navbar-right blue-color">
+            @if (ViewBag.Enable == "Active")
+            {
+                <input type="radio" name="editList" id="Active" value="Active" checked="checked" />
+                <label for="Active">Active</label>
+
+                <input type="radio" name="editList" id="Inactive" value="Inactive" />
+                <label for="Inactive">In active</label>
+            }
+            else
+            {
+                <input type="radio" name="editList" id="Active" value="Active" />
+                    <label for="Active">Active</label>
+
+                    <input type="radio" name="editList" id="Inactive" value="Inactive" checked="checked" />
+                    <label for="Inactive">In active</label>
+            }
+
+        </div>
+
+        <div class="navbar-form navbar-right" role="search">
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-striped table-hover dataTable table-custom-border" id="tblServiceList">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayName("Client")</th>
+            <th>@Html.DisplayName("Description")</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 0;}
+        @foreach (var item in Model)
+        {
+            rowNo = rowNo + 1;
+            var css = "";
+            var ustatus = "";
+            var msg = "";
+            if (item.IsEnabled == true)
+            {
+                css = "glyphicon glyphicon-ok green-color";
+                ustatus = "Active";
+                msg = "deactivate";
+            }
+            else
+            {
+                css = "glyphicon glyphicon-remove red-color";
+                ustatus = "Inactive";
+                msg = "activate";
+            }
+
+            <tr>
+                <td>@rowNo</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Service)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceDescription)
+                </td>
+                <td>
+                    <a href="@Url.Action("EditService","DocumentManagement",new { id = item.ID })" title="Edit" class="fa fa-edit gray-color"></a>&nbsp;|
+                    &nbsp;
+                    <a href="javascript:;" name="Edit" title="@ustatus" class="@css" onclick="ChangeStatus(@item.ID,'@msg')"></a>
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('#tblServiceList').DataTable({
+                "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                responsive: true
+            });
+        });
+              
+
+
+                function ChangeStatus(id, msg) {
+                    bootbox.confirm({
+                        title: 'Client Activate / Deactivate',
+                        message: 'Are you sure you want to ' + msg + ' this Client?',
+                        buttons: {
+                            'cancel': {
+                                label: 'No',
+                                className: 'btn-cancel pull-left'
+                            },
+                            'confirm': {
+                                label: 'Yes',
+                                className: 'btn-default pull-right'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: '@Url.Content("~/DocumentManagement/ActivateService")',
+                                    type: 'POST',
+                                    data: { id: id },
+                                    dataType: 'json',
+                                    success: function (result) { location.reload(); },
+                                    error: function () { alert('Error!'); }
+                                });
+                            }
+                        }
+                    });
+                }
+
+        $("input[name='editList']").change(function () {
+             
+            var enable = $("input[name='editList']:checked").val();
+
+            var url = '@Url.Content("~/DocumentManagement/AccountServiceList")'+'?enable='+ enable;
+
+            location.href =url;
+
+               });
+
+    </script>
+}

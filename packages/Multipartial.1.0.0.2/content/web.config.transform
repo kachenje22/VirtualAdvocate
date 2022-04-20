@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<configuration>
+  <system.web>
+    <httpHandlers>
+      <add path="multipartial.axd" verb="*" type="Pulzonic.Multipartial.Handler, Pulzonic.Multipartial" />
+    </httpHandlers>
+  </system.web>
+  <system.webServer>
+    <handlers>
+      <add name="MultipartialHandler" path="multipartial.axd" verb="*" type="Pulzonic.Multipartial.Handler, Pulzonic.Multipartial"/>
+    </handlers>
+  </system.webServer>
+</configuration>

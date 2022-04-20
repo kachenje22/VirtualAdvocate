@@ -1,0 +1,45 @@
+﻿@if (Session["UserId"] != null)
+{
+    int id;
+    var proActName = "ManageProfile";
+    id = Convert.ToInt32(Session["UserId"]);
+
+
+    <ul class="nav navbar-nav navbar-right">
+        @if (Convert.ToInt32(Session["RoleId"]) == 5 || Convert.ToInt32(Session["RoleId"]) == 6)
+        {
+            <li>
+                <a href="/Notifications"><i style="font-size: 18px;" class="fa fa-bell"></i><span id="notificationCount" style="margin-top:-25px; margin-left: -4px" class="badge badge-light"></span></a>
+            </li>
+        }
+        <li>
+            <a href="@Url.Action("ChangePassword", "UsersRegistration", new { @id = Session["UserId"] })">Change Password</a>
+        </li>
+        <li>
+            <a href="@Url.Action(proActName, "UsersManagement", new { @id = id })">Manage Profile</a>
+        </li>
+        @if (Convert.ToInt32(Session["RoleId"]) == 2)
+        {
+
+            int id1 = Convert.ToInt32(Session["OrgId"]);
+            <li>
+                <a href="@Url.Action("ManageOrganization", "UsersManagement", new { @id = id1 })">Company Profile</a>
+            </li>
+        }
+
+
+        <li><a href="@Url.Action("LogOff", "UsersRegistration")">Log Off</a></li>
+    </ul>
+}
+
+<script>
+    $.ajax({
+        url: '/Notifications/GetNotificationCount',
+        type: 'GET',
+        success: function (count) {
+            if (count && Number.parseInt(count) > 0) {
+                $('#notificationCount').text(count);
+            }
+        }
+    })
+</script>

@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.MenuActive = "DocumentManagement";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>@ViewBag.Head</h2>
+<div>@Html.Raw(@ViewBag.Dynamic)</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $('#btnSubmit').button();
+        $('#btnSubmit').click(function () {
+    $(this).html('<img src="http://www.bba-reman.com/images/fbloader.gif" />');
+});
+    </script>
+
+}

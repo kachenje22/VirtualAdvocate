@@ -1,0 +1,57 @@
+﻿@model VirtualAdvocate.Models.EditUserRoleModel
+@{
+    //ViewBag.Title = "EditPayment";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>EDIT ROLE</h2>
+<hr />
+@using (Html.BeginForm("EditUserRole", "UsersManagement", FormMethod.Post, new { @class = "form-horizontal", role = "form" ,onsubmit = "showProgress()" } ))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset class="checkBoxListFor">
+                    <legend>User Role</legend>
+                    <div class="form-group">
+                        @Html.HiddenFor(m => m.userId)
+                        <div class="col-lg-12 form-inline">
+                            @Html.DropDownListFor(m => m.UserRole, new SelectList(Model.Roles, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UserRole, string.Empty, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Save Changes" />
+                </div>
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="history.go(-1);">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script type="text/javascript">
+        $(function () {
+
+            $('input[name="PostedPaymentMethods.PaymentTypeIds"]').rules('add', {
+                required: true,
+                messages: {
+                    required: "Select atleast one payment method"
+                }
+            });
+
+        });
+    </script>
+}
+
+

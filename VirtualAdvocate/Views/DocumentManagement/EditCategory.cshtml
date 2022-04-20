@@ -1,0 +1,112 @@
+﻿@model VirtualAdvocate.Models.DocumentCategoryModel
+@{
+    ViewBag.MenuActive = "DocumentManagement";
+    //ViewBag.Title = "EDIT CATEGORY";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>EDIT CATEGORY</h2>
+@using (Html.BeginForm("EditCategory", "DocumentManagement", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Document Category</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m=>m.DocumentCategoryId)
+                                @Html.Label("Document Category Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.DocumentCategoryName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.DocumentCategoryName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Document Category Description", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.DocumentCategoryDescription, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Select Organzation", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.DropDownListFor(m => m.ServiceId, new SelectList(Model.getAllServices, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ServiceId, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Category Icon", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="col-lg-8">
+                                                <input name="uploadFile" type="file" onchange="readURL(this);" />
+                                            </div>
+@if (@Model.ImagePath != null)
+{
+                                            <div class="col-lg-8 margin-top-10">
+                                                <img id="blah" src="@Model.ImagePath" alt=""   accept=".jpeg, .jpg, .png, .gif, .bmp" height="200" width="150"/>
+                                            </div>
+}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div></div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Submit" />
+                </div>
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("Index","DocumentManagement")'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+@Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+            var fileType = file["type"];
+            var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+            if ($.inArray(fileType, ValidImageTypes) < 0) {
+                
+                bootbox.alert("Please upload valid Icon");
+
+            }
+            else
+
+            {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+</script>
+}
+

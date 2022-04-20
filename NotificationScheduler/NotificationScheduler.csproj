@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F92911EA-07C8-4FF4-80F8-00508023E605}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>NotificationScheduler</RootNamespace>
+    <AssemblyName>NotificationScheduler</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>E:\Sumit Mahajan\d\VADV-Web\Publish Task\20190129\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>E026C3522076EF7A2CAF47C9D4B9C8EC0554EA6A</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>NotificationScheduler_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\CustomerDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DocumentDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DocumentDetailsStatu.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DocumentTemplate.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\Logger.cs" />
+    <Compile Include="Models\ProbationDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RecursiveNotificationDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserAddressDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\FilledTemplateDetail.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Insurance.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Property.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfile.cs">
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VirtualAdvocate.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VirtualAdvocate.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VirtualAdvocate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VirtualAdvocate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VirtualAdvocate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VirtualAdvocate.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="Models\VirtualAdvocate.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>VirtualAdvocate.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Models\VirtualAdvocate.edmx.diagram">
+      <DependentUpon>VirtualAdvocate.edmx</DependentUpon>
+    </None>
+    <None Include="NotificationScheduler_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\logo.png" />
+    <Content Include="Models\VirtualAdvocate.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>VirtualAdvocate.Context.cs</LastGenOutput>
+      <DependentUpon>VirtualAdvocate.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\VirtualAdvocate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>VirtualAdvocate.edmx</DependentUpon>
+      <LastGenOutput>VirtualAdvocate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\General\GeneralEmailNotification_AfterExpiry.html" />
+    <Content Include="Templates\General\GeneralEmailNotification_OnExpiryDate.html" />
+    <Content Include="Templates\General\GeneralEmailNotification_PriorToExpiry.html" />
+    <Content Include="Templates\Insurance\InsuranceEmailNotification_AfterExpiry.html" />
+    <Content Include="Templates\Insurance\InsuranceEmailNotification_OnExpiryDate.html" />
+    <Content Include="Templates\Insurance\InsuranceEmailNotification_PriorToExpiry.html" />
+    <Content Include="Templates\MailTemplate.html" />
+    <Content Include="Templates\Probation\ProbationEmailNotification_AfterExpiry.html" />
+    <Content Include="Templates\Probation\ProbationEmailNotification_OnExpiryDate.html" />
+    <Content Include="Templates\Probation\ProbationEmailNotification_PriorToExpiry.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

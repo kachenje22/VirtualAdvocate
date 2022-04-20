@@ -1,0 +1,131 @@
+﻿@model VirtualAdvocate.Models.DocumentDetailsViewModel
+@{
+    ViewBag.MenuActive = "Tracker";
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="~/Scripts/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<h2>Update Document</h2>
+
+@using (Html.BeginForm("Edit", "DocumentDetails", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id);
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well bs-component">
+            <fieldset>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.ValidationMessage("PageError", "", new { @class = "text-danger col-md-offset-1" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="select" class="col-lg-2 control-label">Customer Name</label>
+
+
+                            <div class="col-lg-4">
+                                @Html.DropDownList("CustomerId", null, "Select Customer", new { @class = "form-control", @readonly = "true"})
+
+                            </div>
+
+                            <label for="select" class="col-lg-2 control-label">Document</label>
+                            <div class="col-lg-4">
+
+                                @Html.DropDownList("DocumentId", null, "Select Document Type", new { @class = "form-control", @readonly = "true" })
+                                @Html.ValidationMessageFor(model => model.DocumentId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="select" class="col-lg-2 control-label">Vendor</label>
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.Vendor, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+
+                            </div>
+
+                            <label for="select" class="col-lg-2 control-label">Purpose</label>
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="select" class="col-lg-2 control-label">Date Handed</label>
+                            <div class="col-lg-4" style="margin: 7px 0 0 0;">
+
+                                @Html.EditorFor(model => model.DateHanded, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                @Html.ValidationMessageFor(model => model.DateHanded, "", new { @class = "text-danger" })
+
+                            </div>
+                            <label for="select" class="col-lg-2 control-label">Date to submitted</label>
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.DateToBeSubmitted, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                @Html.ValidationMessageFor(model => model.DateToBeSubmitted, "", new { @class = "text-danger" })
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-2">
+                <input type="submit" value="Update" class="btn btn-default" id="btnUpdateSubmit" />
+            </div>
+            <div class="">
+                <a href="/DocumentDetails" class="btn btn-cancel" id="btncancel">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+}
+
+
+<script>
+    //$("#DateHanded").datepicker({
+    //    dateFormat: 'dd-mm-yy'
+    //});
+
+    //$("#DateToBeSubmitted").datepicker({
+    //    dateFormat: 'dd-mm-yy'
+    //});
+
+    var $j = jQuery.noConflict();
+    $j('#DateHanded').datepicker({
+        dateFormat: 'dd-mm-yy',
+        onSelect: function (date, e) {
+            
+            var selectedDate = new Date(date);
+            var msecsInADay = 86400000;
+            var endDate = new Date(selectedDate.getTime() + msecsInADay);
+
+            //Set Minimum Date of EndDatePicker After Selected Date of StartDatePicker
+            $j("#DateToBeSubmitted").datepicker("option", "minDate", date);
+
+        }
+    });
+
+    $j("#DateToBeSubmitted").datepicker({ dateFormat: 'dd-mm-yy' });
+</script>

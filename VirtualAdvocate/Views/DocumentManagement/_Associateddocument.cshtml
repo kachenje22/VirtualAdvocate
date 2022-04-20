@@ -1,0 +1,44 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.GetAssociatedDocuments_Result>
+
+<div>
+    <h5>Associated Documents</h5>
+    <hr />
+    <table class="table table-striped table-hover dataTable table-custom-border" id="tblServiceList">
+        <thead>
+            <tr>
+                <th>@Html.DisplayName("Select")</th>
+                <th>@Html.DisplayName("Template")</th>
+                <th>@Html.DisplayName("Display Order")</th>
+                <th>@Html.DisplayName("Mandatory")</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+          
+
+            @foreach (var item in Model)
+            {
+           
+
+            <tr>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Selected)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocumentTitle)
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => item.DisplayOrder)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Mandatory)
+                </td>
+
+            </tr>
+          
+            }
+
+        </tbody>
+    </table>
+</div>

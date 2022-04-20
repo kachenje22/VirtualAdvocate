@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="db2c085b34724496b0abf7e4355c8657" Name="Diagram1">
+        <EntityTypeShape EntityType="VirtualAdvocateModel.CustomerDetail" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.FilledTemplateDetail" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Insurance" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Property" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.UserProfile" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_CustomerDetails_CustomerDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Property_Document" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Insurance_Property" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Insurance_UserProfile" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.UserAddressDetail" Width="1.5" PointX="5.25" PointY="11" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_UserAddressDetails_UserProfile" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentTemplate" Width="1.5" PointX="8.375" PointY="4.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.RecursiveNotificationDetail" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ProbationDetail" Width="1.5" PointX="11" PointY="5.75" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_ProbationDetails_CustomerDetails" />
+        <AssociationConnector Association="VirtualAdvocateModel.Fk" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentDetail" Width="1.5" PointX="10.25" PointY="0.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentDetailsStatu" Width="1.5" PointX="8" PointY="11.375" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_DocumentDetailsStatus" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_FilledTemplateDetails1" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_UserProfile" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

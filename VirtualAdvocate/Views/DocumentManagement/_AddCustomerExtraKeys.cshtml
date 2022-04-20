@@ -1,0 +1,49 @@
+﻿@model  VirtualAdvocate.Models.CustomerTemplateDetail
+
+
+
+
+@if (Model != null)
+{
+
+
+
+
+<div class="col-lg-6">
+    <div class="form-group">
+
+        @Html.Label("Name", new { @class = "col-lg-6 control-label" })
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => Model.FieldName, new { @Name = "extraFields[" + Model.id + "].FieldName", @id = "extraFields_" + Model.id + "__FieldName", @class = "form-control" })
+
+        </div>
+    </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="form-group">
+
+            @Html.Label("Value", new { @class = "col-lg-6 control-label" })
+            <div class="col-lg-6">
+                @Html.TextBoxFor(m => Model.FieldValue, new { @Name = "extraFields[" + Model.id + "].FieldValue", @id = "extraFields_" + Model.id + "__FieldValue", @class = "form-control" })
+                @Html.CheckBoxFor(m => Model.show);
+            </div>
+          
+        </div>
+      
+
+        </div>
+}
+        @*<tr>
+                <td>
+                    @Html.TextBoxFor(modelItem => item.TemplateId, new { @Name = "associatedTemplate[" + i + "].TemplateId", id = "associatedTemplate_" + i + "__TemplateId", @style = "display:none" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => item.TemplateId, new { @Name = "associatedTemplate[" + i + "].TemplateId", id = "associatedTemplate_" + i + "__TemplateId", @style = "display:none" })
+                </td>
+
+            </tr>*@
+        @*i++;
+                
+            }*@
+
+

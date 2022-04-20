@@ -1,0 +1,72 @@
+﻿@model VirtualAdvocate.Models.RecursiveNotificationModel
+
+@{
+    ViewBag.MenuActive = "Recursive";
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Edit Recursive Notification</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    @*<legend>Add Insurance</legend>*@
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                @Html.ValidationMessage("PageError", "", new { @class = "text-danger col-md-offset-1" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+                                        <label for="select" class="col-lg-2 control-label">Recurrs Before Days</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.RecurrsBeforeDays, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RecurrsBeforeDays, "", new { @class = "text-danger" })
+                                        </div>
+
+
+                                        <label for="select" class="col-lg-2 control-label">Recurrs After Days</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.RecurrsAfterDays, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                            @Html.ValidationMessageFor(model => model.RecurrsAfterDays, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr class="bottom-spacing-25">
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" value="Update" class="btn btn-default" id="btnEdit" />
+                </div>
+                <div class="">
+                    <a href="/RecursiveNotification" class="btn btn-cancel">Cancel</a>
+                    @*<button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href=''">Cancel</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}

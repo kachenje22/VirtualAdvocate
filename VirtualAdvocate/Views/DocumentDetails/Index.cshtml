@@ -1,0 +1,299 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.DocumentDetailsViewModel>
+
+@{
+    ViewBag.MenuActive = "Tracker";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Document Tracker</h2>
+
+<link rel="stylesheet" href="~/Content/themes/base/datepicker.css" />
+<link rel="stylesheet" href="~/Content/themes/base/jquery-ui.css" />
+
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+
+@if (Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]) == 5)
+{
+    <br>
+    <button class="btn btn-default" id="partialDiv" style="margin-bottom: 15px;" onclick="location.href='@Url.Action("Create", "DocumentDetails")'">Add Document</button>
+}
+@*<div>
+        <button class="btn btn-default" id="partialDiv" onclick="location.href='@Url.Action("Create", "ProbationTracker")'">Add Probation</button>&nbsp;&nbsp;
+        <button class="btn btn-default" id="partialDiv" onclick="location.href='@Url.Action("BulkProbationUpload", "ProbationTracker")'">Bulk Probation Upload</button>
+        <button class="btn btn-default" id="btnExtendExpiry" style="float:right">Submit</button>
+    </div>*@
+<br>
+<div class="row" id="ReportListDiv">
+    <div class="col-lg-12">
+        <table class="table table-striped table-hover dataTable table-custom-border" id="tblEmployeeList" style="font-size:small">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Document</th>
+                    <th>Vendor</th>
+                    <th>Purpose</th>
+                    <th>Date Handed</th>
+                    <th>Date to be Submitted</th>
+                    <th>Delayed By (in days)</th>
+                    <th>Status</th>
+                    <th>Rejection Reason</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr id="tr-@item.Id">
+                        <td> @i</td>
+                        <td> @item.Name</td>
+                        <td title="@item.Documentname">
+                            @{ string name = item.Documentname.Substring(0, 10) + "...";}
+                            @name
+                        </td>
+                        <td> @item.Vendor </td>
+                        <td> @item.Purpose</td>
+                        <td> @item.DateHanded</td>
+                        <td>@item.DateToBeSubmitted</td>
+                        <td>@item.DelayedBy</td>
+                        <td>
+                            @if (Convert.ToInt32(ViewData["RoleId"].ToString()) == 5 && Convert.ToInt32(item.DocumentStatus.SelectedValue) == (int)VirtualAdvocate.Models.DocumentDetailStatus.PendingApproval)
+                            {
+                                @Html.DropDownList("DocumentStatus", item.DocumentStatus, new { @class = "form-control doc-status", @id = "Status-" + item.Id, @disabled = "true" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("DocumentStatus", item.DocumentStatus, new { @class = "form-control doc-status", @id = "Status-" + item.Id, @onChange = "ChangeDocumentStatus(this)" })
+                            }
+                            @*@Html.DropDownList("DocumentStatus", item.DocumentStatus, new { @class = "form-control doc-status", @id = "Status-" + item.Id, @onChange = "ChangeDocumentStatus(this)" })*@
+                        </td>
+                        <td>@item.RejectionReason</td>
+                        @*<td>
+                                @Html.DropDownList("ExtendedMonths", null, "Month", new { @class = "form-control extended-months", @id = "Month-" + item.Id })
+                            </td>*@
+                        <td>
+                            <a href="/DocumentDetails/Edit/@item.Id">
+                                <i class="fa fa-edit" style="font-size:15px;"></i>
+                            </a>&nbsp;&nbsp;
+                            <a><i class="fa fa-trash" id="Del-@item.Id" style="font-size:15px;"></i></a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="mdlDelete" role="dialog">
+    <div class="modal-dialog" style="margin-top: 12%;">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Warning</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want delete this Document?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnYes" class="btn btn-default" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<button type="button" id="btnShowModal" data-toggle="modal" data-target="#mdlDelete" style="display:none"></button>
+
+<!-- Modal -->
+<div class="modal fade" id="mdlStatus" role="dialog">
+    <div class="modal-dialog" style="margin-top: 12%;">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Warning</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to change the status of this document?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnStatusYes" class="btn btn-default" data-dismiss="modal">Yes</button>
+                <button type="button" id="btnStatusNo" class="btn btn-default button-cancel" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<button type="button" id="btnStatusShowModal" data-toggle="modal" data-target="#mdlStatus" style="display:none"></button>
+
+<!-- Modal -->
+<div class="modal fade" id="mdlReject" role="dialog">
+    <div class="modal-dialog" style="margin-top: 12%;">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Warning</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin: 0 0 50px 0px;">
+                    <label for="select" class="col-lg-4 control-label">Rejection Reason</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" id="txtRejectionReason" />
+                        <label id="txtErrRejectionReason" class="text-danger"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnRejectYes" class="btn btn-default">Submit</button>
+                <button type="button" id="btnRejectNo" class="btn btn-default button-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<button type="button" id="btnRejectShowModal" data-toggle="modal" data-target="#mdlReject" style="display:none"></button>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/jqueryUI")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+
+
+    <script type="text/javascript">
+        var IdToDelete = '';
+        var IdToChangeStatus = '';
+        var DocStatus = '';
+        var previous;
+        $(document).ready(function () {
+            $('#tblEmployeeList').DataTable({
+
+                responsive: true
+
+            });
+        });
+
+        $('.fa-trash').click(function () {
+            var id = $(this)[0].id.split('-')[1];
+            IdToDelete = id;
+
+            $('#btnShowModal').click();
+
+        });
+
+        $('#btnYes').click(function () {
+
+            showProgress();
+
+            $.ajax({
+                url: '/DocumentDetails/Delete?id=' + IdToDelete,
+                type: 'GET',
+                contentType: 'json',
+                success: function (response) {
+                    if (response == 200) {
+                        alert('Document has been succesfully deleted.');
+
+                    }
+                    else {
+                        alert('Something went wrong. Please try again.');
+                    }
+                    window.location.href = '/DocumentDetails';
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+        });
+
+        $('.button-cancel').click(function () {
+            $('#Status-' + IdToChangeStatus).val(previous);
+        });
+
+        $('#btnStatusYes').click(function () {
+
+            var reason = $('#txtRejectionReason').val();
+
+            showProgress();
+
+            $.ajax({
+                url: '/DocumentDetails/ChangeDocumentStatus',//?documentId=' + IdToChangeStatus + '&statusId=' + DocStatus + '&changeFrom=' + previous,
+                type: 'GET',
+                contentType: 'json',
+                data: { DocumentId: IdToChangeStatus, StatusId: DocStatus, ChangeFrom: previous, RejectionReason: reason },
+                success: function (response) {
+                    if (response == 100) {
+                        alert('Document is gone for approval.');
+                    }
+                    else if (response == 200) {
+                        alert('Status of the document has been successfully changed');
+                    }
+                    else if (response == 300) {
+                        alert('Status of the document has been rejected');
+                    }
+                    else if (response == 400) {
+                        alert('Unauthorized.');
+                    }
+                    else {
+                        alert('Something went wrong. Please try again.');
+                    }
+                    window.location.href = '/DocumentDetails';
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+        });
+
+        $('.doc-status').on('focus', function () {
+            // Store the current value on focus and on change
+            previous = this.value;
+        }).change(function () {
+            // Make sure the previous value is updated
+            //previous = this.value;
+        });
+
+        function ChangeDocumentStatus(ddl) {
+            console.log(previous);
+            var id = ddl.id.split('-')[1];
+            var statusId = ddl.value;
+            IdToChangeStatus = id;
+            DocStatus = statusId;
+
+            if (statusId == 4) {
+                $('#btnRejectShowModal').click();
+            }
+            else {
+                $('#btnStatusShowModal').click();
+            }
+            return false;
+        }
+
+        $('#btnRejectYes').click(function () {
+            if ($('#txtRejectionReason').val() == '') {
+                $('#txtErrRejectionReason').text('Please enter rejection reason.');
+            }
+            else {
+                $('#btnRejectNo').click();
+                $('#btnStatusShowModal').click();
+            }
+        });
+
+    </script>
+
+}
+
+

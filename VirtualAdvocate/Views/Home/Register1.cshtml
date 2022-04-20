@@ -1,0 +1,242 @@
+﻿@model VirtualAdvocate.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Registration » Organizations";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Organizational Membership Type</legend>
+                        <div class="form-group">
+                            <div class="col-lg-6 form-inline">
+                                <div class="radio col-lg-4">
+                                    <label>
+                                        <input name="optionsRadios" id="optionsRadios1" value="option1" checked="" type="radio">
+                                        Single User Account
+                                    </label>
+                                </div>
+                                <div class="radio col-lg-4">
+                                    <label>
+                                        <input name="optionsRadios" id="optionsRadios2" value="option2" type="radio">
+                                        Multiuser Account
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Organizational Details</legend>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Organization Name</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Firstname" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Email Address</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Email" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Telephone</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Lastname" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Street Name</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Street Name" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Building Name</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Building Name" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Plot Number</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Plot Number" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword" class="col-lg-4 control-label">Block Number</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputPassword" placeholder="Block Number" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword" class="col-lg-4 control-label">Region</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputPassword" placeholder="Region" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword" class="col-lg-4 control-label">Near To</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputPassword" placeholder="Near To" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>User Details</legend>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Firstname</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Firstname" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Email Address</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Email" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword" class="col-lg-4 control-label">Password</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputPassword" placeholder="Password" type="password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword" class="col-lg-4 control-label">Confirm Password</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputPassword" placeholder="Password" type="password">
+                                    </div>
+                                </div>
+                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Lastname</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Lastname" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-lg-4 control-label">Designation</label>
+                                    <div class="col-lg-6">
+                                        <input class="form-control" id="inputEmail" placeholder="Designation" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Services Required</legend>
+                        <div class="form-group">
+                            <div class="col-lg-12 form-inline">
+                                <div class="checkbox col-lg-2">
+                                    <label>
+                                        <input type="checkbox">
+                                        Bank
+                                    </label>
+                                </div>
+                                <div class="checkbox col-lg-2">
+                                    <label>
+                                        <input type="checkbox">
+                                        Law Firm
+                                    </label>
+                                </div>
+                                <div class="checkbox col-lg-2">
+                                    <label>
+                                        <input type="checkbox">
+                                        Real Estate
+                                    </label>
+                                </div>
+                                <div class="checkbox col-lg-2">
+                                    <label>
+                                        <input type="checkbox">
+                                        Human Resources
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Preferred Payment Method</legend>
+                        <div class="form-group">
+                            <div class="col-lg-6 form-inline">
+                                <div class="checkbox col-lg-4">
+                                    <label>
+                                        <input type="checkbox">
+                                        Bankers Cheque
+                                    </label>
+                                </div>
+                                <div class="radio col-lg-4">
+                                    <label>
+                                        <input type="checkbox">
+                                        SWIFT
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-1">
+                    <input type="submit" class="btn btn-default" value="Submit" />
+                </div>
+                <div class="">
+                    <input type="submit" class="btn btn-default" value="Cancel" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

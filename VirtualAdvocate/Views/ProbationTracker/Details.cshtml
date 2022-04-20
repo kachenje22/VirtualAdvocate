@@ -1,0 +1,51 @@
+﻿@model VirtualAdvocate.Models.ProbationDetail
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProbationDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfJoining)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfJoining)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProbationPeriod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProbationPeriod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfExpiry)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfExpiry)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,29 @@
+﻿@model VirtualAdvocate.Models.AccountServiceModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_AccountServices</title>
+</head>
+<body>
+    <div> 
+        <div class="well bs-component">
+            <fieldset class="checkBoxListFor">
+                <legend>Services Required</legend>
+                <div class="form-group">
+                    <div class="col-lg-12 form-inline">
+                        @Html.CheckBoxListFor(model => model.PostedServices.ServiceIds, model => model.AvailableService, m => m.Id, m => m.Name, model => model.SelectedService)
+                        @Html.ValidationMessageFor(model => model.PostedServices.ServiceIds, string.Empty, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        </div>
+</body>
+</html>

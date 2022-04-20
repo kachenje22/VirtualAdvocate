@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Virtual Advocate</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="~/css/modern-business.css" rel="stylesheet">
+    <!-- Custom  CSS -->
+    <link href="~/css/custom.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
+    <script src="~/Scripts/LoadingSpinner.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header  col-sm-2  col-md-2">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a href="#"> <img src="~/images/logo.png" width="197" height="52" alt="" class="img-responsive mrg_top15" /></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse col-sm-10  col-md-10 pull_rit " id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="@Url.Action("Index", "Home")"> Home</a>  </li>
+                    <li><a href="@Url.Action("About", "Home")"> Features and Benefits</a></li>
+                    <li><a href="@Url.Action("Solutions", "Home")">Industries and Solutions</a>  </li>
+                    @*<li><a href="@Url.Action("Service", "Home")">Services</a>  </li>*@
+                    <li><a href="@Url.Action("Contact", "Home")">Contact</a>  </li>
+                    <li><a href="@Url.Action("Index", "Login")"> Login </a> </li>
+                    <li> <a href="@Url.Action("Registration", "UsersRegistration")"> Sign Up</a> </li>
+                    <li> <a href="@Url.Action("DueDiligenceRegister", "UsersRegistration")"> Due Diligence</a> </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+    <div class="body-content" >
+        <div id="overlay" style="display:none">
+            <div id="spinner">
+                <i class="fa fa-4x fa-spinner fa-spin "></i>Please wait..
+            </div>
+        </div>
+        @RenderBody()
+
+
+    </div>
+
+
+    <!-- Portfolio Section -->
+    <!-- /.row -->
+    <div class="container-fluid color_bgwt">
+        <div class="container">
+            <div class="col-md-12 footer_link_3">
+                <div class="col-sm-12 col-md-8  ">
+
+                    <h4>Get in Touch</h4>
+                    <br>
+                    Telephone Number: 0222 926531 <br>
+                    Email: support@va.co.tz
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-2  ">
+                   
+                    <h4>Company </h4>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("About", "Home")"> About Us</a>
+                        </li>
+                        @*<li>About Us</li>*@
+                        <li>Meet the Team</li>
+                        <li>Terms & Conditions</li>
+                    </ul>
+
+                </div>
+                <div class=" col-xs-6 col-sm-4 col-md-2  ">
+
+                    <h4>Support </h4>
+                    <ul>
+                        <li>FAQ</li>
+                        <li>Disclaimers</li>
+                        <li>Documentation</li>
+                    </ul>
+
+                </div>
+                @*<div class="col-xs-6 col-sm-3 col-md-2  ">
+
+                    <h4>Developers </h4>
+                    <ul>
+                        <li>Web Development</li>
+                        <li>SEO Marketing</li>
+                        <li>Email Marketing</li>
+                    </ul>
+
+                </div>
+                <div class=" col-xs-6 col-sm-3 col-md-2  ">
+
+                    <h4>Our Partners</h4>
+                    <ul>
+                        <li>Adipisicing Elit</li>
+                        <li>Eiusmod</li>
+                        <li>Tempor</li>
+                    </ul>
+
+                </div>*@
+            </div>
+
+        </div>
+    </div>
+
+    <!-- /.container -->
+    <div class="container-fluid">
+        <div class="container">
+            <footer>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>© 2017 Virtual Advocate. All Rights Reserved. </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery.js"></script>
+
+    <script src="~/Scripts/jquery_008.js"></script>
+    <script src="~/Scripts/lity.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+  
+    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script>
+        //window.onload = window.history.forward(0);  //calling function on window onload
+          var onResize = function () {
+              // apply dynamic padding at the top of the body according to the fixed navbar height
+              $("body").css("padding-top", $(".navbar-fixed-top").height());
+          };
+
+          // attach the function to the window resize event
+          $(window).resize(onResize);
+
+          // call it also when the page is ready after load or reload
+          $(function () {
+              onResize();
+          });
+    </script>
+</body>
+</html>

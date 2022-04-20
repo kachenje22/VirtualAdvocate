@@ -1,0 +1,207 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.PreviewClauses>
+@{ ViewBag.MenuActive = "SearchTemplate";
+                Layout = "~/Views/Shared/_Layoutmain.cshtml"; }
+
+
+<style>
+    .fontchangeforclause {
+        font-family: 'Arial', 'sans-serif';
+        font-size: 12pt;
+        font-style: normal;
+        font-weight: normal;
+    }
+</style>
+<h2>PREVIEW DOCUMENT</h2>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.Action("GetPartialCustomerDetails", "DocumentManagement", new { cuStomerID = ViewBag.customerID })
+        </div>
+
+    </div>
+</div>
+
+<table id="tblAttachAttributes">
+    <tr>
+        <td>
+            @if (Model != null && Model.Count() > 0)
+            {
+<h6>
+    <b>
+        Additional Clauses for this Document
+        (The Below Clause(s) may be used in this Document. Kindly drag and drop it in the desired area of the document.)
+    </b>
+</h6>
+                <div id="unassigned_attributes" class="sortable">
+
+                    @foreach (var item in Model)
+                    {
+    <label style="font-family: 'Arial', 'sans-serif';font-size: 12pt;font-style: normal;font-weight: normal;" name="attributes" id=@item.ClauseID class="fontchangeforclause">@item.Clause </label><br />}
+                </div> } @*@using (Html.BeginForm("FormsConfirmation", "DocumentManagement",FormMethod.Post))
+                    {*@
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-lg-12 doc-height">
+                    <div class="well bs-component" id="preview">
+                        <div style="margin-left:20pt;margin-right:20pt">
+                            <input type=hidden name="customerId">
+                            @*@Html.Raw(@ViewBag.WordContent)*@
+                            @if (@ViewBag.WordContent.ToString().Length > 0)
+                            {
+                                @Html.Raw(System.IO.File.ReadAllText(@ViewBag.WordContent));
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-md-1">
+                        <input type="submit" id="add" class="btn btn-default" value="Submit" id="btnSubmit" onclick="GetClauseData()" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Please Wait.. " />
+
+                    </div>
+                    <div class="col-md-1"><button type="button" value="Edit" class="btn btn-cancel" id="btnedit" onclick="location.href='@Url.Action("CreateDynamicForm","DocumentManagement",new { id=Session["CurrentTempAId"]})'">Edit</button></div>
+                    @*<div class="col-md-1">
+                            <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("SearchTemplate","DocumentManagement", new { id = Convert.ToInt32(Session["OrgId"]) })'">Cancel</button>
+                        </div>*@
+                </div>
+            </div>
+
+            @*// }*@
+
+        </td>
+    </tr>
+</table>
+
+@section Scripts{
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+                clouse = false;
+               // $('span[class^="pt - DefaultParagraphFont"]').remove();
+                //$('#preview').find('span').remove()
+            });
+            function showStatus(msg) {
+                $("#iconType").removeClass().addClass("fa fa-spinner fa-spin");
+                $("#statusMsg").removeClass().addClass('normal-status').show(); //shows status message by adding a normal-status class, use this method to process Ajax request to display waiting status
+                $("#statusText").text(msg); //status message
+            }
+
+            function hideStatus() {
+                $("#statusMsg").hide(); //use this method to hide waiting status message after completion of Ajax request
+            }
+
+            $(document).ready(function () {
+                $('table#tblAttachAttributes').find('div.sortable').sortable({
+                    connectWith: 'div.sortable'
+                });
+            });
+
+            $.fn.extend({
+                getMaxHeight: function () {
+                    var maxHeight = -1;
+                    this.each(function () {
+                        var height = $(this).height();
+                        maxHeight = maxHeight > height ? 4 : 4;
+
+                    });
+                    return maxHeight;
+                }
+            });
+
+            function setMenusDivHeight($attributeDivs) {
+                return $attributeDivs.css('min-height', $attributeDivs.getMaxHeight());
+            }
+
+            setMenusDivHeight($('table#tblAttachAttributes').find('div.sortable')).sortable({
+                connectWith: 'div.sortable',
+                start: function (event, ui) {
+                    clouse = true;
+                    if (ui.item[0].innerText.includes('{{'))
+                    {
+                        ui.item[0].innerText=ui.item[0].innerText.replace("{{", "");
+                        ui.item[0].innerText= ui.item[0].innerText.replace("}}", "");
+                    }
+                    ui.item[0].innerText = ui.item[0].innerText.replace(ui.item[0].innerText, '{{' + ui.item[0].innerText + '}}');
+                    setMenusDivHeight(ui.item.closest('table#tblAttachAttributes').find('div.sortable'))
+                                  .css('box-shadow', '1px 2px 4px #ddd');
+                },
+                stop: function (event, ui) {
+                    setMenusDivHeight(ui.item.closest('table#tblAttachAttributes').find('div.sortable'))
+                            .css('box-shadow', '');
+
+                }
+            });
+
+
+
+            function GetClauseData()
+            {
+                //$("#preview").css('letter-spacing', '1px');
+                $(".dynamic-form-clause").each(function () {
+                    $(this).replaceWith($('<italic>' + $(this).text() + '</italic>'));
+                });
+
+                $("#overlay").show();
+                showProgress();
+                var sHTML = $("#preview").html();
+                sHTML = sHTML.replace('</style>', 'p, span, div {font-size: 15pt !important}</style>');
+                //$("#preview p").css('letter-spacing', 'normal');
+                //$("#preview span").css('letter-spacing', 'normal');
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("FormsConfirmation1", "DocumentManagement"))",
+
+                    dataType: "json",
+                    data: { html: escape(sHTML), clause: clouse },
+
+                    success: function (data) {
+
+                        if (data == "CreateDynamicForm") {
+                            var url = "@(Url.Action("CreateDynamicForm", "DocumentManagement"))";
+                            window.location.href = url;
+                        }
+                        else if (data == "CoverLetterConfirm") {
+                            var url = "@(Url.Action("CoverLetterConfirm", "DocumentManagement"))";
+                            window.location.href = url;
+                        }
+                        else
+                        {
+
+                            var url = "@(Url.Action("FormsHistory", "DocumentManagement"))";
+                            window.location.href = url;
+                        }
+
+                        hideStatus();
+
+
+                    }
+
+                });
+            }
+
+            var spinnerVisible = false;
+            function showProgress() {
+                if (!spinnerVisible) {
+                    $("div#spinner").fadeIn("fast");
+                    spinnerVisible = true;
+                }
+            };
+            function hideProgress() {
+                if (spinnerVisible) {
+                    var spinner = $("div#spinner");
+                    spinner.stop();
+                    spinner.fadeOut("fast");
+                    spinnerVisible = false;
+                }
+            };
+    </script>
+
+}

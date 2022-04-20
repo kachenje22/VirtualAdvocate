@@ -1,0 +1,217 @@
+﻿@model VirtualAdvocate.Models.DueDiligenceAttachViewModel
+@{
+    ViewBag.MenuActive = "AttachReport";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Attach Report</h2>
+
+@using (Html.BeginForm("AttachReport", "DueDiligence", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.Label("Enquiry Type", new { @class = "col-lg-6 control-label" })
+                        <div class="col-lg-6">
+                            @Html.DropDownListFor(m => m.EnquiryTypeId, new SelectList(Model.getAllEnquiryType, "ID", "Name"), "-Select-", new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well bs-component" id="company" style="display:none">
+                <fieldset>
+                    <legend>Enquiry For Companies</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Company Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Company Incorporation Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CompanyRegName, new { @class = "form-control", @placeholder = "Company Incorporation Number", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+        <div class="col-lg-12" id="business" style="display:none">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Enquiry For Business</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Business Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BusinessName, new { @class = "form-control", @placeholder = "Business Name", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Business Registration Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BusinessRegistrationNumber, new { @class = "form-control", @placeholder = "Business Registration Number", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="col-lg-12" id="land" style="display:none">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Enquiry For Land</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Certificate Title Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CertificateTitleNo, new { @class = "form-control", @placeholder = "Certificate Title Number", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Plot Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.PlotNumber, new { @class = "form-control", @placeholder = "Plot Number", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Block Number", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.BlockNumber, new { @class = "form-control", @placeholder = "Block Number", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.Label("Area", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @placeholder = "Area", @disabled = "disabled" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Municipality", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Municipality, new { @class = "form-control", @placeholder = "Municipality", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Region", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Region, new { @class = "form-control", @placeholder = "Region", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Time and Cost</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.EnquiryId)
+                                @Html.Label("Time", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.TimeLine, new { @class = "form-control", @placeholder = "Time", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Cost", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.Cost, new { @class = "form-control", @placeholder = "Cost", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Attach Report</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">File Upload</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.AttachFile, new { type = "file", @placeholder = "File Upoad" })
+                                    @Html.ValidationMessageFor(m => m.AttachFile, string.Empty, new { @class = "text-danger" })
+                                    @Html.DisplayFor(m=>m.ReportDocument, new { @class = "col-lg-6 control-label" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                @if (Model.ReportDocument != "")
+                {
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-default" value="Submit" />
+                    </div>
+                }
+
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("InquiryList","DueDiligence")'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        if ($("#EnquiryTypeId").val() == 1) {
+            $("#business").show();
+            $("#company").hide();
+            $("#land").hide();
+        } else if ($("#EnquiryTypeId").val() == 2) {
+            $("#business").hide();
+            $("#company").show();
+            $("#land").hide();
+        } else if ($("#EnquiryTypeId").val() == 3) {
+            $("#business").hide();
+            $("#company").hide();
+            $("#land").show();
+        }
+        else {
+            $("#business").hide();
+            $("#company").hide();
+            $("#land").hide();
+        }
+
+       
+    });
+
+    </script>
+
+}

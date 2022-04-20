@@ -1,0 +1,105 @@
+﻿@model VirtualAdvocate.Models.DocumentDetail
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>DocumentDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Purpose)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Purpose)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateHanded)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateHanded)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateToBeSubmitted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateToBeSubmitted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RejectionReason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RejectionReason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentDetailsStatu.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentDetailsStatu.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FilledTemplateDetail.FilledTemplateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FilledTemplateDetail.FilledTemplateName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

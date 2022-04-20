@@ -1,0 +1,204 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.Department>
+
+@{
+    ViewBag.MenuActive = "Department";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Department list</h2>
+
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="col-md-3">
+        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Department")'"><i class="fa fa-user-plus"></i> Add Department</button>
+    </div>
+    <div class="col-md-9">
+        <div class="navbar-form navbar-right blue-color">
+            @if (ViewBag.Enable == "Active")
+            {
+                <input type="radio" name="editList" id="Active" value="Active" checked="checked" />
+                <label for="Active" class="radio-color">Active</label>
+
+                <input type="radio" name="editList" id="Inactive" value="Inactive" />
+                <label for="Inactive" class="radio-color">In active</label>
+            }
+            else
+            {
+                <input type="radio" name="editList" id="Active" value="Active" />
+                    <label for="Active" class="radio-color">Active</label>
+
+                    <input type="radio" name="editList" id="Inactive" value="Inactive" checked="checked" />
+                    <label for="Inactive" class="radio-color">In active</label>
+            }
+
+        </div>
+        <div class="navbar-form navbar-right" role="search">
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-striped table-hover dataTable table-custom-border" id="tblDepartmentList">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayName("Department")</th>
+            <th>@Html.DisplayName("Description")</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 0;}
+        @foreach (var item in Model)
+        {
+            rowNo = rowNo + 1;
+            var css = "";
+            var ustatus = "";
+            var msg = "";
+            if (item.IsEnabled == true)
+            {
+                css = "glyphicon glyphicon-ok green-color";
+                ustatus = "Active";
+                msg = "deactivate";
+            }
+            else
+            {
+                css = "glyphicon glyphicon-remove red-color";
+                ustatus = "Inactive";
+                msg = "activate";
+            }
+            <tr>
+                <td>@rowNo</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a href="@Url.Action("EditDepartment","Department",new { id = item.Id })" title="Edit" class="fa fa-edit gray-color" onsubmit = "showProgress()"></a>&nbsp;|
+                    &nbsp;
+                    <a href="javascript:;" name="Edit" title="@ustatus" class="@css" onclick="ChangeStatus(@item.Id,'@msg')"></a>
+
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/unobtrusive")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+
+
+    <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#tblDepartmentList').DataTable({
+                        "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                        responsive: true
+                    });
+
+                });
+
+                function ChangeStatus(id, msg) {
+                    debugger;
+
+                    if (msg == "deactivate") {
+                        showProgress();
+                        $.ajax({
+                            url: '@Url.Content("~/Department/CheckDepartmentData")',
+                            type: 'POST',
+                            data: { id: id },
+                            dataType: 'json',
+                            success: function (fresult) {
+                                if (fresult) {
+                                    debugger;
+                                    bootbox.confirm({
+                                        title: 'Department Activate / Deactivate',
+                                        message: 'Are you sure you want to ' + msg + ' this Department?',
+                                        buttons: {
+                                            'cancel': {
+                                                label: 'No',
+                                                className: 'btn-cancel pull-left'
+                                            },
+                                            'confirm': {
+                                                label: 'Yes',
+                                                className: 'btn-default pull-right'
+                                            }
+                                        },
+                                        callback: function (result) {
+                                            if (result) {
+                                                showProgress();
+                                                $.ajax({
+                                                    url: '@Url.Content("~/Department/ActivateDepartment")',
+                                                    type: 'POST',
+                                                    data: { id: id },
+                                                    dataType: 'json',
+                                                    success: function (result) { location.reload(); },
+                                                    error: function () { alert('Error!'); }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                else { bootbox.alert("This Department has assigned to User,Documents or Organization. So you can not deactivate this department"); }
+                            },
+                            error: function () { alert('Error!'); }
+                        });
+
+
+
+                    }
+                    else {
+                       bootbox.confirm({
+                                        title: 'Department Activate / Deactivate',
+                                        message: 'Are you sure you want to ' + msg + ' this Department?',
+                                        buttons: {
+                                            'cancel': {
+                                                label: 'No',
+                                                className: 'btn-cancel pull-left'
+                                            },
+                                            'confirm': {
+                                                label: 'Yes',
+                                                className: 'btn-default pull-right'
+                                            }
+                                        },
+                                        callback: function (result) {
+                                            if (result) {
+                                                showProgress();
+                                                $.ajax({
+                                                    url: '@Url.Content("~/Department/ActivateDepartment")',
+                                                    type: 'POST',
+                                                    data: { id: id },
+                                                    dataType: 'json',
+                                                    success: function (result) { location.reload(); },
+                                                    error: function () { alert('Error!'); }
+                                                });
+                                            }
+                                        }
+                                    });
+                    }
+
+
+
+                }
+
+        $("input[name='editList']").change(function () {
+
+            var enable = $("input[name='editList']:checked").val();
+
+            var url = '@Url.Content("~/Department/DepartmentList")' + '?enable=' + enable;
+
+            location.href = url;
+
+        });
+    </script>
+}

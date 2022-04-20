@@ -1,0 +1,54 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.DocumentCategory>
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Category</h2>
+
+<div id="page-wrapper">
+    <!-- /.row -->
+    <div class="row">
+
+
+@foreach (var item in Model)
+{
+        <div class="col-lg-3 col-md-6 col-xs-6">
+            <div class="row">
+                <div class="dashboard-box text-center col-md-11 margin-bottom-15 col-xs-11">
+                    <div class="icon-box margin-bottom-10"> 
+                    
+                     @if (item.ImagePath != "" && item.ImagePath != null)
+                     {
+                        <img src="@item.ImagePath" alt="image" height="42" width="33" />
+                    }
+                    else
+                    {
+                     <i class="fa fa-user fa-3x fa-gray-color"></i>
+                    }
+                    
+                    </div>
+                    <a href="@Url.Action("SearchSubCategory", "DocumentManagement",new { id= @item.DocumentCategoryId})" title="View Details">@item.DocumentCategoryName </a>
+                </div>
+            </div>
+            @*<div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-user fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <a href="@Url.Action("SearchSubCategory", "DocumentManagement",new { id= @item.DocumentCategoryId})" title="View Details">@item.DocumentCategoryName </a>
+
+</div>
+                    </div>
+                </div>
+              
+            </div>*@
+        </div>
+}
+      
+
+        </div>
+    </div>
+

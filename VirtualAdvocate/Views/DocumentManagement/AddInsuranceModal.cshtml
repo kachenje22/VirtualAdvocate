@@ -1,0 +1,116 @@
+﻿@model VirtualAdvocate.Models.KeyCategoryModal
+
+<div class="modal fade" id="mdlInsurance-@Model.KeyCateogryId" role="dialog">
+
+    <div class="modal-dialog" style="margin-top: 12%;">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Insurance</h4>
+
+            </div>
+            <div class="modal-body" style="height: 22pc;">
+
+                <div class="col-lg-12">
+
+                    <div class="form-group">
+                        <input type="hidden" id="InsuranceWantToAddInsurance-@Model.KeyCateogryId" name="InsuranceWantToAddInsurance-@Model.KeyCateogryId" style="display:none" value="0" />
+                        <input type="text" id="InsuranceId-@Model.KeyCateogryId" name="InsuranceId-@Model.KeyCateogryId" style="display:none" value="0" />
+                        <label for="select" class="col-lg-2 control-label">Name</label>
+
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" id="InsuranceCustomerName-@Model.KeyCateogryId" name="InsuranceCustomerName-@Model.KeyCateogryId" readonly value="@Model.CustomerName" />
+
+                        </div>
+                        <label for="select" class="col-lg-2 control-label">Asset Insured</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control disabled" id="InsuranceAssetInsured-@Model.KeyCateogryId" name="InsuranceAssetInsured-@Model.KeyCateogryId" readonly value="@Model.AssetName" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-12">
+
+                    <div class="form-group">
+
+                        <label for="select" class="col-lg-2 control-label">Insurer</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control" id="InsuranceInsurer-@Model.KeyCateogryId" name="InsuranceInsurer-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="errInsuranceInsurer-@Model.KeyCateogryId"></label>
+                        </div>
+
+                        @*<label for="select" class="col-lg-2 control-label">Amount Insured</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control" id="InsuranceAmountInsured-@Model.KeyCateogryId" name="InsuranceAmountInsured-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="errInsuranceAmountInsured-@Model.KeyCateogryId"></label>
+                        </div>*@
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="form-group">
+
+                        <label for="select" class="col-lg-2 control-label">Currency</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control" id="InsuranceCurrency-@Model.KeyCateogryId" name="InsuranceCurrency-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="InsuranceCurrency-@Model.KeyCateogryId"></label>
+                        </div>
+
+                        <label for="select" class="col-lg-2 control-label">Amount Insured</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control" id="InsuranceAmountInsured-@Model.KeyCateogryId" name="InsuranceAmountInsured-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="errInsuranceAmountInsured-@Model.KeyCateogryId"></label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="form-group">
+
+                        <label for="select" class="col-lg-2 control-label">Date of Insurance</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control date-control date-of-insurance" name="InsuranceDateOfInsrurance-@Model.KeyCateogryId" id="InsuranceDateOfInsrurance-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="errInsuranceDateOfInsrurance-@Model.KeyCateogryId"></label>
+                        </div>
+
+                        <label for="select" class="col-lg-2 control-label">Expiry Date</label>
+                        <div class="col-lg-4">
+
+                            <input type="text" class="form-control date-control date-of-expiry" id="InsuranceDateOfExpiry-@Model.KeyCateogryId" name="InsuranceDateOfExpiry-@Model.KeyCateogryId" />
+                            <label class="text-danger" id="errInsuranceDateOfExpiry-@Model.KeyCateogryId"></label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-12">
+
+                    <button class="btn btn-default add-insurance" type="button" style="float:right" id="btnSubmit-@Model.KeyCateogryId">Add</button>
+                    <button class="btn btn-default" type="button" style="float:right; display:none" data-dismiss="modal" id="btnTempSubmit-@Model.KeyCateogryId">Add</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,116 @@
+﻿@model VirtualAdvocate.Models.ProbationViewModel
+@{
+    ViewBag.Title = "EditProbation";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="~/Scripts/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<h2>Update Probation</h2>
+
+@using (Html.BeginForm("Edit", "ProbationTracker", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                @Html.ValidationMessage("PageError", "", new { @class = "text-danger col-md-offset-1" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Customer Name</label>
+
+                                @*<div class="col-lg-4">
+                                        <input type="text" class="form-control" />
+                                    </div>*@
+                                @*<label for="select" class="col-lg-2 control-label">Employer</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" />
+                                    </div>*@
+                                <div class="col-lg-4">
+                                    @Html.DropDownList("CustomerId", null, "Select Customer", new { @class = "form-control", @disabled = "true" })
+                                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                                </div>
+
+                                <label for="select" class="col-lg-2 control-label">Date Of Joining</label>
+                                <div class="col-lg-4">
+                                    @Html.EditorFor(model => model.DateOfJoining, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.DateOfJoining, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+
+
+                                <label for="select" class="col-lg-2 control-label">Probation Period</label>
+                                <div class="col-lg-2">
+                                    @Html.DropDownList("ProbationPeriod", null, "Month", new { @class = "form-control", @disabled = "true" })
+                                    @Html.ValidationMessageFor(model => model.ProbationPeriod, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-2" style="    margin: 7px 0 0 0;">
+                                    Months
+                                </div>
+
+                                <label for="select" class="col-lg-2 control-label">Extend Expiry</label>
+                                <div class="col-lg-2">
+                                    @Html.DropDownList("ExtendExpiry", null, "Month", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ExtendExpiry, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-2" style="margin: 7px 0 0 0;">
+                                    Months
+                                </div>
+
+                                @*<label for="select" class="col-lg-2 control-label">Extend Expiry</label>
+        <div class="col-lg-2">
+            <select class="form-control">
+                <option>3</option>
+            </select>
+        </div>
+        <div class="col-lg-2" style="    margin: 7px 0 0 0;">
+            Months
+        </div>*@
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" value="Update" class="btn btn-default" id="btnUpdateSubmit" />
+                </div>
+                <div class="">
+                    <a href="/ProbationTracker" class="btn btn-cancel" id="btncancel">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script>
+    $("#DateOfJoining").datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true
+    });
+</script>

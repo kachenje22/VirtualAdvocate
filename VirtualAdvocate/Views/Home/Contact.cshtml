@@ -1,0 +1,186 @@
+﻿
+
+@model VirtualAdvocate.Models.NewInquiry
+    <div class="container-fluid color_bg">
+        <div class="col-lg-12">
+            <h2 class="page-header">Contact Us</h2>
+        </div>
+
+    </div>
+    <div class="container-fluid innerpage panel-heading gmap-area">
+
+
+        <div class="container">
+            <div class="col-sm-6 text-center mrg_top">
+                <div class="gmap">
+                    @*<iframe scrolling="no" marginheight="0" marginwidth="0"
+        src="https://www.mapsdirections.info/en/custom-google-maps/map.php?width=350&height=400&hl=ru&coord=51.5072,0.12750000000005457&q=1st%20Floor%2C%20Address%20Building%2C%20Bains%20Avenue%2C%20Masaki%20P.O.%20Box%2022450%20%20Dar%20es%20Salaam%20Tanzania+(Your%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
+        style="border:0" allowfullscreen="" frameborder="0" height="300" width="400"></iframe>*@
+
+                    <iframe scrolling="no" marginheight="0" marginwidth="0"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.2048871459288!2d39.27791421431674!3d-6.744846495124227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d0a1f7b3cfd%3A0xad0336ca8b112c13!2sStatoil+Tanzania!5e0!3m2!1sen!2sin!4v1525422456811"
+                            style="border:0" allowfullscreen="" frameborder="0" height="300" width="400"></iframe>
+
+
+
+                </div>
+                <div class="col-sm-12 ">
+
+                    <address class="text-center">
+                      
+                        <p>
+                            1<sup>st</sup> Floor, Address, Bains Avenue, Masaki<br />
+                            P.O. Box 22450 <br>
+                            Dar es Salaam<br>
+                            Tanzania<br>
+                            
+                        </p>
+                        <p>
+                            Telephone number: 0222 926531 <br>
+                            Email: <a href="support@va.co.tz">support@va.co.tz </a>
+                        </p>
+                    </address>
+
+                </div>
+            </div>
+            <div class="col-md-6  padd_top">
+             
+                @*<h4>Contact Us</h4>*@
+                <p class="text-left">Want to know more about our features, pricing or request for a demo? Please fill out this contact form and one of our specialists will get back to you asap.</p>
+@using (Ajax.BeginForm("AddContact", "Home", new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess()" }))
+{@Html.AntiForgeryToken()
+                <div class="row contact-wrap">
+                    <div class="status alert alert-success" style="display: none"></div>
+                    <form id="ContactForm" class="contact-form" name="contact-form" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.Label("Name")
+                                <div>
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+
+                              
+                            </div>
+                            <div class="form-group">
+
+                                @Html.Label("Organization")
+                                <div>
+                                    @Html.EditorFor(model => model.Organization, new { htmlAttributes = new { @class = "form-control"} })
+                                    @Html.ValidationMessageFor(model => model.Organization, "", new { @class = "text-danger" })
+                                </div>
+
+                                
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Email")
+                                <div>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+
+                             
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Phone")
+                                <div>
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                @Html.Label("Inquiry / Issue")
+                                <div>
+                                    @Html.TextAreaFor(model => model.Issue,  new { @class = "form-control",@rows="10" } )
+                                    @Html.ValidationMessageFor(model => model.Issue, "", new { @class = "text-danger" })
+                                </div>
+
+                               
+
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" name="submit" class="btn btn-default btn-lg">Submit Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+}
+            </div>
+
+        </div>
+
+
+
+        <!-- /Support form-->
+
+
+    </div>
+
+    <div>
+
+    </div>
+
+@section Scripts{
+    <script type="text/javascript">
+       
+
+        function ajaxSuccess() {
+
+            alert('Mail has sent successfully, our team will reach you soon!');           
+            $("#Name").val("");
+            $("#Organization").val("");
+            $("#Email").val("");
+            $("#Phone").val("");
+            $("#Issue").val("");
+
+        }
+
+        @*function OnSuccess() {
+
+            Name = $("#Name").val();
+            Organization = $("#Organization").val();
+            Email = $("#Email").val();
+            Phone = $("#Phone").val();
+            Issue = $("#Issue").val();
+            debugger;
+            var contactForm = $("#ContactForm");
+            if (contactForm.valid()) {
+                $.ajax({
+                    url: '@Url.Content("~/Home/AddContact")',
+                    type: 'POST',
+                    data:
+                        {
+                            inquiryObj:
+                                {
+                                    Name: Name,
+                                    Organization: Organization,
+                                    Email: Email,
+                                    Phone: Phone,
+                                    Issue: Issue
+                                }
+                        }
+                }).success(function (result) {
+                    debugger;
+                    if (result == "true") {
+                        alert('Added Successfully');
+                        $("#Name").val("");
+                        $("#Organization").val("");
+                        $("#Email").val("");
+                        $("#Phone").val("");
+                        $("#Issue").val("");
+                    }
+                });
+            }
+        }*@
+       
+
+        
+
+</script>
+}
+

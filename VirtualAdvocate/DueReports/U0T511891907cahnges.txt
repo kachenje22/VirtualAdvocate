@@ -1,0 +1,12 @@
+Protection Zones-
+	township,Latitude	section,Longitude	range,Failure Contingency Plan Comments 
+
+Deficiency-Add drop down,Outage Required To Repair
+
+outage
+
+
+Transformer Read table- remove 
+Battery ID
+Battery Voltage
+Charger Amps

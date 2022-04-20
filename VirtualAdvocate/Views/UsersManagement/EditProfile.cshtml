@@ -1,0 +1,247 @@
+﻿@model VirtualAdvocate.Models.ProfileViewModel
+@{
+    ViewBag.MenuActive = "UserManagement";
+    //ViewBag.Title = "EditProfile";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>EDIT PROFILE</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="row">
+    @*<div class="col-lg-12">
+        <div class="well bs-component">
+            <fieldset>
+                <legend>Organizational Membership Type</legend>
+                <div class="form-group">
+                    <div class="col-lg-6 form-inline">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.UserAccountType, new { @class = "col-lg-5 control-label" })
+                                <div class="col-lg-6 ">
+                                    <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.UserAccountType)</label>
+                                </div>
+                            </div>
+                            <label class="editable-content col-lg-12">Single User Account</label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            @if(Model.UserAccountTypeid==1)
+            {
+            <div id="edit-button" class="btn btn-primary btn-xs"><a href="@Url.Action("ManageAccountType","UsersManagement", new {id=Model.OrganizationId })">Edit</a></div>
+            }      
+        </div>
+    </div>*@
+     <div class="col-lg-12">
+        <div class="well bs-component">
+            <fieldset>
+                <legend>User Details</legend>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.userId)
+                            @Html.LabelFor(m => m.FirstName, new { @class = "col-lg-5 control-label" })
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.FirstName)</label>
+                            </div>
+                        </div>                       
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LastName, new { @class = "col-lg-5 control-label" })
+                            @*<label for="inputEmail" class="col-lg-4 control-label">Lastname</label>*@
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.LastName)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.EmailAddress, new { @class = "col-lg-5 control-label" })
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.EmailAddress)</label>
+                            </div>
+                        </div>
+                       @*@if (Convert.ToInt32(Session["RoleId"]) != 1 && Model.RoleId != 4)
+                       {*@
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Designation, new { @class = "col-lg-5 control-label" })
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.Designation)</label>
+                            </div>
+                        </div>
+
+                    
+@if ( Model.RoleId != 3)
+{
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Department, new { @class = "col-lg-5 control-label" })
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.Department)</label>
+                            </div>
+                        </div>
+}
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputEmail" class="col-lg-5 control-label">Street Name</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.StreetName)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail" class="col-lg-5 control-label">Building Name</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.BuildingName)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail" class="col-lg-5 control-label">Plot Number</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.PlotNo)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-lg-5 control-label">Block Number</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.BlockNo)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-lg-5 control-label">Region</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.Region)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-lg-5 control-label">Near To</label>
+                            <div class="col-lg-6">
+                                <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.LandMark)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="edit-button"><a href="@Url.Action("ManageProfile", "UsersManagement", new { id = Model.userId})" class="fa fa-edit gray-color" title="Edit Details" onsubmit = "showProgress()"></a></div>
+      </div>
+    </div>
+
+   
+    @*@if (Model.RoleId != 4)
+    {
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Client Required</legend>
+                    <div class="form-group">
+                        <div class="col-lg-12 form-inline">
+                            @foreach (var ser in Model.getSelectedService)
+                            {
+                                <div class="col-lg-2">
+                                    <label class="editable-content col-lg-12">@ser.Service</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </fieldset>
+                <div id="edit-button" class="btn btn-primary btn-xs"><a href="@Url.Action("EditAcService", "UsersManagement", new { id = Model.userId })">Edit</a></div>
+            </div>
+        </div>
+    }*@
+   
+    @if (Convert.ToInt32(Session["AccountUser"]) != 1)
+    {
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Preferred Payment Method</legend>
+                    <div class="form-group">
+                        <div class="col-lg-12 form-inline">
+                            @foreach (var pay in Model.getSeletedPayment)
+                            {
+                                <div class="col-lg-2">
+                                    <label class="editable-content col-lg-12">@pay.PaymentDescription</label>
+                                </div>
+                            }                           
+                        </div>
+                    </div>
+                </fieldset>
+                <div id="edit-button" ><a href="@Url.Action("EditPayment", "UsersManagement", new { id = Model.userId })" class="fa fa-edit gray-color" title="Edit Details" onsubmit = "showProgress()"></a></div>
+            </div>
+        </div>
+    }
+    
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>User Type</legend>
+                    <div class="form-group">
+                        <div class="col-lg-12 form-inline">
+                                <div class="col-lg-4">
+                                    <label class="editable-content col-lg-12">@Html.DisplayFor(m => m.RoleDescription)</label>
+                                </div>
+                        </div>
+                    </div>
+                </fieldset>
+                @*@if (Convert.ToInt32(Session["RoleId"]) == 1 && Model.RoleId==5)
+                {*@
+
+                @if ((Convert.ToInt32(Session["RoleId"]) == 1|| Convert.ToInt32(Session["RoleId"]) == 2|| Convert.ToInt32(Session["RoleId"]) == 6) && (Model.RoleId == 5 || Model.RoleId==2| Model.RoleId == 6))
+                {
+                <div id="edit-button"><a href="@Url.Action("EditRole", "UsersManagement", new { id = Model.userId })" class="fa fa-edit gray-color" title="Change the Role" onsubmit = "showProgress()"></a></div>
+                }
+
+                @*<div id="edit-button" class="btn btn-primary btn-xs">
+                    <a href="#" name="EditRole"  onclick="ChangeRole(@Model.userId)">Change To Admin</a></div>
+                @*}*@
+            </div>
+        </div>
+
+    
+
+  @{ 
+      var actname = "UserList";
+      var orgId = 0;
+      if(Model.OrganizationId != 0 && (Convert.ToInt32(Session["RoleId"])==2 || Convert.ToInt32(Session["RoleId"]) == 1))
+      {
+          actname = "OrgUserList";
+          orgId = Model.OrganizationId;
+      }
+      if (ViewBag.user == "Yes")
+      {
+          actname = "UserList";
+      }
+  }
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-1">
+                    <input type="button" class="btn btn-default" value="Back" onclick="location.href='@Url.Action(actname,"UsersManagement", new { id = orgId })'"  onsubmit = "showProgress()"/>
+            </div>
+        </div>
+    </div>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">              
+                function ChangeRole(id)
+                {
+                   
+                    var flag = confirm('Are you sure you want to change admin role for this user?');
+                    if (flag) {
+                        showProgress();
+                        $.ajax({
+                            url: '@Url.Content("~/UsersManagement/EditRole")',
+                            type: 'POST',
+                            data: { id: id },
+                            dataType: 'json',
+                            success: function (result) { location.reload(); },
+                            error: function () { alert('Error!'); }
+                        });
+                    }
+
+                  
+                    return false;
+                }
+</script>
+}

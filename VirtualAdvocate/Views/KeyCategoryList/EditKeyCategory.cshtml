@@ -1,0 +1,112 @@
+﻿@model VirtualAdvocate.Models.EditKeyCategoryModel
+@{
+    ViewBag.MenuActive = "EditKeyCategory";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Edit Key Category</h2>
+
+
+@using (Html.BeginForm("EditKeyCategory", "KeyCategoryList", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Category</legend>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.ID)
+
+                                @Html.Label("Key Category Name", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.CategoryName, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Key Category Description", new { @class = "col-lg-6 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.CategoryDescription, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Key Category Order", htmlAttributes: new { @class = "col-lg-6 control-label", @maxlength = 10 })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(model => model.Order, new { htmlAttributes = new { @class = "form-control", @placeholder = "Category Order" } })
+                                    @Html.ValidationMessageFor(model => model.Order, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Provide Insurance ?", htmlAttributes: new { @class = "col-lg-6 control-label", @maxlength = 10 })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(model => model.CanAddInsurance, new { htmlAttributes = new { @style = "margin: 9px 0 0 0" } })
+                                    @*@Html.ValidationMessageFor(model => model.Order, "", new { @class = "text-danger" })*@
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Submit" />
+                </div>
+                <div class="">
+                    <button type="button" value="Cancel" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("KeyCategoryList","KeyCategoryList")'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+
+    <script>
+
+        jQuery('#CategoryName').change('input', function() {
+            debugger;
+            var test=@Html.Raw(Json.Encode(Model.CategoryName));
+            if(test!=$(this).val())
+            {
+                 CallKeyCategory($(this).val());
+
+            }
+        });
+
+        function CallKeyCategory(id) {
+            $.ajax({
+                url: '@Url.Action("CheckKeyCategoryName", "KeyCategoryList")',
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                data: { 'CategoryName': id },
+                success: function (result) {
+                    if(result==true)
+                    {$('#CategoryName').val("");
+                        alert("Category already exist");
+
+
+                    }
+                },
+                error: function () {
+                    alert('Error occured');
+                }
+            });
+        }
+
+
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

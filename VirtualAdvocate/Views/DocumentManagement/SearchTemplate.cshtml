@@ -1,0 +1,269 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.DocumentTemplateListModel>
+@{
+    ViewBag.MenuActive = "SearchTemplate";
+    //ViewBag.Title = "Search Template";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>Fill Template</h2>
+
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<link href= "@Url.Content("~/Content/themes/base/autocomplete.css")" rel="stylesheet" type="text/css" />
+<form name="form" method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2">Customer Name :</div>
+            <div class="col-md-9">
+                <input type="text" id="customersearch" name="customersearch" class="navbar-left form-control" />
+                 @*<input type="text" id="customersearch" name="customersearch" class="navbar-left form-control" />*@
+                @Html.Hidden("CustomerId")
+                <div id="results" class="ui-autocomplete"></div>
+
+            </div>
+           
+        </div>
+        </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="navbar-form navbar-right" role="search">
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover dataTable table-custom-border" id="tblTemplateList">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>@Html.DisplayName("Template")</th>
+                <th>@Html.DisplayName("Category")</th>               
+                <th>@Html.DisplayName("SubCategory")</th>
+                <th>@Html.DisplayName("Sub SubCategory")</th>
+               
+                <th>@Html.DisplayName("Cost")</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int rowNo = 0;}
+            @foreach (var item in Model)
+        {
+            rowNo = rowNo + 1;
+        <tr>
+            <td>@rowNo</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TemplateName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentSubCategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentSubSubCategoryName)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @*<a href="@Url.Action("CreateDynamicForm","DocumentManagement",new { id = item.TemplateId })" title="Fill">Fill</a>*@
+                <a href="javascript:void(0);" onclick="checkCustomer(@item.TemplateId)" title="Fill">Fill</a> 
+              
+            </td>
+        </tr>
+
+        }
+
+        </tbody>
+    </table>
+</form>
+
+@section Scripts {
+
+@Scripts.Render("~/bundles/bootbox")
+@Scripts.Render("~/bundles/jqueryUI")
+    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                debugger;
+            $.ajax({
+                    async: false,
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("CustomerSearch", "DocumentManagement"))",
+                    data: { "term": "testdataby" },
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            customer = data[i].CustomerName;
+                            $("#customersearch").val(customer)
+                            $("#CustomerId").val(data[i].CustomerId)
+                        }
+                      
+                    }
+                });
+
+            $('#tblTemplateList').DataTable({
+                "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                responsive: true
+            });
+
+            $("#customersearch").autocomplete({
+                source: function (request, response) {
+                    var customer = new Array();
+                    $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("CustomerSearch", "DocumentManagement"))",
+                        data: { "term": request.term },
+                    success: function (data) {
+                        for (var i = 0; i < data.length ; i++) {
+                            customer[i] = { label: data[i].CustomerName, Id: data[i].CustomerId };
+                        }
+                        },
+                        error: function (xhr, er, err) {
+                            console.log(xhr);
+                            console.log(er);
+                            console.log(err);
+                        }
+                    });
+               $("#results").html(response(customer));
+            //response(customer);
+        },
+                select: function (event, ui) {
+                    $("#customersearch").val(ui.item.label)
+                    $("#CustomerId").val(ui.item.Id)
+                return false;
+                },
+                minLength: 1
+        });
+
+
+        });
+
+
+
+        @*$(function () {
+            debugger;
+            var availableTags = new Array();
+            $.ajax({
+                async: false,
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("CustomerSearch", "DocumentManagement"))",
+                data: { "term": "" },
+            success: function (data) {
+                for (var i = 0; i < data.length ; i++) {
+                    availableTags[i] = {label:"Customer Name:"+ data[i].CustomerName +"| Email : " + data[i].EmailAddress + " | AccNo : " + data[i].AccountNumber, Id: data[i].CustomerId };
+                }
+            }
+        });
+
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $("#customersearch")
+              // don't navigate away from the field on tab when selecting an item
+              .on("keydown", function (event) {
+                  if (event.keyCode === $.ui.keyCode.TAB &&
+                      $(this).autocomplete("instance").menu.active) {
+                      event.preventDefault();
+                  }
+              })
+              .autocomplete({
+                  minLength: 0,
+                  source: function (request, response) {
+
+
+                      //// delegate back to autocomplete, but extract the last term
+                      response($.ui.autocomplete.filter(
+                        availableTags, extractLast(request.term)));
+                  },
+                  focus: function () {
+                      // prevent value inserted on focus
+                      return false;
+                  },
+                  select: function (event, ui) {
+                      var terms = split(this.value);
+                      // remove the current input
+                      terms.pop();
+                      // add the selected item
+                      terms.push(ui.item.value);
+                      // add placeholder to get the comma-and-space at the end
+                      terms.push("");
+                      this.value = terms.join(", ");
+                      return false;
+                  }
+              });
+        });*@
+
+
+    </script>
+    <script type="text/javascript">
+        function checkCustomer(id)
+        {
+            debugger;
+            if ($("#customersearch").val() != null && $("#customersearch").val() != "" && $("#customersearch").val() != " ")
+            {
+               
+                $.ajax({
+                    async: false,
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("CheckCustomer", "DocumentManagement"))",
+                    data: { "id": $("#customersearch").val() },
+                success: function (data) {
+                    debugger;
+                    if (data == "true")
+                    {
+                        document.form.action ="@(Url.Content("~/DocumentManagement/CreateDynamicForm/" ))"+id;
+                        document.form.submit();
+                        return true;
+                    }
+                    else
+
+                    {
+                        bootbox.alert("Please Select Customer For Filling Document");
+                        //alert("Please Select Customer For Filling Document");
+                        return false;
+                    }
+                }
+            });
+            } else {
+                bootbox.alert("Please Select Customer For Filling Document");
+            }
+        }
+        function McheckCustomer(id)
+        {
+            if ($("#CustomerId").val() > 0 && $("#CustomerId").val() != null && $("#customersearch").val()!="")
+            {
+                //window.location = "~/CreateDynamicForm?id=" + id;
+                document.form.action ="@(Url.Content("~/DocumentManagement/AssociateCreateDynamicForm/" ))"+id;
+                document.form.submit();
+                return true;
+
+            } else {
+                bootbox.alert("Please Select Customer For Filling Document");
+                //alert("Please Select Customer For Filling Document");
+                return false;
+            }
+        }
+    </script>
+
+
+}
+
+
+
+

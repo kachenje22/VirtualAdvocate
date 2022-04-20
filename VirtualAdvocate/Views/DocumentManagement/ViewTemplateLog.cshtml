@@ -1,0 +1,224 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.ViewLogTemplateUpload_Result>
+@{
+    ViewBag.MenuActive = "TemplateLog";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>View Template Log</h2>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well bs-component">
+            <fieldset>
+                <legend>Template Log Details</legend>
+                <div class="row">
+                    @{
+                        int rowNo = 0;
+                        var msg = "";
+                    }
+                    @foreach (var item in Model)
+                    {
+                        rowNo = rowNo + 1;
+                        if (item.IsEnabled == true)
+                        {
+                            msg = "Enabled";
+                        }
+                        else
+                        {
+                            msg = "Disabled";
+                        }
+
+                        if (rowNo == 1)
+                        {
+                            <fieldset>
+                                <legend>Current Values</legend>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        @Html.Label("Date", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.ModifiedDate.ToString()</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Title", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentTitle</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Type", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentType</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Description", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentDescription</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Cost", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.TemplateCost</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        @Html.Label("Action", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.Action</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentCategoryName</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Sub Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            @if (item.DocumentSubCategoryName != null)
+                                            {
+                                                <label class="editable-content col-lg-12">@item.DocumentSubCategoryName</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="editable-content col-lg-12">--</label>
+                                            }
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Sub Sub Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            @if (item.SubDocumentCategoryName != null)
+                                            {
+                                            <label class="editable-content col-lg-12">@item.SubDocumentCategoryName</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="editable-content col-lg-12">--</label>
+                                            }
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        @Html.Label("IsEnabled", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12"> @msg</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        }
+                        if (rowNo == 2)
+                        {
+                            <fieldset>
+                                <legend>Original Values</legend>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        @Html.Label("Date", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.ModifiedDate.ToString()</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Title", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentTitle</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Type", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentType</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Document Description", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentDescription</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Cost", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.TemplateCost</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        @Html.Label("Action", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.Action</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12">@item.DocumentCategoryName</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Sub Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            @if (item.DocumentSubCategoryName != null)
+                                            {
+                                                <label class="editable-content col-lg-12">@item.DocumentSubCategoryName</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="editable-content col-lg-12">--</label>
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Sub Sub Category", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            @if (item.SubDocumentCategoryName != null)
+                                            {
+                                                <label class="editable-content col-lg-12">@item.SubDocumentCategoryName</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="editable-content col-lg-12">--</label>
+                                            }
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        @Html.Label("IsEnabled", new { @class = "col-lg-6 control-label" })
+                                        <div class="col-lg-6">
+                                            <label class="editable-content col-lg-12"> @msg</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        }
+
+                    }
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="">
+                <button type="button" value="Back" class="btn btn-cancel" id="btncancel" onclick="location.href='@Url.Action("TemplateLog","DocumentManagement")'">Back</button>
+            </div>
+        </div>
+    </div>
+</div>

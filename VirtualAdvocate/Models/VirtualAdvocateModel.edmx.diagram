@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="631007bae00940ddb659609103808f9b" Name="Diagram1" ZoomLevel="65">
+        <EntityTypeShape EntityType="VirtualAdvocateModel.AccountService" Width="1.5" PointX="0.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ApplicationConfiguration" Width="1.5" PointX="0.75" PointY="7.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.AssociatedKeyGroup" Width="1.5" PointX="10.75" PointY="9.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.AssociateTemplateDetail" Width="1.5" PointX="7.75" PointY="8.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.BulkTemplateLog" Width="1.5" PointX="8.25" PointY="11.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.BulkTemplateValue" Width="1.5" PointX="10.75" PointY="14.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ClientWiseCustomerTemplate" Width="1.5" PointX="12.75" PointY="9.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Clouse" Width="1.5" PointX="7.75" PointY="15.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ClouseandCategoryMaping" Width="1.5" PointX="11" PointY="7.125" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ClouseLog" Width="1.5" PointX="12.75" PointY="12.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.CoverLetter" Width="1.5" PointX="0.75" PointY="16.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.CustomerDetail" Width="1.5" PointX="12.75" PointY="16.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.CustomerTemplateDetail" Width="1.5" PointX="14.75" PointY="7.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Department" Width="1.5" PointX="14.75" PointY="11.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DepartmentLog" Width="1.5" PointX="14.75" PointY="14.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentCategory" Width="1.5" PointX="8.75" PointY="5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentSubCategory" Width="1.5" PointX="11" PointY="3.875" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentSubSubCategory" Width="1.5" PointX="13.25" PointY="3.875" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentTemplate" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DueDiligenceCost" Width="1.5" PointX="15.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DueDiligenceEnquiry" Width="1.5" PointX="7.75" PointY="18.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DueDiligenceEnquiryType" Width="1.5" PointX="2.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.FilledTemplateDetail" Width="1.5" PointX="9.75" PointY="18.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Inquiry" Width="1.5" PointX="14.75" PointY="18.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.InvoiceDetail" Width="1.5" PointX="16.75" PointY="6.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogAccountService" Width="1.5" PointX="16.75" PointY="13.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogDocumentCategory" Width="1.5" PointX="16.75" PointY="17.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogDocumentSubCategory" Width="1.5" PointX="0.75" PointY="20.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogDueDiligenceUser" Width="1.5" PointX="18.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogDueUserPaymentType" Width="1.5" PointX="18.75" PointY="9.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LoginHistory" Width="1.5" PointX="18.75" PointY="12.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogKeywordCategory" Width="1.5" PointX="11.75" PointY="21.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogOrganizationDetail" Width="1.5" PointX="18.75" PointY="15.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogRegistration" Width="1.5" PointX="16.75" PointY="21.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogSubSubCategory" Width="1.5" PointX="18.75" PointY="20.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogTemplateUpload" Width="1.5" PointX="13.75" PointY="22.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogUserPaymentType" Width="1.5" PointX="20.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.LogUserService" Width="1.5" PointX="2.75" PointY="23.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.OrganizationDetail" Width="1.5" PointX="5.25" PointY="13.875" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.OrganizationType" Width="1.5" PointX="20.75" PointY="6.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.PasswordRequest" Width="1.5" PointX="4.75" PointY="23.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.PaymentMethod" Width="1.5" PointX="20.75" PointY="9.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ReportType" Width="1.5" PointX="20.75" PointY="12.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Role" Width="1.5" PointX="0.75" PointY="12" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.SelectedAccountService" Width="1.5" PointX="5.25" PointY="5.875" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.SelectedDepartment" Width="1.5" PointX="20.75" PointY="15.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.SelectedPaymentMethod" Width="1.5" PointX="5.25" PointY="8.375" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.SystemConfig" Width="1.5" PointX="20.75" PointY="21.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.TemplateDynamicFormValue" Width="1.5" PointX="6.75" PointY="24.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.TemplateGroupDetail" Width="1.5" PointX="8.75" PointY="24.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.TemplateKeysPointer" Width="1.5" PointX="18.75" PointY="24.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Ticket" Width="1.5" PointX="22.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.UserAccountType" Width="1.5" PointX="22.75" PointY="7.5" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.UserAddressDetail" Width="1.5" PointX="5.25" PointY="18.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.UserProfile" Width="1.5" PointX="3" PointY="10.375" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_BulkTemplateLog_DocumentTemplate" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_BulkTemplateLog_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_ClouseandCategoryMaping_DocumentCategory" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentSubCategory_DocumentCategory" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentSubSubCatrgory_DocumentSubCategory" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_OrganizationDetails_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_UserProfile_Roles" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_SelectedAccountServices_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_SelectedPaymentMethods_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_UserAddressDetails_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_CustomerDetails_CustomerDetails" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Property" Width="1.5" PointX="12" PointY="27.125" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Property_Document" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.KeyCategory" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.TemplateKeyword" Width="1.5" PointX="21.375" PointY="24.75" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.RecursiveNotificationDetail" Width="1.5" PointX="7.5" PointY="28.875" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_RecursiveNotificationDetail_OrganizationDetails" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.ProbationDetail" Width="1.5" PointX="23" PointY="14.875" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_ProbationDetails_CustomerDetails" />
+        <AssociationConnector Association="VirtualAdvocateModel.Fk" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentDetailsStatu" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentStatusChangeRequest" Width="1.5" PointX="23.25" PointY="19.25" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus1" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_UserProfile" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.DocumentDetail" Width="1.5" PointX="12" PointY="0.75" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_DocumentDetailsStatus" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_FilledTemplateDetails1" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentDetails_UserProfile" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetails" />
+        <EntityTypeShape EntityType="VirtualAdvocateModel.Insurance" Width="1.5" PointX="14.25" PointY="27.5" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Insurance_Property" />
+        <AssociationConnector Association="VirtualAdvocateModel.FK_Insurance_UserProfile" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

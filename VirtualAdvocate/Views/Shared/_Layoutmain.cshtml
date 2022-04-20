@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRTUAL ADVOCATE</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/LoadingSpinner.js"></script>
+    <link href="~/css/dashboard.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
+
+    <script type="text/javascript">
+
+
+        var appInsights = window.appInsights || function (config) {
+            function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;)s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+        }({
+            instrumentationKey: "2b087f05-3d2f-4279-8112-0dbc06ec4866"
+        });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+
+        // Set timeout variables.
+        var timoutWarning = 6000000000000; // Display warning in 1Mins.
+        var timoutNow = 60000; // Timeout in 2 mins.
+
+
+        var warningTimer;
+        var timeoutTimer;
+
+        // Start timers.
+        function StartTimers() {
+
+            window.clearTimeout(warningTimer);
+            window.clearTimeout(timeoutTimer);
+            warningTimer = window.setTimeout("IdleWarning()", 6000000000000);
+            timeoutTimer = window.setTimeout("IdleTimeout()", 600000); //change to 60000 when deploy
+        }
+
+        // Reset timers.
+        function ResetTimers() {
+
+            window.clearTimeout(warningTimer);
+            window.clearTimeout(timeoutTimer);
+            StartTimers();
+            // $("#timeout").dialog('close');
+        }
+
+        //// Show idle timeout warning dialog.
+        function IdleWarning() {
+            //$("#timeout").dialog({
+            //    modal: true
+            //});
+        }
+
+        // Logout the user.
+        function IdleTimeout() {
+            window.location.href = '/UsersRegistration/LogOff/';
+        }
+        window.onload = window.history.forward(0);  //calling function on window onload
+
+    </script>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            /*z-index: 1000;*/
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .8 ) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+
+        /* When the body has the loading class, we turn
+        the scrollbar off with overflow:hidden */
+        body.loading {
+            overflow: hidden;
+        }
+
+            /* Anytime the body has the loading class, our
+        modal element will be visible */
+            body.loading .modal {
+                display: block;
+            }
+
+        .modal-backdrop {
+            display: none !important
+        }
+    </style>
+</head>
+
+
+
+<body onload="StartTimers();" onmousemove="StartTimers();" onkeypress="StartTimers();">
+
+    <div id="overlay" style="display:none"></div>
+    <div id="spinner">
+        <i class="fa fa-4x fa-spinner fa-spin "></i>Please wait..
+    </div>
+    <div id="statusMsg" align="center" style="display: none;">
+        <div class="">
+            <div class="pull-left"><i class=""></i></div>
+            <div class="msg">
+                <i class="fa fa-spinner fa-spin" id="iconType"></i>&nbsp;
+                <span id="statusText" align="center">
+                </span>
+            </div>
+            <div class="pull-left">
+            </div>
+        </div>
+    </div>
+    <div id="timeout" style="display: none;">
+        <h1>
+            Session About To Timeout
+        </h1>
+        <p>
+            You will be automatically logged out in 1 minute.<br />
+            To remain logged in move your mouse over this window.
+    </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header  col-sm-2  col-md-2">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a href="#"> <img src="~/images/logo.png" width="197" height="52" alt="" class="img-responsive mrg_top15" /></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="col-sm-10  col-md-10 pull_rit">
+                <div class="collapse navbar-collapse  " id="bs-example-navbar-collapse-1">
+
+                    @Html.Partial("_LoginPartial")
+                    <ul class="nav navbar-nav navbar-right">
+                        @*<li><a href="@Url.Action("Index", "Home")"> Home</a>  </li>*@
+                        @*<li><a href="@Url.Action("About", "Home")"> Features and Benifits</a></li>
+                            <li><a href="@Url.Action("Solutions", "Home")">Industries and Solutions</a>  </li>*@
+
+                        @*<li><a href="@Url.Action("Contact", "Home")">Contact</a>  </li>*@
+
+                    </ul>
+
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+
+
+
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    @{ var navaction = "";
+                        var menuHighlight = "";
+                        int? orgid = null;
+                    }
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1)
+                    {
+                        navaction = "UserList";
+                    }
+                    else
+                    {
+                        navaction = "OrgUserList";
+                        orgid = Convert.ToInt32(Session["OrgId"]);
+                    }
+
+                    @if (ViewBag.MenuActive == "DashBoard") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                    <a href="@Url.Action("DashBoard","DocumentManagement")" title="Dash Board" class="list-group-item @menuHighlight">Dash Board</a>
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    {
+                        if (ViewBag.MenuActive == "UserManagement") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action(navaction,"UsersManagement",new { id = orgid })" title="User Management" class="list-group-item @menuHighlight">User Management</a>
+                    }
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1)
+                    {
+                        @*if (ViewBag.MenuActive == "Service") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("AccountServiceList", "DocumentManagement")" title="Client" class="list-group-item @menuHighlight">Client</a>*@
+
+                        if (ViewBag.MenuActive == "Department") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("DepartmentList","Department")" title="Department" class="list-group-item @menuHighlight">Department</a>
+
+                        if (ViewBag.MenuActive == "Organization") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("OrganizationList", "UsersManagement")" title="Organization Management" class="list-group-item @menuHighlight">Organization Management</a>
+
+                        if (ViewBag.MenuActive == "DocumentManagement") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Index","DocumentManagement")" title="Document Category" class="list-group-item @menuHighlight">Document Category</a>
+
+                        if (ViewBag.MenuActive == "Templates") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Templates","DocumentManagement")" title="Upload Documents" class="list-group-item @menuHighlight">Upload Document</a>
+
+                        if (ViewBag.MenuActive == "KeyCategoryList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("KeyCategoryList","KeyCategoryList")" title="Key Category" class="list-group-item @menuHighlight">Key Category</a>
+
+                        if (ViewBag.MenuActive == "Templatekey") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("KeywordIndex","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Document Keys</a>
+                        if (ViewBag.MenuActive == "AssociatedKey") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("AssociatedKeysGroup","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Associated Key Groups</a>
+                        if (ViewBag.MenuActive == "Clause") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("ClouseList","ClouseManagement")" title="Clause" class="list-group-item @menuHighlight">Clauses</a>
+                        if (ViewBag.MenuActive == "ArchiveDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a>
+
+                        if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 5 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    {
+                        if (ViewBag.MenuActive == "Tracker") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Index", "Tracker")" title="Tracker" class="list-group-item @menuHighlight">Tracker</a>
+
+                        if (ViewBag.MenuActive == "Recursive") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Index", "RecursiveNotification")" title="Recursive Notification" class="list-group-item @menuHighlight">Recursive Notification Details</a>
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 5)
+                    {
+                        if (ViewBag.MenuActive == "Customers") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { id = orgid })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    {
+                        if (ViewBag.MenuActive == "Customers") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { enable="Active" })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    {
+                        if (ViewBag.MenuActive == "ArchiveDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a>
+
+                        if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) != 7)
+                    {
+                        if (ViewBag.MenuActive == "Reports") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Reports", "DocumentManagement")" title="Reports" class="list-group-item @menuHighlight">Reports</a>
+
+
+                    }
+                    @if (Convert.ToInt32(Session["RoleId"]) != 7 && Convert.ToInt32(Session["RoleId"]) != 1)
+                    {
+                        if (ViewBag.MenuActive == "FormsHistory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("FormsHistory","DocumentManagement")" title="Forms History" class="list-group-item @menuHighlight">Filled Forms</a>
+
+                        if (ViewBag.MenuActive == "SearchTemplate") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("SearchCategory","DocumentManagement",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Fill Template</a>
+
+                        if (ViewBag.MenuActive == "MultipleDownload") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("MultipleDownload","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Template Download</a>
+
+                        if (ViewBag.MenuActive == "BulkDocuments") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("BulkDocuments","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Documents</a>
+
+                    }
+
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    {
+                        if (ViewBag.MenuActive == "AllFormsList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("AllFilledFormsList","DocumentManagement", new { id = orgid })" title="Filled Form History" class="list-group-item @menuHighlight">All Filled Forms List</a>
+                    }
+                    @if (Convert.ToInt32(Session["RoleId"]) == 7)
+                    {
+                        if (ViewBag.MenuActive == "DueDiligence") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("Enquiry", "DueDiligence")" title="Enquiry Form" class="list-group-item @menuHighlight">Enquiry Form</a>
+
+                    }
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 7)
+                    {
+                        if (ViewBag.MenuActive == "DueDiligenceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("InquiryList", "DueDiligence")" title="Enquiry List" class="list-group-item @menuHighlight">Enquiry List</a>
+
+                    }
+
+                    @*@if (Convert.ToInt32(Session["RoleId"]) == 4)
+                        {
+                            if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("InvoiceList", "DueDiligence")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>
+                        }*@
+                    @if (Convert.ToInt32(Session["RoleId"]) == 1)
+                    {
+
+                        @*if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("InvoiceList", "DocumentManagement")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>*@
+                        if (ViewBag.MenuActive == "RegistrationLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("RegistrationLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Registration Log</a>
+                        if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+
+                        @*if (ViewBag.MenuActive == "ServiceLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("ServiceLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Client Log</a>*@
+                        if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("CategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Category Log</a>
+                        if (ViewBag.MenuActive == "LogSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("SubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">SubCategory Log</a>
+                        if (ViewBag.MenuActive == "LogSubSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("SubSubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Sub-SubCategory Log</a>
+
+                        if (ViewBag.MenuActive == "TemplateLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                        <a href="@Url.Action("TemplateLog", "DocumentManagement")" title="Template Log" class="list-group-item @menuHighlight">Template Log</a>
+
+
+                    }
+
+                </div>
+            </div>
+            <div id="statusMsg" align="center" style="display: none;">
+                <div class="">
+                    <div class="pull-left"><i class=""></i></div>
+                    <div class="msg">
+                        <i class="fa fa-spinner fa-spin" id="iconType"></i>&nbsp;
+                        <span id="statusText" align="center">
+                        </span>
+                    </div>
+                    <div class="pull-left">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
+        </div>
+        <hr />
+
+
+        <div class="row">
+            <div class="col-md-4 col-sm-4">
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - Virtual Advocate 17.02.01</p>
+
+                </footer>
+            </div>
+            <div class="col-md-8 col-sm-8">
+                <ul class="list-unstyled pull-right footer-links">
+                    <li><a href="@Url.Action("Policy","DocumentManagement")">Privacy Policy</a></li>
+                    <li><a href="@Url.Action("Terms","DocumentManagement")">Terms &amp; Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+        // window.onload = window.history.forward(0);
+        //calling function on window onload
+
+
+
+        var onResize = function () {
+            // apply dynamic padding at the top of the body according to the fixed navbar height
+            $("body").css("padding-top", $(".navbar-fixed-top").height());
+        };
+
+        // attach the function to the window resize event
+        $(window).resize(onResize);
+
+        // call it also when the page is ready after load or reload
+        $(function () {
+            onResize();
+        });
+
+                    //$body = $("body");
+
+                    //$(document).on({
+                    //    ajaxStart: function () { $body.addClass("loading"); },
+                    //    ajaxStop: function () { $body.removeClass("loading"); }
+                    //});
+    </script>
+
+
+</body>
+@*<script>
+        var onResize = function () {
+            // apply dynamic padding at the top of the body according to the fixed navbar height
+            $("body").css("padding-top", $(".navbar-fixed-top").height());
+        };
+
+        // attach the function to the window resize event
+        $(window).resize(onResize);
+
+        // call it also when the page is ready after load or reload
+        $(function () {
+            onResize();
+        });
+    </script>*@
+</html>

@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "HTMLEditor";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+    <meta name="viewport" content="width=device-width" />
+    <title>TinyMCE Example</title>
+    <!-- TinyMCE Script Reference -->
+<script src="~/Scripts/tinymce/tinymce.min.js"></script>
+  
+
+<h2>EDIT DOCUMENT</h2>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <b>Selected Customer Names:</b> @ViewBag.MultiName<br/>
+
+        </div>
+
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveDocument", "MultipleDocumentDownload", FormMethod.Post))
+{
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well bs-component">
+            <input type=hidden name="customerId">
+            <textarea id="txtEditor">@Html.Raw(@ViewBag.WordContent)</textarea>         
+        </div>
+    </div>
+</div>
+
+}
+    <!-- Script to wire up your TinyMCE editor -->
+@section Scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+            tinymce.EditorManager.editors = [];
+            tinymce.init({
+                selector: "#txtEditor",
+                theme: "modern",
+                paste_data_images: true,
+                height: "500",
+                menubar:"hide",
+                plugins: [
+                  //"advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                  "searchreplace wordcount visualblocks visualchars code fullscreen",
+                  "insertdatetime media nonbreaking save table contextmenu directionality",
+                  "emoticons template paste textcolor colorpicker textpattern"
+                ],
+                toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor",
+              
+                file_picker_callback: function (callback, value, meta) {
+                    if (meta.filetype == 'image') {
+                        $('#upload').trigger('click');
+                        $('#upload').on('change', function () {
+                            var file = this.files[0];
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                callback(e.target.result, {
+                                    alt: ''
+                                });
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                },
+                templates: [{
+                    title: 'Test template 1',
+                    content: 'Test 1'
+                }, {
+                    title: 'Test template 2',
+                    content: 'Test 2'
+                }]
+            }).then(function (editors) {
+                if (editorDescription != undefined && editorDescription != "") {
+                    tinyMCE.activeEditor.setContent(editorDescription);
+                }
+            });
+
+    })
+
+    </script>
+}

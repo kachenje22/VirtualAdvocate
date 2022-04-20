@@ -1,0 +1,171 @@
+﻿@model VirtualAdvocate.Models.InsuranceViewModel
+@{
+    ViewBag.MenuActive = "Tracker";
+    ViewBag.Title = "AddInsurance";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="~/Scripts/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<h2>Update Insurance</h2>
+
+@using (Html.BeginForm("Edit", "InsuranceTracker", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                @Html.ValidationMessage("PageError", "", new { @class = "text-danger col-md-offset-1" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="select" class="col-lg-2 control-label">Name</label>
+
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @disabled = "true" } })
+                                            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <label for="select" class="col-lg-2 control-label">Document Title</label>
+
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.DocumentTitle, new { htmlAttributes = new { @class = "form-control", @disabled = "true" } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+                                        <label for="select" class="col-lg-2 control-label">Asset Insured</label>
+
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.AssetInsured, new { htmlAttributes = new { @class = "form-control", @disabled = "true" } })
+                                            @Html.ValidationMessageFor(model => model.AssetInsured, "", new { @class = "text-danger" })
+                                        </div>
+
+
+                                        <label for="select" class="col-lg-2 control-label">Insurer</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.Insurer, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Insurer, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+                                        <label for="select" class="col-lg-2 control-label">Currency</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.Currency, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <label for="select" class="col-lg-2 control-label">Amount Insured</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.AmountInsured, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.AmountInsured, "", new { @class = "text-danger" })
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+                                        <label for="select" class="col-lg-2 control-label">Date of Insurance</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.DateOfInsurance, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                            @Html.ValidationMessageFor(model => model.DateOfInsurance, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <label for="select" class="col-lg-2 control-label">Extend Expiry</label>
+                                        <div class="col-lg-2">
+
+                                            @Html.DropDownListFor(model => model.ExtendedMonths, null, "Select", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ExtendedMonths, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-lg-2" style="margin: 7px 0 0 0;">
+                                            <span>Months</span>
+                                        </div>
+
+                                        
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="select" class="col-lg-2 control-label">Expiry Date</label>
+                                        <div class="col-lg-4">
+                                            @Html.EditorFor(model => model.DateOfExpiry, new { htmlAttributes = new { @class = "form-control", @disabled = "true" } })
+                                            @Html.ValidationMessageFor(model => model.DateOfExpiry, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr class="bottom-spacing-25">
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" value="Update" class="btn btn-default" id="btnCreateSubmit" />
+                </div>
+                <div class="">
+                    <a href="/InsuranceTracker" class="btn btn-cancel">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script>
+    var $j = jQuery.noConflict();
+    $j('#DateOfInsurance').datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        onSelect: function (date) {
+
+            var selectedDate = new Date(date);
+            var msecsInADay = 86400000;
+            var endDate = new Date(selectedDate.getTime() + msecsInADay);
+
+            //Set Minimum Date of EndDatePicker After Selected Date of StartDatePicker
+            $j("#DateOfExpiry").datepicker("option", "minDate", date);
+            //$("#DateOfExpiry").datepicker("option", "maxDate", '+2y');
+
+        }
+    });
+
+    $j("#DateOfExpiry").datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+    });
+</script>

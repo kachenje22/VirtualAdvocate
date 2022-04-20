@@ -1,0 +1,282 @@
+﻿@model IEnumerable<VirtualAdvocate.Models.AllOrganizationList>
+  
+@{
+    ViewBag.MenuActive = "Organization";
+    //ViewBag.Title = "OrganizationList";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>ORGANIZATION LIST</h2><hr />
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/jquery-1.9.0.min.js"></script>
+
+<script src="~/Scripts/bootstrap.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- DataTables CSS -->
+<link href="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")" rel="stylesheet" type="text/css" />
+<!-- DataTables Responsive CSS -->
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="col-md-3">
+        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("AddOrganization", "UsersManagement")'"  onsubmit = "showProgress()" ><i class="fa fa-user-plus"></i> Add Organization</button>
+    </div>
+    <div class="col-md-9">
+        @*<div class="navbar-form navbar-right" role="search">
+                <button type="button" class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+            </div>*@
+
+    </div>
+</div>
+
+<table class="table table-striped table-hover dataTable table-custom-border" id="tblOrgList">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.OrganizationName)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.EmailAddress)</th>
+            <th>Actions</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 0;
+            var usrListcss = "";
+            var js = "";
+        }
+        @foreach (var item in Model)
+        {
+            rowNo = rowNo + 1;
+            var css = "";
+            var ustatus = "";
+            var msg = "";
+            if (item.IsEnabled == true)
+            {
+                css = "fa fa-check green-color";
+                ustatus = "Active";
+                msg = "deactivate";
+            }
+            else
+            {
+                css = "fa fa-close red-color";
+                ustatus = "Inactive";
+                msg = "activate";
+            }
+            if (item.userAccountType == 2)
+            {
+                usrListcss = "glyphicon glyphicon-th-list gray-color";
+
+            }
+            else
+            {
+                usrListcss = "glyphicon glyphicon-th-list gray-color";
+
+            }
+            <tr>
+                <td>@rowNo</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrganizationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td>
+                    <a href="@Url.Action("ManageOrganization", "UsersManagement", new { id = item.OrganizationId })" title="Edit" class="fa fa-edit gray-color"></a>&nbsp;|
+                    &nbsp;
+                    <a href="javascript:;" name="Activate" title="@ustatus" class="@css" onclick="ChangeStatus(@item.OrganizationId,'@msg')"></a>
+                    |
+                    <a href="@Url.Action("OrgUserList", "UsersManagement", new { id = item.OrganizationId })" title="Users List" class="@usrListcss"></a>&nbsp;
+                    @*@if (item.userAccountType==2)
+                            {
+                                <a href = "@Url.Action("AddOrgUser","UsersManagement",new { id = item.OrganizationId })" title = "Add User" class="fa fa-user-plus gray-color"></a>
+                        }*@
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+
+
+<div id="divModal" class="modal fade" role="dialog" >
+    <div class="modal-dialog  modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modalHeader">
+                    <div id="divModalHeader">
+                      Assign Account services
+                    </div>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div id="divModalBody">
+                    <form>
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-lg-5 margin-top-7">
+                                Services
+                            </div>
+                            <div class="col-sm-8 col-lg-7">
+                                <input type="hidden" name="orgID" value="test"  />
+                            @foreach (SelectListItem item in (MultiSelectList)ViewBag.Services)
+                            {
+                                <input type="checkbox" name="Services" value=@item.Value> @Html.Label(item.Text);<br />
+                            }
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnModalOk" type="submit" class="btn btn-sm btn-info"> <i class="fa fa-check"></i> Assign </button>
+                <button id="btnModalClose" class="btn btn-sm btn-info" data-dismiss="modal"> <i class="fa fa-times-circle"></i> Close </button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div id="divActivate" class="modal fade" role="dialog" >
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                <h4 class="modal-title">
+                   
+                        Organization Activate / Deactivate
+                  
+                </h4>
+            </div>
+            <div class="modal-body">
+              
+                    
+                            <div id="message" class="bootbox-body"></div>
+                                
+                            
+                            
+                     
+
+                   
+            </div>
+            <div class="modal-footer">
+                <button id="btnModalcancel" type="submit" class="btn-danger pull-left"> <i class="fa fa-check"></i> No </button>
+                <button id="btnModalConfirm" class="btn-success pull-right" > <i class="fa fa-times-circle"></i> Yes </button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+                @section Scripts {
+                    
+                    <script>
+                        $(document).ready(function () {
+                            $('#tblOrgList').DataTable({
+                                "dom": '<"top"f>rt<"bottom"lp><"clear">',
+                                responsive: true
+                            });
+                        });
+
+                        var orgId;
+                        var message;
+
+                        function ChangeStatus(id, msg) {
+                            orgId = id;
+                            message = msg;
+                            debugger;
+                            $.ajax({
+                                url: '@Url.Content("~/UsersManagement/Checkservicename")',
+                                type: 'POST',
+                                data: { id: id },
+                                dataType: 'json'
+
+
+                            }).success(function (result) {
+
+                                if (result == true) {
+
+                                    $("#message").text('Are you sure you want to ' + msg + ' this organization?');
+                                    $("#divActivate").modal('show');
+                                }
+
+                                else {
+                                    $("#btnModalOk").html('<i class="fa fa-check"></i> Assign ');
+                                 
+                                    $("#divModal").modal('show');
+                                   
+                                    
+                                }
+                            });
+
+                        }
+                          
+                        $("#btnModalOk").click(function () {
+                            var favorite = [];
+                            $.each($("input[name='Services']:checked"), function () {
+                                favorite.push($(this).val());
+                            });
+
+                            $.ajax({
+                                url: '@Url.Content("~/UsersManagement/AssignService")',
+                                type: 'POST',
+                                data: { id: orgId, selectedservices: favorite.join(", ") },
+                                dataType: 'json'
+                            }).success(function (result) {
+                               
+                                if (result == true)
+                                {
+                                    alert("Account service assigned successfully");
+                                    $("#message").text('Are you sure you want to ' + message + ' this organization?');
+                                    $("#divModal").modal('hide');
+                                    $("#divActivate").modal('show');
+                                }
+                            });
+                        }
+                        );
+
+                      
+                     
+
+                        $("#btnModalConfirm").click(function () {
+                            Activate(orgId);
+                        });
+
+                        $("#btnModalcancel").click(function () {
+                            Activate(orgId);
+                        });
+
+                        function Activate(id)
+                        {
+                            $.ajax({
+                                url: '@Url.Content("~/UsersManagement/ActivateOrganization")',
+                                type: 'POST',
+                                data: { id: orgId },
+                                dataType: 'json',  success: function (result) { location.reload(); },
+                            error: function () { alert('Error!'); }
+
+                            });
+
+                        }
+
+                    
+</script>
+                    <script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+                    <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
+
+                }

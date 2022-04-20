@@ -1,0 +1,90 @@
+﻿@using VirtualAdvocate.Models
+@model LoginViewModel
+@{
+    //ViewBag.Title = "Sign In";
+}
+
+<h2>Sign In</h2>
+<hr />
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="well bs-component">
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>Sign In to your Virtual Advocate Account</legend>
+
+                    <div class="form-group">
+                                <label for="inputEmail" class="col-lg-4 control-label">Email Address</label>
+                                <div class="col-lg-6">
+                                    <input class="form-control" id="inputEmail" placeholder="Email" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-4 control-label">Password</label>
+                                <div class="col-lg-6">
+                                    <input class="form-control" id="inputPassword" placeholder="Password" type="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-10">
+                                    <input type="submit" value="Log in" class="btn btn-default" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-10">
+                                    @Html.ActionLink("Forgot Password", "ForgotPassword")
+                                </div>
+                            </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="well bs-component">
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>Sign Up for Virtual Advocate Services</legend>
+                    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Document Templates</div>
+                                <div class="panel-body">
+                                    <div class="bs-component">
+                                        <div class="btn-group-vertical col-lg-12">
+                                            <a href="@Url.Action("Register1", "Home")" class="btn btn-light">Banks</a>
+                                            <a href="@Url.Action("Register1", "Home")" class="btn btn-light">Human Resources</a>
+                                            <a href="@Url.Action("Register1", "Home")" class="btn btn-light">Law Firm</a>
+                                            <a href="@Url.Action("Register1", "Home")" class="btn btn-light">Real Estate</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Due Diligence</div>
+                                <div class="panel-body">
+                                    <div class="bs-component">
+                                        <div class="btn-group-vertical col-lg-12">
+                                            <a href="@Url.Action("Register", "Account")" class="btn btn-light">Businesses</a>
+                                            <a href="@Url.Action("Register", "Account")" class="btn btn-light">Companies</a>
+                                            <a href="@Url.Action("Register", "Account")" class="btn btn-light">Land</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

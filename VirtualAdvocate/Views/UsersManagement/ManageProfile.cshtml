@@ -1,0 +1,169 @@
+﻿@model VirtualAdvocate.Models.PersonalDetailsViewModel
+@{
+    ViewBag.MenuActive = "UserManagement";
+    //ViewBag.Title = "Manage Profile";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml";
+}
+
+<h2>MANAGE PROFILE</h2>
+
+@using (Html.BeginForm("ManageProfile", "UsersManagement", FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "showProgress()" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>Personal Details</legend>
+
+                    <div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.EmailAddress)
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-lg-4 control-label" })
+            <div class="col-lg-6">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", maxlength = 50 })
+                @Html.ValidationMessageFor(m => m.FirstName, string.Empty, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-lg-4 control-label" })
+            <div class="col-lg-6">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", maxlength = 50 })
+                @Html.ValidationMessageFor(m => m.LastName, string.Empty, new { @class = "text-danger" })
+            </div>
+        </div>
+        <fieldset disabled>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EmailAddress, new { @class = "col-lg-4 control-label" })
+                <div class="col-lg-6">
+                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control disabled" })
+                </div>
+            </div>
+        </fieldset>
+        @*@if (Convert.ToInt32(Session["RoleId"]) != 1 && Convert.ToInt32(Session["RoleId"]) != 4)
+        {*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Designation, new { @class = "col-lg-4 control-label" })
+                <div class="col-lg-6">
+                    @Html.TextBoxFor(m => m.Designation, new { @class = "form-control" })
+                </div>
+            </div>
+        @*}*@
+
+        @if (((Convert.ToInt32(Session["RoleId"]) == 1 &&  Model.roleID != 1 && Model.roleID != 7) || Convert.ToInt32(Session["RoleId"]) == 2)&& Model.roleID!= 3&& Model.roleID != 1 && Model.roleID != 7)
+        {<div class="form-group">
+                                @Html.LabelFor(m => m.Department, new { @class = "col-lg-4 control-label" })
+
+                                <div class="col-lg-6">
+                                    @Html.DropDownListFor(m => m.Department, new SelectList(Model.getDepartmentList, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Department, string.Empty, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                @Html.LabelFor(m => m.roleID, new { @class = "col-lg-4 control-label" })
+                                <div class="col-lg-6">
+                                    @Html.DropDownListFor(m => m.roleID, new SelectList(Model.getRoleList, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.roleID, string.Empty, new { @class = "" })
+                                </div>
+                            </div>*@
+
+        }
+        else if (Model.roleID == 3)
+        {
+
+        }
+        else if (Model.roleID != 1 && Model.roleID != 7)
+        {
+            <div class="form-group">
+                @Html.LabelFor(m => m.Department, new { @class = "col-lg-4 control-label" })
+
+                <div class="col-lg-6">
+                    @Html.DropDownListFor(m => m.Department, new SelectList(Model.getDepartmentList, "ID", "Name"), "-Select-", new { @class = "form-control", disabled = "disabled" })
+                    @Html.ValidationMessageFor(m => m.Department, string.Empty, new { @class = "text-danger" })
+                </div>
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.roleID, new { @class = "col-lg-4 control-label" })
+                <div class="col-lg-6">
+                    @Html.DropDownListFor(m => m.roleID, new SelectList(Model.getRoleList, "ID", "Name"), "-Select-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.roleID, string.Empty, new { @class = "" })
+                </div>
+            </div>*@
+        }
+
+      
+        </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.StreetName, new { @class = "col-lg-4 control-label" })
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.StreetName, new { @class = "form-control", maxlength = 50 })
+                                            @Html.ValidationMessageFor(m => m.StreetName, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.BuildingName, new { @class = "col-lg-4 control-label" })
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.BuildingName, new { @class = "form-control", maxlength = 50 })
+                                            @Html.ValidationMessageFor(m => m.BuildingName, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.PlotNo, new { @class = "col-lg-4 control-label" })
+
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.PlotNo, new { @class = "form-control", maxlength = 10 })
+                                            @Html.ValidationMessageFor(m => m.PlotNo, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.BlockNo, new { @class = "col-lg-4 control-label" })
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.BlockNo, new { @class = "form-control", maxlength = 10 })
+                                            @Html.ValidationMessageFor(m => m.BlockNo, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Region, new { @class = "col-lg-4 control-label" })
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.Region, new { @class = "form-control", maxlength = 50 })
+                                            @Html.ValidationMessageFor(m => m.Region, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.LandMark, new { @class = "col-lg-4 control-label" })
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.LandMark, new { @class = "form-control", maxlength = 50 })
+                                            @Html.ValidationMessageFor(m => m.LandMark, string.Empty, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                </fieldset>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" value="Save Changes" />
+                </div>
+                @*@{ var Controllername = "UsersManagement"; var action = "Index";}
+                @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2) { Controllername = "UsersManagement/UserList"; }*@
+                
+                <div class="">
+                    <input type="button" class="btn btn-default" value="Cancel" onclick="history.go(-1);" @*onclick="location.href='@Url.Action(action,Controllername)'"*@ />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {  
+    @Scripts.Render("~/bundles/jqueryval")
+}
