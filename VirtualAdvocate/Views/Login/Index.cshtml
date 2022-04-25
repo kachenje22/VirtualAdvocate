@@ -1,91 +1,94 @@
 ﻿@model VirtualAdvocate.Models.LoginModel
-@{
-    //ViewBag.Title = "Sign In";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ //ViewBag.Title = "Sign In";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 @*<h2>SIGN IN</h2>*@
-@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" , autocomplete = "off", onsubmit = "showProgress()" }))
+@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form", autocomplete = "off", onsubmit = "showProgress()" }))
 {
-    @Html.AntiForgeryToken()
-   
-  
-        <div class="mrg_top_remove" >
+@Html.AntiForgeryToken()
 
-            <div class="col-sm-8 col-lg-6 col-lg-offset-3 col-sm-offset-2 mrg_top">
-                <div class="well bs-component mrg_all123">
-                    <fieldset>
-                        <h3 class="mrg_bott15 ">Sign In to your Virtual Advocate Account</h3>
-                        <div class="alert-box errorMsg">
-                            <span class="text-danger">@TempData["ErrorMessage"]</span>
-                        </div>
-                        <div class="form-group mrg_top30" >
-                            @Html.LabelFor(m => m.EmailAddress, new { @class = "control-label" })
-                            <div>
-                                @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control text-box single-line", maxlength = 50, autocomplete = "off" })
-                                @Html.ValidationMessageFor(m => m.EmailAddress, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Password, new { @class = " control-label" })
-                            <div >
-                                @Html.PasswordFor(m => m.Password, new { @class = "form-control text-box single-line", maxlength = 20, autocomplete = "off" })
-                                @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                         
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <input type="submit" value="Log in" class="btn btn-default col-xs-12" />
+                <div class="mrg_top_remove">
+
+                    <div class="col-sm-8 col-lg-6 col-lg-offset-3 col-sm-offset-2 mrg_top">
+                        <div class="well bs-component mrg_all123">
+                            <fieldset>
+                                <h3 class="mrg_bott15 ">Sign In to your Virtual Advocate Account</h3>
+                                <div class="alert-box errorMsg" >
+                                    <span id="spnErrorMessage" class="text-danger">@TempData["ErrorMessage"]</span>
                                 </div>
-                            </div>
-                            
-                            
-
-                        </div>
-                        @*<div class="form-group">
-                                 <div class="col-md-4"></div>
-                                 <div class="col-md-6">
-                                     <a href="@Url.Action("Registration", "UsersRegistration")">Register</a>
-                                 </div>
-                            </div>*@
-                        <div class="form-group">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-6">
-                                <a href="@Url.Action("ForgotPassword", "UsersRegistration")">Forgot Password?</a>
-                            </div>
-                        </div>
-                        @*<div class="form-group">
-                                <div class="col-md-4"></div>
-                                <div class="col-md-6">
-                                    <a href="@Url.Action("ResetPassword", "UsersRegistration")">Reset Password</a>
+                                <div class="form-group mrg_top30">
+                                    @Html.LabelFor(m => m.EmailAddress, new { @class = "control-label" })
+                                    <div>
+                                        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control text-box single-line", maxlength = 50, autocomplete = "off", Id = "txtEmail" })
+                                        @Html.ValidationMessageFor(m => m.EmailAddress, string.Empty, new { @class = "text-danger" })
+                                    </div>
                                 </div>
-                            </div>*@
-                    </fieldset>
-                </div>
-            </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Password, new { @class = " control-label" })
+                                    <div>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control text-box single-line", maxlength = 20, autocomplete = "off" })
+                                        @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <input type="submit" value="Log in" class="btn btn-default col-xs-12"  id="btnLogin"/>
+                                        </div>
+                                    </div>
 
 
-        </div>
-       
+
+                                </div>
+                                @*<div class="form-group">
+                                         <div class="col-md-4"></div>
+                                         <div class="col-md-6">
+                                             <a href="@Url.Action("Registration", "UsersRegistration")">Register</a>
+                                         </div>
+                                    </div>*@
+                                <div class="form-group">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-6">
+                                        <a href="@Url.Action("ForgotPassword", "UsersRegistration")">Forgot Password?</a>
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-6">
+                                            <a href="@Url.Action("ResetPassword", "UsersRegistration")">Reset Password</a>
+                                        </div>
+                                    </div>*@
+                            </fieldset>
+                        </div>
+                    </div>
+
+
+                </div>}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <style>
+        #Password {
+            -webkit-text-security: disc;
         }
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-<style>
-    #Password {
-        -webkit-text-security: disc;
-    }
-</style>
-<script type="text/javascript">
-
-      function DisableBackButton() {
-       window.history.forward()
-      }
-      DisableBackButton();
-       window.onload = DisableBackButton;
-       window.onpageshow = function(evt) { if (evt.persisted) DisableBackButton() }
-        window.onunload = function() { void (0) }
-</script>
-             
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnLogin').click(function (e) {
+                $('#spnErrorMessage').text('');
+            });
+        });
+        $(window).load(function () {
+            $('#txtEmail').focus();
+        });
+        function DisableBackButton() {
+            window.history.forward()
         }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+    </script>
+
+}

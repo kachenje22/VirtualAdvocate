@@ -160,9 +160,6 @@
 
 
             $('#Id').change(function () {
-
-
-                debugger;
                 $('#tblTemplateKeyList')
                 var id = $('#Id').val();
                 if (id != "") {
@@ -219,7 +216,6 @@
 
             function Delete()
             {
-                debugger;
                 bootbox.confirm({
                     title: 'Delete Key',
                     message: 'Are you sure you want to delete this key?',
@@ -289,7 +285,6 @@
             }
 
         $("input[name='editList']").change(function () {
-            debugger;
             var enable = $("input[name='editList']:checked").val();
             var id = $('#Id').val()
             if (id = " ")

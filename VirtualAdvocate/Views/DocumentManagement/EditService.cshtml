@@ -92,7 +92,6 @@
     <script>
 
         jQuery('#Service').change('input', function() {
-            debugger;
             var test=@Html.Raw(Json.Encode(Model.Service));
             if(test!=$(this).val())
             {
@@ -130,7 +129,6 @@
 
 
         $("#addFields").click(function () {
-            debugger;
             $.ajax({
                 url: '@Url.Action("GetCustomerPartialView", "DocumentManagement")',
                 data: { index: index },

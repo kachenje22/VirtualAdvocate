@@ -1,0 +1,1879 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VirtualAdvocateModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="VirtualAdvocateEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="Get_InvoiceList" ReturnType="Collection(VirtualAdvocateModel.InvoiceList_Result)" />
+    <FunctionImport Name="GetorganizationUserList_sp" ReturnType="Collection(VirtualAdvocateModel.GetorganizationUserList_sp_Result)">
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Get_OrgUserList" ReturnType="Collection(VirtualAdvocateModel.GetorganizationUserList_Result)">
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCurrentMonthCount" ReturnType="Collection(Int32)">
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="DepartmentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetTotalDocumentCount_sp" ReturnType="Collection(VirtualAdvocateModel.GetTotalDocumentCount_sp_Result)" />
+    <FunctionImport Name="GetTotalDocumentCountOrgUser_sp" ReturnType="Collection(Int32)">
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GenerateReport" ReturnType="Collection(VirtualAdvocateModel.GenerateReport_Result)">
+      <Parameter Name="RoleId" Mode="In" Type="Int32" />
+      <Parameter Name="ReportType" Mode="In" Type="Int32" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="DocumentTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="DocumentSubId" Mode="In" Type="Int32" />
+      <Parameter Name="DocumentSubSubId" Mode="In" Type="Int32" />
+      <Parameter Name="Department" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getTotalCountByOrganization" ReturnType="Collection(VirtualAdvocateModel.GetTotalDocumentCount_Result)" />
+    <FunctionImport Name="GetTotalDocumentCountByOrganization_sp" ReturnType="Collection(VirtualAdvocateModel.GetTotalDocumentCountByOrganization_sp_Result)" />
+    <FunctionImport Name="GetOrganizationCountByCategoy" ReturnType="Collection(VirtualAdvocateModel.GetOrganizationCountByCategoy_Result)" />
+    <FunctionImport Name="GetCategoriesOrgUsersCurrnetMonthTotalCount" ReturnType="Collection(VirtualAdvocateModel.GetCategoriesOrgUsersCurrnetMonthTotalCount_Result)">
+      <Parameter Name="CategoryType" Mode="In" Type="Int32" />
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCategoriesOrgUsersTotalCount" ReturnType="Collection(VirtualAdvocateModel.GetCategoriesOrgUsersTotalCount_Result)">
+      <Parameter Name="CategoryType" Mode="In" Type="Int32" />
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="DepartmentID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCategoriesTotalCount" ReturnType="Collection(VirtualAdvocateModel.GetCategoriesTotalCount_Result)">
+      <Parameter Name="CategoryType" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="InvoiceListAcAdmin_sp" ReturnType="Collection(VirtualAdvocateModel.InvoiceListAcAdmin_sp_Result)">
+      <Parameter Name="OrgId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getGraphMonthlyCompanyRegister" ReturnType="Collection(VirtualAdvocateModel.getGraphMonthlyCompanyRegister_Result)" />
+    <FunctionImport Name="NewEnquiriesDueDiligence_sp" ReturnType="Collection(VirtualAdvocateModel.NewEnquiriesDueDiligence_sp_Result)">
+      <Parameter Name="Month" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getGraphMonthlyIndividualRegister" ReturnType="Collection(VirtualAdvocateModel.GraphMonthlyIndividualRegister_Result)" />
+    <FunctionImport Name="CategoryInvoiceTotalAmount" ReturnType="Collection(VirtualAdvocateModel.CategoryInvoiceTotalAmount_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DueInvoiceThisMonth" ReturnType="Collection(VirtualAdvocateModel.DueInvoiceThisMonth_Result)" />
+    <FunctionImport Name="GraphInvoiceTotalAmount" ReturnType="Collection(VirtualAdvocateModel.GraphInvoiceTotalAmount_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="InvoiceTotalAmount" ReturnType="Collection(Decimal)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCategoriesCurrnetMonthTotalCount" ReturnType="Collection(VirtualAdvocateModel.GetCategoriesCurrnetMonthTotalCount_Result)">
+      <Parameter Name="CategoryType" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogCategory" ReturnType="Collection(VirtualAdvocateModel.ViewLogCategory_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogSubCategory" ReturnType="Collection(VirtualAdvocateModel.ViewLogSubCategory_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogSubSubCategory" ReturnType="Collection(VirtualAdvocateModel.ViewLogSubSubCategory_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogTemplateUpload" ReturnType="Collection(VirtualAdvocateModel.ViewLogTemplateUpload_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="LogRegistrationList" ReturnType="Collection(VirtualAdvocateModel.LogRegistrationList_Result)" />
+    <FunctionImport Name="ViewLogRegistration" ReturnType="Collection(VirtualAdvocateModel.ViewLogRegistration_Result1)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogDueRegistration" ReturnType="Collection(VirtualAdvocateModel.ViewLogDueRegistration_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DocumentCategoryByUser_sp" ReturnType="Collection(VirtualAdvocateModel.DocumentCategoryByUser_sp_Result1)">
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetIndividualUserList" ReturnType="Collection(VirtualAdvocateModel.GetIndividualUserList_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="RoleID" Mode="In" Type="Int32" />
+      <Parameter Name="Department" Mode="In" Type="Int32" />
+      <Parameter Name="OrgID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateAssociateTemplate">
+      <Parameter Name="TemplateId" Mode="In" Type="Int32" />
+      <Parameter Name="AssociateTemplateId" Mode="In" Type="Int32" />
+      <Parameter Name="Ordervalue" Mode="In" Type="Int32" />
+      <Parameter Name="Mandatory" Mode="In" Type="Boolean" />
+    </FunctionImport>
+    <FunctionImport Name="ViewLogService" ReturnType="Collection(VirtualAdvocateModel.ViewLogService_Result)">
+      <Parameter Name="LogId" Mode="In" Type="Int32" />
+      <Parameter Name="ServiceID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetAssociatedDocuments" ReturnType="Collection(VirtualAdvocateModel.GetAssociatedDocuments_Result)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+      <Parameter Name="templateId" Mode="In" Type="Int32" />
+      <Parameter Name="departmentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCustomerTemplates">
+      <Parameter Name="clientID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="LogDueRegistrationList" ReturnType="Collection(VirtualAdvocateModel.LogDueRegistrationList_Result)" />
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(VirtualAdvocateModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(VirtualAdvocateModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(String)">
+      <Parameter Name="Input" Mode="In" Type="String" />
+      <Parameter Name="Character" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetReportData" ReturnType="Collection(VirtualAdvocateModel.GetReportData_Result)">
+      <Parameter Name="ReportType" Mode="In" Type="String" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="Todate" Mode="In" Type="DateTime" />
+      <Parameter Name="User" Mode="In" Type="Int32" />
+      <Parameter Name="Category" Mode="In" Type="Int32" />
+      <Parameter Name="SubCategory" Mode="In" Type="Int32" />
+      <Parameter Name="SubsubCategory" Mode="In" Type="Int32" />
+      <Parameter Name="OrgID" Mode="In" Type="Int32" />
+      <Parameter Name="Department" Mode="In" Type="Int32" />
+      <Parameter Name="Role" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetMaxlengthOfUserInputs" ReturnType="Collection(VirtualAdvocateModel.GetMaxlengthOfUserInputs_Result)">
+      <Parameter Name="customerID" Mode="In" Type="Int32" />
+      <Parameter Name="templateId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetAssociatedKeysGroup" ReturnType="Collection(VirtualAdvocateModel.GetAssociatedKeysGroup_Result)" />
+    <FunctionImport Name="GetAssociatedGroupKeys" ReturnType="Collection(VirtualAdvocateModel.GetAssociatedGroupKeys_Result)">
+      <Parameter Name="templateID" Mode="In" Type="Int32" />
+      <Parameter Name="groupName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetReportDetails" ReturnType="Collection(VirtualAdvocateModel.GetReportDetails_Result)">
+      <Parameter Name="ReportType" Mode="In" Type="String" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="Todate" Mode="In" Type="DateTime" />
+      <Parameter Name="User" Mode="In" Type="Int32" />
+      <Parameter Name="Category" Mode="In" Type="Int32" />
+      <Parameter Name="SubCategory" Mode="In" Type="Int32" />
+      <Parameter Name="SubsubCategory" Mode="In" Type="Int32" />
+      <Parameter Name="OrgID" Mode="In" Type="Int32" />
+      <Parameter Name="Department" Mode="In" Type="Int32" />
+      <Parameter Name="Role" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="AccountServices" EntityType="VirtualAdvocateModel.AccountService" />
+    <EntitySet Name="ApplicationConfigurations" EntityType="VirtualAdvocateModel.ApplicationConfiguration" />
+    <EntitySet Name="AssociatedKeyGroups" EntityType="VirtualAdvocateModel.AssociatedKeyGroup" />
+    <EntitySet Name="AssociateTemplateDetails" EntityType="VirtualAdvocateModel.AssociateTemplateDetail" />
+    <EntitySet Name="BulkTemplateLogs" EntityType="VirtualAdvocateModel.BulkTemplateLog" />
+    <EntitySet Name="BulkTemplateValues" EntityType="VirtualAdvocateModel.BulkTemplateValue" />
+    <EntitySet Name="ClientWiseCustomerTemplates" EntityType="VirtualAdvocateModel.ClientWiseCustomerTemplate" />
+    <EntitySet Name="Clice" EntityType="VirtualAdvocateModel.Clouse" />
+    <EntitySet Name="ClouseandCategoryMapings" EntityType="VirtualAdvocateModel.ClouseandCategoryMaping" />
+    <EntitySet Name="ClouseLogs" EntityType="VirtualAdvocateModel.ClouseLog" />
+    <EntitySet Name="CoverLetters" EntityType="VirtualAdvocateModel.CoverLetter" />
+    <EntitySet Name="CustomerDetails" EntityType="VirtualAdvocateModel.CustomerDetail" />
+    <EntitySet Name="CustomerTemplateDetails" EntityType="VirtualAdvocateModel.CustomerTemplateDetail" />
+    <EntitySet Name="Departments" EntityType="VirtualAdvocateModel.Department" />
+    <EntitySet Name="DepartmentLogs" EntityType="VirtualAdvocateModel.DepartmentLog" />
+    <EntitySet Name="DocumentCategories" EntityType="VirtualAdvocateModel.DocumentCategory" />
+    <EntitySet Name="DocumentSubCategories" EntityType="VirtualAdvocateModel.DocumentSubCategory" />
+    <EntitySet Name="DocumentSubSubCategories" EntityType="VirtualAdvocateModel.DocumentSubSubCategory" />
+    <EntitySet Name="DocumentTemplates" EntityType="VirtualAdvocateModel.DocumentTemplate" />
+    <EntitySet Name="DueDiligenceCosts" EntityType="VirtualAdvocateModel.DueDiligenceCost" />
+    <EntitySet Name="DueDiligenceEnquiries" EntityType="VirtualAdvocateModel.DueDiligenceEnquiry" />
+    <EntitySet Name="DueDiligenceEnquiryTypes" EntityType="VirtualAdvocateModel.DueDiligenceEnquiryType" />
+    <EntitySet Name="FilledTemplateDetails" EntityType="VirtualAdvocateModel.FilledTemplateDetail" />
+    <EntitySet Name="Inquiries" EntityType="VirtualAdvocateModel.Inquiry" />
+    <EntitySet Name="InvoiceDetails" EntityType="VirtualAdvocateModel.InvoiceDetail" />
+    <EntitySet Name="LogAccountServices" EntityType="VirtualAdvocateModel.LogAccountService" />
+    <EntitySet Name="LogDocumentCategories" EntityType="VirtualAdvocateModel.LogDocumentCategory" />
+    <EntitySet Name="LogDocumentSubCategories" EntityType="VirtualAdvocateModel.LogDocumentSubCategory" />
+    <EntitySet Name="LogDueDiligenceUsers" EntityType="VirtualAdvocateModel.LogDueDiligenceUser" />
+    <EntitySet Name="LogDueUserPaymentTypes" EntityType="VirtualAdvocateModel.LogDueUserPaymentType" />
+    <EntitySet Name="LoginHistories" EntityType="VirtualAdvocateModel.LoginHistory" />
+    <EntitySet Name="LogKeywordCategories" EntityType="VirtualAdvocateModel.LogKeywordCategory" />
+    <EntitySet Name="LogOrganizationDetails" EntityType="VirtualAdvocateModel.LogOrganizationDetail" />
+    <EntitySet Name="LogRegistrations" EntityType="VirtualAdvocateModel.LogRegistration" />
+    <EntitySet Name="LogSubSubCategories" EntityType="VirtualAdvocateModel.LogSubSubCategory" />
+    <EntitySet Name="LogTemplateUploads" EntityType="VirtualAdvocateModel.LogTemplateUpload" />
+    <EntitySet Name="LogUserPaymentTypes" EntityType="VirtualAdvocateModel.LogUserPaymentType" />
+    <EntitySet Name="LogUserServices" EntityType="VirtualAdvocateModel.LogUserService" />
+    <EntitySet Name="OrganizationDetails" EntityType="VirtualAdvocateModel.OrganizationDetail" />
+    <EntitySet Name="OrganizationTypes" EntityType="VirtualAdvocateModel.OrganizationType" />
+    <EntitySet Name="PasswordRequests" EntityType="VirtualAdvocateModel.PasswordRequest" />
+    <EntitySet Name="PaymentMethods" EntityType="VirtualAdvocateModel.PaymentMethod" />
+    <EntitySet Name="ReportTypes" EntityType="VirtualAdvocateModel.ReportType" />
+    <EntitySet Name="Roles" EntityType="VirtualAdvocateModel.Role" />
+    <EntitySet Name="SelectedAccountServices" EntityType="VirtualAdvocateModel.SelectedAccountService" />
+    <EntitySet Name="SelectedDepartments" EntityType="VirtualAdvocateModel.SelectedDepartment" />
+    <EntitySet Name="SelectedPaymentMethods" EntityType="VirtualAdvocateModel.SelectedPaymentMethod" />
+    <EntitySet Name="SystemConfigs" EntityType="VirtualAdvocateModel.SystemConfig" />
+    <EntitySet Name="TemplateDynamicFormValues" EntityType="VirtualAdvocateModel.TemplateDynamicFormValue" />
+    <EntitySet Name="TemplateGroupDetails" EntityType="VirtualAdvocateModel.TemplateGroupDetail" />
+    <EntitySet Name="TemplateKeysPointers" EntityType="VirtualAdvocateModel.TemplateKeysPointer" />
+    <EntitySet Name="Tickets" EntityType="VirtualAdvocateModel.Ticket" />
+    <EntitySet Name="UserAccountTypes" EntityType="VirtualAdvocateModel.UserAccountType" />
+    <EntitySet Name="UserAddressDetails" EntityType="VirtualAdvocateModel.UserAddressDetail" />
+    <EntitySet Name="UserProfiles" EntityType="VirtualAdvocateModel.UserProfile" />
+    <AssociationSet Name="FK_BulkTemplateLog_DocumentTemplate" Association="VirtualAdvocateModel.FK_BulkTemplateLog_DocumentTemplate">
+      <End Role="DocumentTemplate" EntitySet="DocumentTemplates" />
+      <End Role="BulkTemplateLog" EntitySet="BulkTemplateLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BulkTemplateLog_UserProfile" Association="VirtualAdvocateModel.FK_BulkTemplateLog_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="BulkTemplateLog" EntitySet="BulkTemplateLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClouseandCategoryMaping_DocumentCategory" Association="VirtualAdvocateModel.FK_ClouseandCategoryMaping_DocumentCategory">
+      <End Role="DocumentCategory" EntitySet="DocumentCategories" />
+      <End Role="ClouseandCategoryMaping" EntitySet="ClouseandCategoryMapings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentSubCategory_DocumentCategory" Association="VirtualAdvocateModel.FK_DocumentSubCategory_DocumentCategory">
+      <End Role="DocumentCategory" EntitySet="DocumentCategories" />
+      <End Role="DocumentSubCategory" EntitySet="DocumentSubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentSubSubCatrgory_DocumentSubCategory" Association="VirtualAdvocateModel.FK_DocumentSubSubCatrgory_DocumentSubCategory">
+      <End Role="DocumentSubCategory" EntitySet="DocumentSubCategories" />
+      <End Role="DocumentSubSubCategory" EntitySet="DocumentSubSubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrganizationDetails_UserProfile" Association="VirtualAdvocateModel.FK_OrganizationDetails_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="OrganizationDetail" EntitySet="OrganizationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserProfile_Roles" Association="VirtualAdvocateModel.FK_UserProfile_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SelectedAccountServices_UserProfile" Association="VirtualAdvocateModel.FK_SelectedAccountServices_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="SelectedAccountService" EntitySet="SelectedAccountServices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SelectedPaymentMethods_UserProfile" Association="VirtualAdvocateModel.FK_SelectedPaymentMethods_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="SelectedPaymentMethod" EntitySet="SelectedPaymentMethods" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAddressDetails_UserProfile" Association="VirtualAdvocateModel.FK_UserAddressDetails_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="UserAddressDetail" EntitySet="UserAddressDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomerDetails_CustomerDetails" Association="VirtualAdvocateModel.FK_CustomerDetails_CustomerDetails">
+      <End Role="CustomerDetail" EntitySet="CustomerDetails" />
+      <End Role="CustomerDetail1" EntitySet="CustomerDetails" />
+    </AssociationSet>
+    <EntitySet Name="Properties" EntityType="VirtualAdvocateModel.Property" />
+    <AssociationSet Name="FK_Property_Document" Association="VirtualAdvocateModel.FK_Property_Document">
+      <End Role="FilledTemplateDetail" EntitySet="FilledTemplateDetails" />
+      <End Role="Property" EntitySet="Properties" />
+    </AssociationSet>
+    <EntitySet Name="KeyCategories" EntityType="VirtualAdvocateModel.KeyCategory" />
+    <EntitySet Name="TemplateKeywords" EntityType="VirtualAdvocateModel.TemplateKeyword" />
+    <EntitySet Name="RecursiveNotificationDetails" EntityType="VirtualAdvocateModel.RecursiveNotificationDetail" />
+    <AssociationSet Name="FK_RecursiveNotificationDetail_OrganizationDetails" Association="VirtualAdvocateModel.FK_RecursiveNotificationDetail_OrganizationDetails">
+      <End Role="OrganizationDetail" EntitySet="OrganizationDetails" />
+      <End Role="RecursiveNotificationDetail" EntitySet="RecursiveNotificationDetails" />
+    </AssociationSet>
+    <EntitySet Name="ProbationDetails" EntityType="VirtualAdvocateModel.ProbationDetail" />
+    <AssociationSet Name="FK_ProbationDetails_CustomerDetails" Association="VirtualAdvocateModel.FK_ProbationDetails_CustomerDetails">
+      <End Role="CustomerDetail" EntitySet="CustomerDetails" />
+      <End Role="ProbationDetail" EntitySet="ProbationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="Fk" Association="VirtualAdvocateModel.Fk">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="ProbationDetail" EntitySet="ProbationDetails" />
+    </AssociationSet>
+    <EntitySet Name="DocumentDetailsStatus" EntityType="VirtualAdvocateModel.DocumentDetailsStatu" />
+    <EntitySet Name="DocumentStatusChangeRequests" EntityType="VirtualAdvocateModel.DocumentStatusChangeRequest" />
+    <AssociationSet Name="FK_DocumentStatusChangeRequests_DocumentDetailsStatus" Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus">
+      <End Role="DocumentDetailsStatu" EntitySet="DocumentDetailsStatus" />
+      <End Role="DocumentStatusChangeRequest" EntitySet="DocumentStatusChangeRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentStatusChangeRequests_DocumentDetailsStatus1" Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus1">
+      <End Role="DocumentDetailsStatu" EntitySet="DocumentDetailsStatus" />
+      <End Role="DocumentStatusChangeRequest" EntitySet="DocumentStatusChangeRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentStatusChangeRequests_UserProfile" Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="DocumentStatusChangeRequest" EntitySet="DocumentStatusChangeRequests" />
+    </AssociationSet>
+    <EntitySet Name="DocumentDetails" EntityType="VirtualAdvocateModel.DocumentDetail" />
+    <AssociationSet Name="FK_DocumentDetails_DocumentDetailsStatus" Association="VirtualAdvocateModel.FK_DocumentDetails_DocumentDetailsStatus">
+      <End Role="DocumentDetailsStatu" EntitySet="DocumentDetailsStatus" />
+      <End Role="DocumentDetail" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentDetails_FilledTemplateDetails1" Association="VirtualAdvocateModel.FK_DocumentDetails_FilledTemplateDetails1">
+      <End Role="FilledTemplateDetail" EntitySet="FilledTemplateDetails" />
+      <End Role="DocumentDetail" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentDetails_UserProfile" Association="VirtualAdvocateModel.FK_DocumentDetails_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="DocumentDetail" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentStatusChangeRequests_DocumentDetails" Association="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetails">
+      <End Role="DocumentDetail" EntitySet="DocumentDetails" />
+      <End Role="DocumentStatusChangeRequest" EntitySet="DocumentStatusChangeRequests" />
+    </AssociationSet>
+    <EntitySet Name="Insurances" EntityType="VirtualAdvocateModel.Insurance" />
+    <AssociationSet Name="FK_Insurance_Property" Association="VirtualAdvocateModel.FK_Insurance_Property">
+      <End Role="Property" EntitySet="Properties" />
+      <End Role="Insurance" EntitySet="Insurances" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Insurance_UserProfile" Association="VirtualAdvocateModel.FK_Insurance_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+      <End Role="Insurance" EntitySet="Insurances" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="InvoiceList_Result">
+    <Property Type="Boolean" Name="PaidStatus" Nullable="false" />
+    <Property Type="String" Name="InvoiceDocumentName" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+    <Property Type="Int32" Name="CustomerId" Nullable="true" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+    <Property Type="String" Name="CustomerName" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetorganizationUserList_sp_Result">
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+  </ComplexType>
+  <ComplexType Name="GetorganizationUserList_Result">
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+  </ComplexType>
+  <ComplexType Name="DocumentCategoryByUser_sp_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetDocumentCategoryByUser_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetTotalDocumentCount_sp_Result">
+    <Property Type="String" Name="OrgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="TotalDocumentCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ReportsGenerateByFilters_sp_Result">
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CustomerName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="OrgName" Nullable="true" MaxLength="150" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SubDocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="CustomerId" Nullable="true" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GenerateReport_Result">
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CustomerName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="OrgName" Nullable="true" MaxLength="150" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SubDocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="CustomerId" Nullable="true" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetTotalDocumentCount_Result">
+    <Property Type="String" Name="OrgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="TotalDocumentCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetTotalDocumentCountByOrganization_sp_Result">
+    <Property Type="String" Name="OrgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="TotalDocumentCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetOrganizationCountByCategoy_Result">
+    <Property Type="String" Name="OrganizationType" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="NewCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetCategoriesOrgUsersCurrnetMonthTotalCount_Result">
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetCategoriesOrgUsersTotalCount_Result">
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetCategoriesTotalCount_Result">
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="InvoiceListAcAdmin_sp_Result">
+    <Property Type="Boolean" Name="PaidStatus" Nullable="false" />
+    <Property Type="String" Name="InvoiceDocumentName" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+    <Property Type="Int32" Name="CustomerId" Nullable="true" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+    <Property Type="String" Name="CustomerName" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GraphMonthlyCompanyRegister_Result">
+    <Property Type="String" Name="Company" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="January" Nullable="true" />
+    <Property Type="Int32" Name="Febrary" Nullable="true" />
+    <Property Type="Int32" Name="March" Nullable="true" />
+    <Property Type="Int32" Name="April" Nullable="true" />
+    <Property Type="Int32" Name="May" Nullable="true" />
+    <Property Type="Int32" Name="June" Nullable="true" />
+    <Property Type="Int32" Name="July" Nullable="true" />
+    <Property Type="Int32" Name="August" Nullable="true" />
+    <Property Type="Int32" Name="September" Nullable="true" />
+    <Property Type="Int32" Name="October" Nullable="true" />
+    <Property Type="Int32" Name="November" Nullable="true" />
+    <Property Type="Int32" Name="December" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GraphMonthlyCompanyRegister_Result1">
+    <Property Type="String" Name="Company" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="January" Nullable="true" />
+    <Property Type="Int32" Name="February" Nullable="true" />
+    <Property Type="Int32" Name="March" Nullable="true" />
+    <Property Type="Int32" Name="April" Nullable="true" />
+    <Property Type="Int32" Name="May" Nullable="true" />
+    <Property Type="Int32" Name="June" Nullable="true" />
+    <Property Type="Int32" Name="July" Nullable="true" />
+    <Property Type="Int32" Name="August" Nullable="true" />
+    <Property Type="Int32" Name="September" Nullable="true" />
+    <Property Type="Int32" Name="October" Nullable="true" />
+    <Property Type="Int32" Name="November" Nullable="true" />
+    <Property Type="Int32" Name="December" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="getGraphMonthlyCompanyRegister_Result">
+    <Property Type="String" Name="Company" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="January" Nullable="true" />
+    <Property Type="Int32" Name="February" Nullable="true" />
+    <Property Type="Int32" Name="March" Nullable="true" />
+    <Property Type="Int32" Name="April" Nullable="true" />
+    <Property Type="Int32" Name="May" Nullable="true" />
+    <Property Type="Int32" Name="June" Nullable="true" />
+    <Property Type="Int32" Name="July" Nullable="true" />
+    <Property Type="Int32" Name="August" Nullable="true" />
+    <Property Type="Int32" Name="September" Nullable="true" />
+    <Property Type="Int32" Name="October" Nullable="true" />
+    <Property Type="Int32" Name="November" Nullable="true" />
+    <Property Type="Int32" Name="December" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="NewEnquiriesDueDiligence_sp_Result">
+    <Property Type="Int32" Name="newEQTotal" Nullable="true" />
+    <Property Type="String" Name="EnquiryType" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="GraphMonthlyIndividualRegister_Result">
+    <Property Type="Int32" Name="Total" Nullable="true" />
+    <Property Type="String" Name="mymonth" Nullable="false" MaxLength="9" />
+  </ComplexType>
+  <ComplexType Name="CategoryInvoiceTotalAmount_Result">
+    <Property Type="Decimal" Name="InvoiceAmount" Nullable="true" Precision="19" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="DocumentCategoryId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="DueInvoiceThisMonth_Result">
+    <Property Type="Decimal" Name="Total" Nullable="false" Precision="19" />
+    <Property Type="String" Name="EnquiryType" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="GraphInvoiceTotalAmount_Result">
+    <Property Type="Decimal" Name="Amount" Nullable="false" Precision="38" Scale="0" />
+    <Property Type="String" Name="MnthName" Nullable="true" MaxLength="30" />
+  </ComplexType>
+  <ComplexType Name="GetCategoriesCurrnetMonthTotalCount_Result">
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="ViewLogCategory_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="DocumentCategoryId" Nullable="true" />
+    <Property Type="String" Name="DocumentCategoryDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="String" Name="ServicesDescription" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="ViewLogSubCategory_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="DocumentCategoryId" Nullable="true" />
+    <Property Type="String" Name="SubCategoryDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="ViewLogSubSubCategory_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="DocumentSubSubCategoryId" Nullable="true" />
+    <Property Type="String" Name="SubSubCategoryDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SubDocumentCategoryName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="ViewLogTemplateUpload_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="DocumentType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DocumentDescription" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="TemplateCost" Nullable="true" Precision="19" />
+    <Property Type="String" Name="TemplateFileName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SubDocumentCategoryName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="LogRegistration_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="Int32" Name="OrgId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="orgName" Nullable="false" MaxLength="150" />
+  </ComplexType>
+  <ComplexType Name="LogRegistration1_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="Int32" Name="OrgId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="orgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="LogRegistrationList_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="Int32" Name="OrgId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="orgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="ViewLogRegistration_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="150" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="Int32" Name="OrgId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="orgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+    <Property Type="String" Name="StreetName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BuildingName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PlotNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BlockNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Designation" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Region" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LandMark" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="ModifierId" Nullable="false" />
+    <Property Type="String" Name="Column1" Nullable="true" MaxLength="150" />
+  </ComplexType>
+  <ComplexType Name="ViewLogRegistration_Result1">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="150" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="Int32" Name="OrgId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="orgName" Nullable="false" MaxLength="150" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+    <Property Type="String" Name="StreetName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BuildingName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PlotNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BlockNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Designation" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Region" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LandMark" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="ModifierId" Nullable="false" />
+    <Property Type="String" Name="ModifierName" Nullable="true" MaxLength="150" />
+  </ComplexType>
+  <ComplexType Name="ViewLogDueRegistration_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+    <Property Type="String" Name="StreetName" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="BuildingName" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="PlotNumber" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="BlockNumber" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Region" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="LandMark" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="ModifierId" Nullable="false" />
+    <Property Type="String" Name="ModifierName" Nullable="true" MaxLength="150" />
+  </ComplexType>
+  <ComplexType Name="DocumentCategoryByUser_sp_Result1">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetIndividualUserList_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+  </ComplexType>
+  <ComplexType Name="ViewLogService_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="250" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="ServiceId" Nullable="true" />
+    <Property Type="String" Name="ServiceName" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="ServiceDescription" Nullable="true" />
+    <Property Type="Boolean" Name="IsEnabled" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetAssociatedDocuments_Result">
+    <Property Type="Int32" Name="TemplateId" Nullable="false" />
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="DisplayOrder" Nullable="true" />
+    <Property Type="Boolean" Name="Selected" Nullable="false" />
+    <Property Type="Boolean" Name="Mandatory" Nullable="false" />
+    <Property Type="Int32" Name="AssociatedTemplateId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="LogDueRegistrationList_Result">
+    <Property Type="String" Name="Action" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="101" />
+    <Property Type="Int32" Name="RoleId" Nullable="true" />
+    <Property Type="String" Name="RoleDescription" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="LogId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetReportData_Result">
+    <Property Type="String" Name="DocumentTitle" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CustomerName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="OrgName" Nullable="true" MaxLength="150" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="DocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DocumentSubCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SubDocumentCategoryName" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="CustomerId" Nullable="false" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetMaxlengthOfUserInputs_Result">
+    <Property Type="Int64" Name="lettercount" Nullable="true" />
+    <Property Type="String" Name="groupname" Nullable="false" MaxLength="64" />
+  </ComplexType>
+  <ComplexType Name="GetAssociatedKeysGroup_Result">
+    <Property Type="String" Name="DocumentName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="GroupName" Nullable="false" MaxLength="64" />
+    <Property Type="Int32" Name="TemplateID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetAssociatedGroupKeys_Result">
+    <Property Type="Int32" Name="TemplateKeyId" Nullable="false" />
+    <Property Type="Int32" Name="KeyID" Nullable="false" />
+    <Property Type="String" Name="TemplateKeyValue" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="TemplateKeyLabels" Nullable="false" MaxLength="250" />
+    <Property Type="Int32" Name="Selected" Nullable="false" />
+    <Property Type="Int32" Name="keyorder" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetReportDetails_Result">
+    <Property Type="String" Name="Document_Title" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Created_By" Nullable="true" MaxLength="101" />
+    <Property Type="String" Name="Customer_Name" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Organization_Name" Nullable="true" MaxLength="150" />
+    <Property Type="DateTime" Name="Created_Date" Nullable="false" Precision="23" />
+    <Property Type="String" Name="Document_Category_Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Document_Sub_Category_Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Sub_Document_Category_Name" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="CustomerId" Nullable="false" />
+    <Property Type="Int32" Name="groupid" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="AccountService">
+    <Key>
+      <PropertyRef Name="ServiceId" />
+    </Key>
+    <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Service" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ServicesDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ApplicationConfiguration">
+    <Key>
+      <PropertyRef Name="KeyId" />
+    </Key>
+    <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KeyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KeyValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="AssociatedKeyGroup">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="KeyID" Type="Int32" Nullable="false" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <Property Name="KeyOrder" Type="Int32" />
+    <Property Name="Statement" Type="Boolean" Nullable="false" />
+    <Property Name="DesignType" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="FirstColumn" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="AutoNumberStartsFrom" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="KeyLabel" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="AssociateTemplateDetail">
+    <Key>
+      <PropertyRef Name="AssociateId" />
+    </Key>
+    <Property Name="AssociateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="AssociateTemplateId" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="Mandatory" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BulkTemplateLog">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DocumentTemplate" Relationship="VirtualAdvocateModel.FK_BulkTemplateLog_DocumentTemplate" FromRole="BulkTemplateLog" ToRole="DocumentTemplate" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_BulkTemplateLog_UserProfile" FromRole="BulkTemplateLog" ToRole="UserProfile" />
+  </EntityType>
+  <EntityType Name="BulkTemplateValue">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateKey" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserInputs" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="264" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ClientWiseCustomerTemplate">
+    <Key>
+      <PropertyRef Name="KeyID" />
+    </Key>
+    <Property Name="ClientID" Type="Int32" Nullable="false" />
+    <Property Name="KeyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KeyName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Show" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Clouse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Clouse1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClouseandCategoryMaping">
+    <Key>
+      <PropertyRef Name="clouseID" />
+      <PropertyRef Name="categoryID" />
+    </Key>
+    <Property Name="clouseID" Type="Int64" Nullable="false" />
+    <Property Name="categoryID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DocumentCategory" Relationship="VirtualAdvocateModel.FK_ClouseandCategoryMaping_DocumentCategory" FromRole="ClouseandCategoryMaping" ToRole="DocumentCategory" />
+  </EntityType>
+  <EntityType Name="ClouseLog">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ClouseId" Type="Int64" Nullable="false" />
+    <Property Name="ClouseName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClouseDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="CoverLetter">
+    <Key>
+      <PropertyRef Name="CoverLetterId" />
+    </Key>
+    <Property Name="CoverLetterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="CustomerDetail">
+    <Key>
+      <PropertyRef Name="CustomerId" />
+    </Key>
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AccountNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+    <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="createdBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="Department" Type="Int32" />
+    <NavigationProperty Name="CustomerDetails1" Relationship="VirtualAdvocateModel.FK_CustomerDetails_CustomerDetails" FromRole="CustomerDetail" ToRole="CustomerDetail1" />
+    <NavigationProperty Name="CustomerDetail1" Relationship="VirtualAdvocateModel.FK_CustomerDetails_CustomerDetails" FromRole="CustomerDetail1" ToRole="CustomerDetail" />
+    <NavigationProperty Name="ProbationDetails" Relationship="VirtualAdvocateModel.FK_ProbationDetails_CustomerDetails" FromRole="CustomerDetail" ToRole="ProbationDetail" />
+  </EntityType>
+  <EntityType Name="CustomerTemplateDetail">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustID" Type="Int32" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FieldValue" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="FieldID" Type="Int32" />
+    <Property Name="More" Type="Boolean" Nullable="false" />
+    <Property Name="ClientID" Type="Int32" />
+    <Property Name="Show" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DepartmentLog">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DocumentCategory">
+    <Key>
+      <PropertyRef Name="DocumentCategoryId" />
+    </Key>
+    <Property Name="DocumentCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentCategoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentCategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="ServiceId" Type="Int32" Nullable="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="264" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ClouseandCategoryMapings" Relationship="VirtualAdvocateModel.FK_ClouseandCategoryMaping_DocumentCategory" FromRole="DocumentCategory" ToRole="ClouseandCategoryMaping" />
+    <NavigationProperty Name="DocumentSubCategories" Relationship="VirtualAdvocateModel.FK_DocumentSubCategory_DocumentCategory" FromRole="DocumentCategory" ToRole="DocumentSubCategory" />
+  </EntityType>
+  <EntityType Name="DocumentSubCategory">
+    <Key>
+      <PropertyRef Name="DocumentSubCategoryId" />
+    </Key>
+    <Property Name="DocumentSubCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="DocumentSubCategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SubCategoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="264" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="DocumentCategory" Relationship="VirtualAdvocateModel.FK_DocumentSubCategory_DocumentCategory" FromRole="DocumentSubCategory" ToRole="DocumentCategory" />
+    <NavigationProperty Name="DocumentSubSubCategories" Relationship="VirtualAdvocateModel.FK_DocumentSubSubCatrgory_DocumentSubCategory" FromRole="DocumentSubCategory" ToRole="DocumentSubSubCategory" />
+  </EntityType>
+  <EntityType Name="DocumentSubSubCategory">
+    <Key>
+      <PropertyRef Name="DocumentSubSubCategoryId" />
+    </Key>
+    <Property Name="DocumentSubSubCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubSubCategoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="SubDocumentCategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentSubCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="564" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="DocumentSubCategory" Relationship="VirtualAdvocateModel.FK_DocumentSubSubCatrgory_DocumentSubCategory" FromRole="DocumentSubSubCategory" ToRole="DocumentSubCategory" />
+  </EntityType>
+  <EntityType Name="DocumentTemplate">
+    <Key>
+      <PropertyRef Name="TemplateId" />
+    </Key>
+    <Property Name="TemplateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="TemplateCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TemplateFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentCategory" Type="Int32" Nullable="false" />
+    <Property Name="DocumentSubCategory" Type="Int32" />
+    <Property Name="DocumentSubSubCategory" Type="Int32" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AssociateTemplateId" Type="Int32" />
+    <Property Name="Mandatory" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <NavigationProperty Name="BulkTemplateLogs" Relationship="VirtualAdvocateModel.FK_BulkTemplateLog_DocumentTemplate" FromRole="DocumentTemplate" ToRole="BulkTemplateLog" />
+  </EntityType>
+  <EntityType Name="DueDiligenceCost">
+    <Key>
+      <PropertyRef Name="CostId" />
+    </Key>
+    <Property Name="CostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DueDiligenceType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="DueDiligenceEnquiry">
+    <Key>
+      <PropertyRef Name="EnquiryId" />
+    </Key>
+    <Property Name="EnquiryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyRegName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="BusinessName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="BusinessRegistrationNumber" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="CertificateTitleNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PlotNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="BlockNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Area" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Municipality" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Region" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="EnquiryType" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="PaidStatus" Type="Boolean" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="TimeLine" Type="DateTime" Precision="0" />
+    <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ReportDocument" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceDocument" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="ReplyStatus" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="DueDiligenceEnquiryType">
+    <Key>
+      <PropertyRef Name="EnquiryTypeId" />
+    </Key>
+    <Property Name="EnquiryTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EnquiryType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FilledTemplateDetail">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="FilledTemplateName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="PaidStatus" Type="Boolean" Nullable="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="ArchiveStatus" Type="Boolean" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="OrgId" Type="Int32" />
+    <Property Name="CoverLetter" Type="Boolean" />
+    <Property Name="BulkTemplateID" Type="Int32" />
+    <NavigationProperty Name="Properties" Relationship="VirtualAdvocateModel.FK_Property_Document" FromRole="FilledTemplateDetail" ToRole="Property" />
+    <NavigationProperty Name="DocumentDetails" Relationship="VirtualAdvocateModel.FK_DocumentDetails_FilledTemplateDetails1" FromRole="FilledTemplateDetail" ToRole="DocumentDetail" />
+  </EntityType>
+  <EntityType Name="Inquiry">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Organization" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Issue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="InvoiceDetail">
+    <Key>
+      <PropertyRef Name="InvoiceId" />
+    </Key>
+    <Property Name="InvoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="InvoiceDocumentName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="PaidStatus" Type="Boolean" />
+    <Property Name="CreatedBy" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LogAccountService">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ServiceId" Type="Int32" />
+    <Property Name="ServiceName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="ServiceDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="LogDocumentCategory">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="DocumentCategoryId" Type="Int32" />
+    <Property Name="DocumentCategoryDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="ServiceId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LogDocumentSubCategory">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="DocumentSubCategoryId" Type="Int32" />
+    <Property Name="DocumentCategoryId" Type="Int32" />
+    <Property Name="DocumentSubCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SubCategoryDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="LogDueDiligenceUser">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ModifierId" Type="Int32" Nullable="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BuildingName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlotNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BlockNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LandMark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="EnquiryType" Type="Int32" />
+    <Property Name="RoleId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LogDueUserPaymentType">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LoginHistory">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="LoginDate" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LogKeywordCategory">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="KeywordCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CategoryOrder" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LogOrganizationDetail">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrgId" Type="Int32" Nullable="false" />
+    <Property Name="OrgName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgStreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgBlockNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgPlotNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgRegion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgLandmark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgBuildingName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrganizationTypeId" Type="Int32" Nullable="false" />
+    <Property Name="UserAccountType" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifierId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LogRegistration">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ModifierId" Type="Int32" Nullable="false" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="EmailAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="RoleId" Type="Int32" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PersonalEmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BuildingName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlotNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BlockNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LandMark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgId" Type="Int32" />
+    <Property Name="Services" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="LogSubSubCategory">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="DocumentSubSubCategoryId" Type="Int32" />
+    <Property Name="SubSubCategoryDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SubDocumentCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentSubCategoryId" Type="Int32" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="LogTemplateUpload">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="TemplateId" Type="Int32" />
+    <Property Name="DocumentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TemplateCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TemplateFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentCategory" Type="Int32" />
+    <Property Name="DocumentSubCategory" Type="Int32" />
+    <Property Name="DocumentSubSubCategory" Type="Int32" />
+    <Property Name="IsEnabled" Type="Boolean" />
+    <Property Name="AssociateTemplateId" Type="Int32" />
+    <Property Name="Mandatory" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="LogUserPaymentType">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LogUserService">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ServiceId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrganizationDetail">
+    <Key>
+      <PropertyRef Name="OrganizationId" />
+    </Key>
+    <Property Name="OrganizationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrgName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="OrgPhoneNumber" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="OrgEmail" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="OrgStreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgBuildingName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgPlotNo" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="OrgBlockNo" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="OrgRegion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrgLandMark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserAccountsType" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="OrganizationTypeId" Type="Int32" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_OrganizationDetails_UserProfile" FromRole="OrganizationDetail" ToRole="UserProfile" />
+    <NavigationProperty Name="RecursiveNotificationDetails" Relationship="VirtualAdvocateModel.FK_RecursiveNotificationDetail_OrganizationDetails" FromRole="OrganizationDetail" ToRole="RecursiveNotificationDetail" />
+  </EntityType>
+  <EntityType Name="OrganizationType">
+    <Key>
+      <PropertyRef Name="OrganizationTypeId" />
+    </Key>
+    <Property Name="OrganizationTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrganizationType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrganizationDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PasswordRequest">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="RquestTime" Type="Int64" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentMethod">
+    <Key>
+      <PropertyRef Name="PaymentTypeId" />
+    </Key>
+    <Property Name="PaymentTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PaymentDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Enabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ReportType">
+    <Key>
+      <PropertyRef Name="ReportTypeId" />
+    </Key>
+    <Property Name="ReportTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReportTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="UserProfiles" Relationship="VirtualAdvocateModel.FK_UserProfile_Roles" FromRole="Role" ToRole="UserProfile" />
+  </EntityType>
+  <EntityType Name="SelectedAccountService">
+    <Key>
+      <PropertyRef Name="RowID" />
+    </Key>
+    <Property Name="RowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ServiceId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_SelectedAccountServices_UserProfile" FromRole="SelectedAccountService" ToRole="UserProfile" />
+  </EntityType>
+  <EntityType Name="SelectedDepartment">
+    <Key>
+      <PropertyRef Name="RowID" />
+    </Key>
+    <Property Name="RowID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrgID" Type="Int32" Nullable="false" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SelectedPaymentMethod">
+    <Key>
+      <PropertyRef Name="RowID" />
+    </Key>
+    <Property Name="RowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_SelectedPaymentMethods_UserProfile" FromRole="SelectedPaymentMethod" ToRole="UserProfile" />
+  </EntityType>
+  <EntityType Name="SystemConfig">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ApplicationTitle" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="AdminMailAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="DueDays" Type="Int32" />
+    <Property Name="ApplicationUrlEncryptionKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TemplateDynamicFormValue">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateKey" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserInputs" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="ParentkeyId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TemplateGroupDetail">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateId" Type="Int32" />
+    <Property Name="GroupName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="DesignType" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TemplateKeysPointer">
+    <Key>
+      <PropertyRef Name="TemplateKeyRowId" />
+    </Key>
+    <Property Name="TemplateKeyRowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="TemplateKeyId" Type="Int32" Nullable="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContactPerson" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="BusinessImpact" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Organization" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Issue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserAccountType">
+    <Key>
+      <PropertyRef Name="UserAccountTypeId" />
+    </Key>
+    <Property Name="UserAccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserAccountDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="UserAddressDetail">
+    <Key>
+      <PropertyRef Name="RowID" />
+    </Key>
+    <Property Name="RowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BuildingName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlotNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="BlockNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LandMark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_UserAddressDetails_UserProfile" FromRole="UserAddressDetail" ToRole="UserProfile" />
+  </EntityType>
+  <EntityType Name="UserProfile">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="HasActivated" Type="Boolean" Nullable="false" />
+    <Property Name="IsMailSent" Type="Boolean" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="ReasonForReject" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="OrganizationId" Type="Int32" />
+    <Property Name="TermsConditions" Type="Boolean" />
+    <Property Name="UserPasswordLastExpieredOn" Type="DateTime" Precision="0" />
+    <Property Name="UnusedUser" Type="Boolean" Nullable="false" />
+    <Property Name="Department" Type="Int32" />
+    <NavigationProperty Name="BulkTemplateLogs" Relationship="VirtualAdvocateModel.FK_BulkTemplateLog_UserProfile" FromRole="UserProfile" ToRole="BulkTemplateLog" />
+    <NavigationProperty Name="OrganizationDetails" Relationship="VirtualAdvocateModel.FK_OrganizationDetails_UserProfile" FromRole="UserProfile" ToRole="OrganizationDetail" />
+    <NavigationProperty Name="Role" Relationship="VirtualAdvocateModel.FK_UserProfile_Roles" FromRole="UserProfile" ToRole="Role" />
+    <NavigationProperty Name="SelectedAccountServices" Relationship="VirtualAdvocateModel.FK_SelectedAccountServices_UserProfile" FromRole="UserProfile" ToRole="SelectedAccountService" />
+    <NavigationProperty Name="SelectedPaymentMethods" Relationship="VirtualAdvocateModel.FK_SelectedPaymentMethods_UserProfile" FromRole="UserProfile" ToRole="SelectedPaymentMethod" />
+    <NavigationProperty Name="UserAddressDetails" Relationship="VirtualAdvocateModel.FK_UserAddressDetails_UserProfile" FromRole="UserProfile" ToRole="UserAddressDetail" />
+    <NavigationProperty Name="ProbationDetails" Relationship="VirtualAdvocateModel.Fk" FromRole="UserProfile" ToRole="ProbationDetail" />
+    <NavigationProperty Name="DocumentStatusChangeRequests" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_UserProfile" FromRole="UserProfile" ToRole="DocumentStatusChangeRequest" />
+    <NavigationProperty Name="DocumentDetails" Relationship="VirtualAdvocateModel.FK_DocumentDetails_UserProfile" FromRole="UserProfile" ToRole="DocumentDetail" />
+    <NavigationProperty Name="Insurances" Relationship="VirtualAdvocateModel.FK_Insurance_UserProfile" FromRole="UserProfile" ToRole="Insurance" />
+  </EntityType>
+  <Association Name="FK_BulkTemplateLog_DocumentTemplate">
+    <End Type="VirtualAdvocateModel.DocumentTemplate" Role="DocumentTemplate" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.BulkTemplateLog" Role="BulkTemplateLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentTemplate">
+        <PropertyRef Name="TemplateId" />
+      </Principal>
+      <Dependent Role="BulkTemplateLog">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BulkTemplateLog_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.BulkTemplateLog" Role="BulkTemplateLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="BulkTemplateLog">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClouseandCategoryMaping_DocumentCategory">
+    <End Type="VirtualAdvocateModel.DocumentCategory" Role="DocumentCategory" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.ClouseandCategoryMaping" Role="ClouseandCategoryMaping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentCategory">
+        <PropertyRef Name="DocumentCategoryId" />
+      </Principal>
+      <Dependent Role="ClouseandCategoryMaping">
+        <PropertyRef Name="categoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentSubCategory_DocumentCategory">
+    <End Type="VirtualAdvocateModel.DocumentCategory" Role="DocumentCategory" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentSubCategory" Role="DocumentSubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentCategory">
+        <PropertyRef Name="DocumentCategoryId" />
+      </Principal>
+      <Dependent Role="DocumentSubCategory">
+        <PropertyRef Name="DocumentCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentSubSubCatrgory_DocumentSubCategory">
+    <End Type="VirtualAdvocateModel.DocumentSubCategory" Role="DocumentSubCategory" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentSubSubCategory" Role="DocumentSubSubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentSubCategory">
+        <PropertyRef Name="DocumentSubCategoryId" />
+      </Principal>
+      <Dependent Role="DocumentSubSubCategory">
+        <PropertyRef Name="DocumentSubCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrganizationDetails_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+    <End Type="VirtualAdvocateModel.OrganizationDetail" Role="OrganizationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="OrganizationDetail">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserProfile_Roles">
+    <End Type="VirtualAdvocateModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="UserProfile">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SelectedAccountServices_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.SelectedAccountService" Role="SelectedAccountService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SelectedAccountService">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SelectedPaymentMethods_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.SelectedPaymentMethod" Role="SelectedPaymentMethod" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SelectedPaymentMethod">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAddressDetails_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.UserAddressDetail" Role="UserAddressDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserAddressDetail">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomerDetails_CustomerDetails">
+    <End Type="VirtualAdvocateModel.CustomerDetail" Role="CustomerDetail" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.CustomerDetail" Role="CustomerDetail1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetail">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="CustomerDetail1">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Property">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="DocumentId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FilledTemplateDetail" Relationship="VirtualAdvocateModel.FK_Property_Document" FromRole="Property" ToRole="FilledTemplateDetail" />
+    <NavigationProperty Name="Insurances" Relationship="VirtualAdvocateModel.FK_Insurance_Property" FromRole="Property" ToRole="Insurance" />
+  </EntityType>
+  <Association Name="FK_Property_Document">
+    <End Type="VirtualAdvocateModel.FilledTemplateDetail" Role="FilledTemplateDetail" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.Property" Role="Property" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilledTemplateDetail">
+        <PropertyRef Name="RowId" />
+      </Principal>
+      <Dependent Role="Property">
+        <PropertyRef Name="DocumentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="KeyCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="CategoryOrder" Type="Int32" Nullable="false" />
+    <Property Name="CanAddInsurance" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TemplateKeyword">
+    <Key>
+      <PropertyRef Name="TemplateKeyId" />
+    </Key>
+    <Property Name="TemplateKeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateKeyCategory" Type="Int32" />
+    <Property Name="TemplateKeyValue" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TemplateKeyLabels" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="TemplateKeyDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="MultipleKeys" Type="Boolean" Nullable="false" />
+    <Property Name="AddedByClient" Type="Boolean" Nullable="false" />
+    <Property Name="KeyCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SecurityAlert" Type="Boolean" />
+    <Property Name="TextArea" Type="Boolean" Nullable="false" />
+    <Property Name="BigTextArea" Type="Boolean" Nullable="false" />
+    <Property Name="Cloned" Type="Boolean" Nullable="false" />
+    <Property Name="ClonedFrom" Type="Int32" />
+    <Property Name="IsAssetName" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="RecursiveNotificationDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrgId" Type="Int32" Nullable="false" />
+    <Property Name="RecurrsBeforeDays" Type="Int32" />
+    <Property Name="RecurrsAfterDays" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="OrganizationDetail" Relationship="VirtualAdvocateModel.FK_RecursiveNotificationDetail_OrganizationDetails" FromRole="RecursiveNotificationDetail" ToRole="OrganizationDetail" />
+  </EntityType>
+  <Association Name="FK_RecursiveNotificationDetail_OrganizationDetails">
+    <End Type="VirtualAdvocateModel.OrganizationDetail" Role="OrganizationDetail" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.RecursiveNotificationDetail" Role="RecursiveNotificationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrganizationDetail">
+        <PropertyRef Name="OrganizationId" />
+      </Principal>
+      <Dependent Role="RecursiveNotificationDetail">
+        <PropertyRef Name="OrgId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProbationDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOfJoining" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ProbationPeriod" Type="Int32" Nullable="false" />
+    <Property Name="DateOfExpiry" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CustomerId" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="CustomerDetail" Relationship="VirtualAdvocateModel.FK_ProbationDetails_CustomerDetails" FromRole="ProbationDetail" ToRole="CustomerDetail" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.Fk" FromRole="ProbationDetail" ToRole="UserProfile" />
+  </EntityType>
+  <Association Name="FK_ProbationDetails_CustomerDetails">
+    <End Type="VirtualAdvocateModel.CustomerDetail" Role="CustomerDetail" Multiplicity="0..1" />
+    <End Type="VirtualAdvocateModel.ProbationDetail" Role="ProbationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetail">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="ProbationDetail">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Fk">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+    <End Type="VirtualAdvocateModel.ProbationDetail" Role="ProbationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ProbationDetail">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DocumentDetailsStatu">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DocumentStatusChangeRequests" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus" FromRole="DocumentDetailsStatu" ToRole="DocumentStatusChangeRequest" />
+    <NavigationProperty Name="DocumentStatusChangeRequests1" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus1" FromRole="DocumentDetailsStatu" ToRole="DocumentStatusChangeRequest" />
+    <NavigationProperty Name="DocumentDetails" Relationship="VirtualAdvocateModel.FK_DocumentDetails_DocumentDetailsStatus" FromRole="DocumentDetailsStatu" ToRole="DocumentDetail" />
+  </EntityType>
+  <EntityType Name="DocumentStatusChangeRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentDetailId" Type="Int32" Nullable="false" />
+    <Property Name="ChangeFrom" Type="Int32" Nullable="false" />
+    <Property Name="ChangeTo" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="DocumentDetailsStatu" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus" FromRole="DocumentStatusChangeRequest" ToRole="DocumentDetailsStatu" />
+    <NavigationProperty Name="DocumentDetailsStatu1" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetailsStatus1" FromRole="DocumentStatusChangeRequest" ToRole="DocumentDetailsStatu" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_UserProfile" FromRole="DocumentStatusChangeRequest" ToRole="UserProfile" />
+    <NavigationProperty Name="DocumentDetail" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetails" FromRole="DocumentStatusChangeRequest" ToRole="DocumentDetail" />
+  </EntityType>
+  <Association Name="FK_DocumentStatusChangeRequests_DocumentDetailsStatus">
+    <End Type="VirtualAdvocateModel.DocumentDetailsStatu" Role="DocumentDetailsStatu" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentStatusChangeRequest" Role="DocumentStatusChangeRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentDetailsStatu">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentStatusChangeRequest">
+        <PropertyRef Name="ChangeFrom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentStatusChangeRequests_DocumentDetailsStatus1">
+    <End Type="VirtualAdvocateModel.DocumentDetailsStatu" Role="DocumentDetailsStatu" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentStatusChangeRequest" Role="DocumentStatusChangeRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentDetailsStatu">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentStatusChangeRequest">
+        <PropertyRef Name="ChangeTo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentStatusChangeRequests_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+    <End Type="VirtualAdvocateModel.DocumentStatusChangeRequest" Role="DocumentStatusChangeRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="DocumentStatusChangeRequest">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DocumentDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentId" Type="Int32" Nullable="false" />
+    <Property Name="Vendor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Purpose" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DateHanded" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateToBeSubmitted" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DocumentStatus" Type="Int32" Nullable="false" />
+    <Property Name="RejectionReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DocumentDetailsStatu" Relationship="VirtualAdvocateModel.FK_DocumentDetails_DocumentDetailsStatus" FromRole="DocumentDetail" ToRole="DocumentDetailsStatu" />
+    <NavigationProperty Name="FilledTemplateDetail" Relationship="VirtualAdvocateModel.FK_DocumentDetails_FilledTemplateDetails1" FromRole="DocumentDetail" ToRole="FilledTemplateDetail" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_DocumentDetails_UserProfile" FromRole="DocumentDetail" ToRole="UserProfile" />
+    <NavigationProperty Name="DocumentStatusChangeRequests" Relationship="VirtualAdvocateModel.FK_DocumentStatusChangeRequests_DocumentDetails" FromRole="DocumentDetail" ToRole="DocumentStatusChangeRequest" />
+  </EntityType>
+  <Association Name="FK_DocumentDetails_DocumentDetailsStatus">
+    <End Type="VirtualAdvocateModel.DocumentDetailsStatu" Role="DocumentDetailsStatu" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentDetail" Role="DocumentDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentDetailsStatu">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentDetail">
+        <PropertyRef Name="DocumentStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentDetails_FilledTemplateDetails1">
+    <End Type="VirtualAdvocateModel.FilledTemplateDetail" Role="FilledTemplateDetail" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentDetail" Role="DocumentDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilledTemplateDetail">
+        <PropertyRef Name="RowId" />
+      </Principal>
+      <Dependent Role="DocumentDetail">
+        <PropertyRef Name="DocumentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentDetails_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentDetail" Role="DocumentDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="DocumentDetail">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentStatusChangeRequests_DocumentDetails">
+    <End Type="VirtualAdvocateModel.DocumentDetail" Role="DocumentDetail" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.DocumentStatusChangeRequest" Role="DocumentStatusChangeRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentDetail">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentStatusChangeRequest">
+        <PropertyRef Name="DocumentDetailId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Insurance">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PropertyId" Type="Int32" Nullable="false" />
+    <Property Name="Insurer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AmountInsured" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="DateOfInsurance" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateOfExpiry" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="Currency" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Property" Relationship="VirtualAdvocateModel.FK_Insurance_Property" FromRole="Insurance" ToRole="Property" />
+    <NavigationProperty Name="UserProfile" Relationship="VirtualAdvocateModel.FK_Insurance_UserProfile" FromRole="Insurance" ToRole="UserProfile" />
+  </EntityType>
+  <Association Name="FK_Insurance_Property">
+    <End Type="VirtualAdvocateModel.Property" Role="Property" Multiplicity="1" />
+    <End Type="VirtualAdvocateModel.Insurance" Role="Insurance" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Property">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Insurance">
+        <PropertyRef Name="PropertyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Insurance_UserProfile">
+    <End Type="VirtualAdvocateModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+    <End Type="VirtualAdvocateModel.Insurance" Role="Insurance" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Insurance">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

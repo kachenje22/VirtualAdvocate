@@ -78,7 +78,6 @@
     <script>
         var index = 1;
         $("#addFields").click(function () {
-            debugger;
             $.ajax({
                 url: '@Url.Action("GetCustomerPartialView", "DocumentManagement")',
                 data: { index: index },
@@ -98,7 +97,6 @@
         }
 
         function RemoveRow(element) {
-            debugger;
             $(element).parents("div.divElementSet:first").remove();
 
             return false;

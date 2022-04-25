@@ -19,7 +19,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
-    <script src="~/Scripts/LoadingSpinner.js"></script>
+   
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,7 +53,7 @@
             <!-- /.navbar-collapse -->
         </div>
     </nav>
-    <div class="body-content" >
+    <div class="body-content">
         <div id="overlay" style="display:none">
             <div id="spinner">
                 <i class="fa fa-4x fa-spinner fa-spin "></i>Please wait..
@@ -78,7 +78,7 @@
                     Email: support@va.co.tz
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-2  ">
-                   
+
                     <h4>Company </h4>
                     <ul>
                         <li>
@@ -102,24 +102,24 @@
                 </div>
                 @*<div class="col-xs-6 col-sm-3 col-md-2  ">
 
-                    <h4>Developers </h4>
-                    <ul>
-                        <li>Web Development</li>
-                        <li>SEO Marketing</li>
-                        <li>Email Marketing</li>
-                    </ul>
+                        <h4>Developers </h4>
+                        <ul>
+                            <li>Web Development</li>
+                            <li>SEO Marketing</li>
+                            <li>Email Marketing</li>
+                        </ul>
 
-                </div>
-                <div class=" col-xs-6 col-sm-3 col-md-2  ">
+                    </div>
+                    <div class=" col-xs-6 col-sm-3 col-md-2  ">
 
-                    <h4>Our Partners</h4>
-                    <ul>
-                        <li>Adipisicing Elit</li>
-                        <li>Eiusmod</li>
-                        <li>Tempor</li>
-                    </ul>
+                        <h4>Our Partners</h4>
+                        <ul>
+                            <li>Adipisicing Elit</li>
+                            <li>Eiusmod</li>
+                            <li>Tempor</li>
+                        </ul>
 
-                </div>*@
+                    </div>*@
             </div>
 
         </div>
@@ -138,27 +138,27 @@
         </div>
     </div>
     <script src="~/Scripts/jquery.js"></script>
-
-    <script src="~/Scripts/jquery_008.js"></script>
+    @*<script src="~/Scripts/jquery_008.js"></script>*@
     <script src="~/Scripts/lity.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-  
+    <script src="~/Scripts/LoadingSpinner.js"></script>
+
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/unobtrusive")
     <script>
         //window.onload = window.history.forward(0);  //calling function on window onload
-          var onResize = function () {
-              // apply dynamic padding at the top of the body according to the fixed navbar height
-              $("body").css("padding-top", $(".navbar-fixed-top").height());
-          };
+        var onResize = function () {
+            // apply dynamic padding at the top of the body according to the fixed navbar height
+            $("body").css("padding-top", $(".navbar-fixed-top").height());
+        };
 
-          // attach the function to the window resize event
-          $(window).resize(onResize);
+        // attach the function to the window resize event
+        $(window).resize(onResize);
 
-          // call it also when the page is ready after load or reload
-          $(function () {
-              onResize();
-          });
+        // call it also when the page is ready after load or reload
+        $(function () {
+            onResize();
+        });
     </script>
 </body>
 </html>

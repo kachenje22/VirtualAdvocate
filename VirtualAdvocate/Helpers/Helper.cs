@@ -45,7 +45,7 @@ namespace VirtualAdvocate.Helpers
         #endregion
 
         #region ConvertToInt
-        public static int ToInt(this string intString)
+        public static int ToInteger(this string intString)
         {
             int iValue = 0;
             int.TryParse(intString, out iValue);

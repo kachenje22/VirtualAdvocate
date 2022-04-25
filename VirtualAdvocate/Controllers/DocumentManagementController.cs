@@ -8033,6 +8033,7 @@ namespace VirtualAdvocate.Controllers
 
             try
             {
+                int roleId = CurrentUser.RoleId;
 
                 List<GetTotalDocumentCountByOrganization_sp_Result> objOrgTotal = new List<GetTotalDocumentCountByOrganization_sp_Result>();
                 int? userId = null;
@@ -10187,10 +10188,10 @@ namespace VirtualAdvocate.Controllers
                                             {
                                                 customerDetail = new CustomerDetail();
                                                 customerDetail.CustomerName = excelCustomerName;
-                                                customerDetail.OrganizationId = Session["OrgId"].ToString().ToInt();
+                                                customerDetail.OrganizationId = Session["OrgId"].ToString().ToInteger();
                                                 customerDetail.IsEnabled = true;
                                                 customerDetail.CustomerId = ++custId;
-                                                customerDetail.createdBy = Session["UserId"].ToString().ToInt();
+                                                customerDetail.createdBy = Session["UserId"].ToString().ToInteger();
                                                 customerDetail.CreatedOn = DateTime.UtcNow;
                                                 db.CustomerDetails.Add(customerDetail);
                                                 db.SaveChanges();

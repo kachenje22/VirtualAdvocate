@@ -250,7 +250,6 @@
                         var index = parseInt(document.getElementById("Count").value, 10);
 
                    $("#addFields").click(function () {
-            debugger;
             $.ajax({
                 url: '@Url.Action("GetCustomerPartialView", "DocumentManagement")',
                 data: { index: index },

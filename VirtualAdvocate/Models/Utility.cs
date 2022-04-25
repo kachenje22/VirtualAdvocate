@@ -1,18 +1,20 @@
-﻿using OfficeOpenXml;
+﻿#region NameSpaces
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Net.Mail;
-using System.Net.Mime;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VirtualAdvocate.BLL;
 using VirtualAdvocate.Common;
-
+#endregion
+#region VirtualAdvocate.Models
 namespace VirtualAdvocate.Models
 {
+    #region SendMailParam
     public class SendMailParam
     {
         public List<string> To { get; set; }
@@ -26,8 +28,12 @@ namespace VirtualAdvocate.Models
         public DocumentDetailStatus Status { get; set; }
         public string RejectedReason { get; set; }
     }
+    #endregion
+
+    #region Utility
     public class Utility
     {
+        #region RenderPartialViewToString
         public static string RenderPartialViewToString(Controller controller, string viewName, object model)
         {
             if (string.IsNullOrEmpty(viewName))
@@ -45,6 +51,9 @@ namespace VirtualAdvocate.Models
             }
         }
 
+        #endregion
+
+        #region ReadExcelFile
         public static DataTable ReadExcelFile(HttpPostedFileBase file)
         {
             try
@@ -90,7 +99,9 @@ namespace VirtualAdvocate.Models
                 throw;
             }
         }
+        #endregion
 
+        #region SendMail
         public static void SendMail(SendMailParam param)
         {
             try
@@ -144,7 +155,7 @@ namespace VirtualAdvocate.Models
                 {
                     objAcc = new MailSend { Body = template, ToAddress = new string[] { uatmailid }, CCAddress = param.CC.ToArray(), Subject = subject };
                 }
-                
+
                 Email objEmail = new Email(objAcc);
 
                 objEmail.SendEmail();
@@ -158,7 +169,7 @@ namespace VirtualAdvocate.Models
                 //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
                 //mail.From = new MailAddress(mailId);
 
-                
+
                 //foreach (var item in param.To)
                 //    mail.To.Add(item);
 
@@ -178,7 +189,9 @@ namespace VirtualAdvocate.Models
                 throw;
             }
         }
+        #endregion
 
+        #region GetDate
         public static string GetDate(object date)
         {
             double res;
@@ -205,7 +218,104 @@ namespace VirtualAdvocate.Models
             }
 
             return result;
-        }
+        } 
+        #endregion
+    } 
+    #endregion
+
+    #region CurrentUser
+    public static class CurrentUser
+    {
+        public static int UserId { get; set; }
+        public static int? OrgId { get; set; }
+        public static int RoleId { get; set; }
+        public static int? DepartmentId { get; set; }
+
     }
-    
-}
+    #endregion
+
+    #region ConversionHelper
+    public static class ConversionHelper
+    {
+        #region ConvertToDecimal
+        public static decimal ToDecimal(this string decimalString)
+        {
+            decimal dValue = 0;
+            decimal.TryParse(decimalString, out dValue);
+            return dValue;
+        }
+        #endregion
+
+        #region ToBoolean
+        public static bool ToBoolean(this string boolString)
+        {
+            if (new string[] { "1", "TRUE", "T", "Y", "YES" }.Contains(boolString.ToUpper()))
+                boolString = "true";
+            bool bValue = false;
+            bool.TryParse(boolString, out bValue);
+            return bValue;
+        }
+        #endregion
+
+        #region ConvertToInt
+        public static int ToInt(this string intString)
+        {
+            int iValue = 0;
+            int.TryParse(intString, out iValue);
+            return iValue;
+        }
+        #endregion
+
+        #region ConvertToInt64
+        public static Int64 ToInt64(this string intString)
+        {
+            Int64 iValue = 0;
+            Int64.TryParse(intString, out iValue);
+            return iValue;
+        }
+        #endregion
+
+        #region ConvertToDecimal2
+        public static decimal ToDecimal2(this string decimalString)
+        {
+            decimal dValue = -1;
+            decimal.TryParse(decimalString, out dValue);
+            return dValue;
+        }
+        #endregion
+
+        #region ConvertToInt
+        public static int ToInt2(this string intString)
+        {
+            int iValue = -1;
+            int.TryParse(intString, out iValue);
+            return iValue;
+        }
+        #endregion
+
+        #region ToDate
+        public static DateTime ToDate(this string dateString)
+        {
+            DateTime dateTime = DateTime.MinValue;
+            DateTime.TryParse(dateString, out dateTime);
+            if (DateTime.MinValue.Equals(dateTime))
+            {
+                string[] formats = new string[2] { "dd/MM/yyyy", "MM/dd/yyyy" };
+                try
+                {
+                    dateTime = DateTime.ParseExact(dateString, formats, CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeLocal);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return dateTime;
+        }
+        #endregion
+    }
+    #endregion
+
+} 
+#endregion

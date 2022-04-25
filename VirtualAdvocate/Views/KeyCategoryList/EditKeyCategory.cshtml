@@ -76,7 +76,6 @@
     <script>
 
         jQuery('#CategoryName').change('input', function() {
-            debugger;
             var test=@Html.Raw(Json.Encode(Model.CategoryName));
             if(test!=$(this).val())
             {

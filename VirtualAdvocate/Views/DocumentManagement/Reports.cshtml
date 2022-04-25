@@ -224,7 +224,6 @@
               
             });
             var rowCount = $('#tblReportList >tbody >tr').length;
-            debugger;
             if (rowCount > 0)
             {
                 $('td').filter(function () {
@@ -368,7 +367,7 @@
 
 
             $("#DocumentCategoryId").change(function () {
-                debugger;
+               
                 if ($("#DocumentCategoryId").val() != "") {                  
                     var options = {};
                     options.url = "@Url.Content("~/DocumentManagement/GetSubCategoryListById")";
@@ -475,7 +474,6 @@
             });
 
             function SetData(data) {
-                debugger;
                 $("#divPartialView").html(data); // HTML DOM replace
             }
             
@@ -495,8 +493,6 @@
 
 
             $("#btnExport").click(function () {
-                
-                debugger;
                 $.ajax({
                     url: '@Url.Content("~/DocumentManagement/ExcelExport")',
                     type: 'POST',

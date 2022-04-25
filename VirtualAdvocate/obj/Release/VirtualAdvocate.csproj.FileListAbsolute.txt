@@ -1,0 +1,2 @@
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Release\VirtualAdvocate.csproj.AssemblyReference.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Release\VirtualAdvocate.csproj.CoreCompileInputs.cache

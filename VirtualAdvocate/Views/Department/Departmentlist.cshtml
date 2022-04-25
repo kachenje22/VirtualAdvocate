@@ -109,8 +109,6 @@
                 });
 
                 function ChangeStatus(id, msg) {
-                    debugger;
-
                     if (msg == "deactivate") {
                         showProgress();
                         $.ajax({
@@ -120,7 +118,6 @@
                             dataType: 'json',
                             success: function (fresult) {
                                 if (fresult) {
-                                    debugger;
                                     bootbox.confirm({
                                         title: 'Department Activate / Deactivate',
                                         message: 'Are you sure you want to ' + msg + ' this Department?',

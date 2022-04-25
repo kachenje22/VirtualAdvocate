@@ -1,0 +1,17 @@
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\NotificationScheduler.exe.config
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\NotificationScheduler.exe.manifest
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\NotificationScheduler.application
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\NotificationScheduler.exe
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\NotificationScheduler.pdb
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\EntityFramework.dll
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\EntityFramework.SqlServer.dll
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\EntityFramework.xml
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\bin\Release\EntityFramework.SqlServer.xml
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.csproj.AssemblyReference.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.csproj.SuggestedBindingRedirects.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.csproj.CoreCompileInputs.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.exe.manifest
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.application
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.csproj.CopyComplete
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.exe
+C:\Surya\Development\Code\Websites\VirtualAdvocate\NotificationScheduler\obj\Release\NotificationScheduler.pdb

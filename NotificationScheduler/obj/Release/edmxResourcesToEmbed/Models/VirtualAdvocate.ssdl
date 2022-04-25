@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VirtualAdvocateModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CustomerDetails">
+    <Key>
+      <PropertyRef Name="CustomerId" />
+    </Key>
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AccountNumber" Type="varchar" MaxLength="20" />
+    <Property Name="Address" Type="varchar" MaxLength="250" />
+    <Property Name="OrganizationId" Type="int" Nullable="false" />
+    <Property Name="BankName" Type="varchar" MaxLength="50" />
+    <Property Name="IsEnabled" Type="bit" />
+    <Property Name="createdBy" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedOn" Type="datetime" />
+    <Property Name="Department" Type="int" />
+  </EntityType>
+  <EntityType Name="DocumentDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocumentId" Type="int" Nullable="false" />
+    <Property Name="Vendor" Type="nvarchar" MaxLength="50" />
+    <Property Name="Purpose" Type="nvarchar(max)" />
+    <Property Name="DateHanded" Type="datetime" Nullable="false" />
+    <Property Name="DateToBeSubmitted" Type="datetime" Nullable="false" />
+    <Property Name="DocumentStatus" Type="int" Nullable="false" />
+    <Property Name="RejectionReason" Type="nvarchar(max)" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DocumentDetailsStatus">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="DocumentTemplate">
+    <Key>
+      <PropertyRef Name="TemplateId" />
+    </Key>
+    <Property Name="TemplateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocumentType" Type="varchar" MaxLength="100" />
+    <Property Name="DocumentTitle" Type="varchar" MaxLength="100" />
+    <Property Name="DocumentDescription" Type="varchar" MaxLength="250" />
+    <Property Name="TemplateCost" Type="money" />
+    <Property Name="TemplateFileName" Type="varchar(max)" />
+    <Property Name="DocumentCategory" Type="int" Nullable="false" />
+    <Property Name="DocumentSubCategory" Type="int" />
+    <Property Name="DocumentSubSubCategory" Type="int" />
+    <Property Name="IsEnabled" Type="bit" Nullable="false" />
+    <Property Name="AssociateTemplateId" Type="int" />
+    <Property Name="Mandatory" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="DepartmentID" Type="int" />
+  </EntityType>
+  <EntityType Name="FilledTemplateDetails">
+    <Key>
+      <PropertyRef Name="RowId" />
+    </Key>
+    <Property Name="RowId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="TemplateId" Type="int" Nullable="false" />
+    <Property Name="FilledTemplateName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="PaidStatus" Type="bit" Nullable="false" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="ArchiveStatus" Type="bit" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="OrgId" Type="int" />
+    <Property Name="CoverLetter" Type="bit" />
+    <Property Name="BulkTemplateID" Type="int" />
+  </EntityType>
+  <EntityType Name="Insurance">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyId" Type="int" Nullable="false" />
+    <Property Name="Insurer" Type="varchar" MaxLength="50" />
+    <Property Name="AmountInsured" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="DateOfInsurance" Type="datetime" Nullable="false" />
+    <Property Name="DateOfExpiry" Type="datetime" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+  </EntityType>
+  <EntityType Name="ProbationDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateOfJoining" Type="datetime" Nullable="false" />
+    <Property Name="ProbationPeriod" Type="int" Nullable="false" />
+    <Property Name="DateOfExpiry" Type="datetime" Nullable="false" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+  </EntityType>
+  <EntityType Name="Property">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="DocumentId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RecursiveNotificationDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrgId" Type="int" Nullable="false" />
+    <Property Name="RecurrsBeforeDays" Type="int" />
+    <Property Name="RecurrsAfterDays" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserAddressDetails">
+    <Key>
+      <PropertyRef Name="RowID" />
+    </Key>
+    <Property Name="RowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="64" />
+    <Property Name="Designation" Type="varchar" MaxLength="50" />
+    <Property Name="StreetName" Type="varchar" MaxLength="50" />
+    <Property Name="BuildingName" Type="varchar" MaxLength="50" />
+    <Property Name="PlotNumber" Type="varchar" MaxLength="10" />
+    <Property Name="BlockNumber" Type="varchar" MaxLength="10" />
+    <Property Name="Region" Type="varchar" MaxLength="50" />
+    <Property Name="LandMark" Type="varchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserProfile">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsEnabled" Type="bit" Nullable="false" />
+    <Property Name="HasActivated" Type="bit" Nullable="false" />
+    <Property Name="IsMailSent" Type="bit" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
+    <Property Name="ReasonForReject" Type="text" />
+    <Property Name="CreatedDate" Type="date" />
+    <Property Name="OrganizationId" Type="int" />
+    <Property Name="TermsConditions" Type="bit" />
+    <Property Name="UserPasswordLastExpieredOn" Type="date" />
+    <Property Name="UnusedUser" Type="bit" Nullable="false" />
+    <Property Name="Department" Type="int" />
+  </EntityType>
+  <Association Name="Fk">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+    <End Role="ProbationDetails" Type="Self.ProbationDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ProbationDetails">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomerDetails_CustomerDetails">
+    <End Role="CustomerDetails" Type="Self.CustomerDetails" Multiplicity="1" />
+    <End Role="CustomerDetails1" Type="Self.CustomerDetails" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetails">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="CustomerDetails1">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentDetails_DocumentDetailsStatus">
+    <End Role="DocumentDetailsStatus" Type="Self.DocumentDetailsStatus" Multiplicity="1" />
+    <End Role="DocumentDetails" Type="Self.DocumentDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentDetailsStatus">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentDetails">
+        <PropertyRef Name="DocumentStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentDetails_FilledTemplateDetails1">
+    <End Role="FilledTemplateDetails" Type="Self.FilledTemplateDetails" Multiplicity="1" />
+    <End Role="DocumentDetails" Type="Self.DocumentDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilledTemplateDetails">
+        <PropertyRef Name="RowId" />
+      </Principal>
+      <Dependent Role="DocumentDetails">
+        <PropertyRef Name="DocumentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocumentDetails_UserProfile">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+    <End Role="DocumentDetails" Type="Self.DocumentDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="DocumentDetails">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Insurance_Property">
+    <End Role="Property" Type="Self.Property" Multiplicity="1" />
+    <End Role="Insurance" Type="Self.Insurance" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Property">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Insurance">
+        <PropertyRef Name="PropertyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Insurance_UserProfile">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+    <End Role="Insurance" Type="Self.Insurance" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Insurance">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProbationDetails_CustomerDetails">
+    <End Role="CustomerDetails" Type="Self.CustomerDetails" Multiplicity="0..1" />
+    <End Role="ProbationDetails" Type="Self.ProbationDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetails">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="ProbationDetails">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Property_Document">
+    <End Role="FilledTemplateDetails" Type="Self.FilledTemplateDetails" Multiplicity="1" />
+    <End Role="Property" Type="Self.Property" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilledTemplateDetails">
+        <PropertyRef Name="RowId" />
+      </Principal>
+      <Dependent Role="Property">
+        <PropertyRef Name="DocumentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAddressDetails_UserProfile">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+    <End Role="UserAddressDetails" Type="Self.UserAddressDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserAddressDetails">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VirtualAdvocateModelStoreContainer">
+    <EntitySet Name="CustomerDetails" EntityType="Self.CustomerDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DocumentDetails" EntityType="Self.DocumentDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DocumentDetailsStatus" EntityType="Self.DocumentDetailsStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DocumentTemplate" EntityType="Self.DocumentTemplate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FilledTemplateDetails" EntityType="Self.FilledTemplateDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Insurance" EntityType="Self.Insurance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProbationDetails" EntityType="Self.ProbationDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Property" EntityType="Self.Property" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RecursiveNotificationDetails" EntityType="Self.RecursiveNotificationDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserAddressDetails" EntityType="Self.UserAddressDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="Fk" Association="Self.Fk">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="ProbationDetails" EntitySet="ProbationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomerDetails_CustomerDetails" Association="Self.FK_CustomerDetails_CustomerDetails">
+      <End Role="CustomerDetails" EntitySet="CustomerDetails" />
+      <End Role="CustomerDetails1" EntitySet="CustomerDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentDetails_DocumentDetailsStatus" Association="Self.FK_DocumentDetails_DocumentDetailsStatus">
+      <End Role="DocumentDetailsStatus" EntitySet="DocumentDetailsStatus" />
+      <End Role="DocumentDetails" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentDetails_FilledTemplateDetails1" Association="Self.FK_DocumentDetails_FilledTemplateDetails1">
+      <End Role="FilledTemplateDetails" EntitySet="FilledTemplateDetails" />
+      <End Role="DocumentDetails" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocumentDetails_UserProfile" Association="Self.FK_DocumentDetails_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="DocumentDetails" EntitySet="DocumentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Insurance_Property" Association="Self.FK_Insurance_Property">
+      <End Role="Property" EntitySet="Property" />
+      <End Role="Insurance" EntitySet="Insurance" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Insurance_UserProfile" Association="Self.FK_Insurance_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="Insurance" EntitySet="Insurance" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProbationDetails_CustomerDetails" Association="Self.FK_ProbationDetails_CustomerDetails">
+      <End Role="CustomerDetails" EntitySet="CustomerDetails" />
+      <End Role="ProbationDetails" EntitySet="ProbationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Property_Document" Association="Self.FK_Property_Document">
+      <End Role="FilledTemplateDetails" EntitySet="FilledTemplateDetails" />
+      <End Role="Property" EntitySet="Property" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAddressDetails_UserProfile" Association="Self.FK_UserAddressDetails_UserProfile">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="UserAddressDetails" EntitySet="UserAddressDetails" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

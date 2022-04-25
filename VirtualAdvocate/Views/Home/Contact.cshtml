@@ -147,7 +147,6 @@
             Email = $("#Email").val();
             Phone = $("#Phone").val();
             Issue = $("#Issue").val();
-            debugger;
             var contactForm = $("#ContactForm");
             if (contactForm.valid()) {
                 $.ajax({
@@ -165,7 +164,6 @@
                                 }
                         }
                 }).success(function (result) {
-                    debugger;
                     if (result == "true") {
                         alert('Added Successfully');
                         $("#Name").val("");

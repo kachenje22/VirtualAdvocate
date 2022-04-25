@@ -1,5 +1,6 @@
 ﻿#region NameSpaces
 using System;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -19,7 +20,8 @@ namespace VirtualAdvocate
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //Enabling Bundling and Minification
             BundleTable.EnableOptimizations = false;
-            Spire.License.LicenseProvider.SetLicenseFileName("license.elic.xml");
+            if (string.Compare(ConfigurationManager.AppSettings["ProductionBuild"].ToString(), "true", true) == 0)
+                Spire.License.LicenseProvider.SetLicenseFileName("license.elic.xml");
         }
         #endregion
 
@@ -28,9 +30,9 @@ namespace VirtualAdvocate
         {
             Exception exception = Server.GetLastError();
             Server.ClearError();
-        } 
+        }
         #endregion
-    } 
+    }
     #endregion
-} 
+}
 #endregion

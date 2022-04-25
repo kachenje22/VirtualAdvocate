@@ -1,6 +1,5 @@
 ﻿var spinnerVisible = false;
 function showProgress() {
-    debugger;
     if (!spinnerVisible) {
         $("#overlay").show();
         $("div#spinner").fadeIn("fast");

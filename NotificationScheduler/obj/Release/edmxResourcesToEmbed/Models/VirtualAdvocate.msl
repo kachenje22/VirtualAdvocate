@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="VirtualAdvocateModelStoreContainer" CdmEntityContainer="VirtualAdvocateEntities">
+    <EntitySetMapping Name="CustomerDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.CustomerDetail">
+        <MappingFragment StoreEntitySet="CustomerDetails">
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FilledTemplateDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.FilledTemplateDetail">
+        <MappingFragment StoreEntitySet="FilledTemplateDetails">
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="FilledTemplateName" ColumnName="FilledTemplateName" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="ArchiveStatus" ColumnName="ArchiveStatus" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="CoverLetter" ColumnName="CoverLetter" />
+          <ScalarProperty Name="BulkTemplateID" ColumnName="BulkTemplateID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Insurances">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Insurance">
+        <MappingFragment StoreEntitySet="Insurance">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+          <ScalarProperty Name="Insurer" ColumnName="Insurer" />
+          <ScalarProperty Name="AmountInsured" ColumnName="AmountInsured" />
+          <ScalarProperty Name="DateOfInsurance" ColumnName="DateOfInsurance" />
+          <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Properties">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Property">
+        <MappingFragment StoreEntitySet="Property">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserProfiles">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.UserProfile">
+        <MappingFragment StoreEntitySet="UserProfile">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="HasActivated" ColumnName="HasActivated" />
+          <ScalarProperty Name="IsMailSent" ColumnName="IsMailSent" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="ReasonForReject" ColumnName="ReasonForReject" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="TermsConditions" ColumnName="TermsConditions" />
+          <ScalarProperty Name="UserPasswordLastExpieredOn" ColumnName="UserPasswordLastExpieredOn" />
+          <ScalarProperty Name="UnusedUser" ColumnName="UnusedUser" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserAddressDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.UserAddressDetail">
+        <MappingFragment StoreEntitySet="UserAddressDetails">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowID" ColumnName="RowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentTemplates">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentTemplate">
+        <MappingFragment StoreEntitySet="DocumentTemplate">
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Mandatory" ColumnName="Mandatory" />
+          <ScalarProperty Name="AssociateTemplateId" ColumnName="AssociateTemplateId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubSubCategory" ColumnName="DocumentSubSubCategory" />
+          <ScalarProperty Name="DocumentSubCategory" ColumnName="DocumentSubCategory" />
+          <ScalarProperty Name="DocumentCategory" ColumnName="DocumentCategory" />
+          <ScalarProperty Name="TemplateFileName" ColumnName="TemplateFileName" />
+          <ScalarProperty Name="TemplateCost" ColumnName="TemplateCost" />
+          <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecursiveNotificationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.RecursiveNotificationDetail">
+        <MappingFragment StoreEntitySet="RecursiveNotificationDetails">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="RecurrsAfterDays" ColumnName="RecurrsAfterDays" />
+          <ScalarProperty Name="RecurrsBeforeDays" ColumnName="RecurrsBeforeDays" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProbationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ProbationDetail">
+        <MappingFragment StoreEntitySet="ProbationDetails">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+          <ScalarProperty Name="ProbationPeriod" ColumnName="ProbationPeriod" />
+          <ScalarProperty Name="DateOfJoining" ColumnName="DateOfJoining" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentDetail">
+        <MappingFragment StoreEntitySet="DocumentDetails">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="RejectionReason" ColumnName="RejectionReason" />
+          <ScalarProperty Name="DocumentStatus" ColumnName="DocumentStatus" />
+          <ScalarProperty Name="DateToBeSubmitted" ColumnName="DateToBeSubmitted" />
+          <ScalarProperty Name="DateHanded" ColumnName="DateHanded" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+          <ScalarProperty Name="Vendor" ColumnName="Vendor" />
+          <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentDetailsStatus">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentDetailsStatu">
+        <MappingFragment StoreEntitySet="DocumentDetailsStatus">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

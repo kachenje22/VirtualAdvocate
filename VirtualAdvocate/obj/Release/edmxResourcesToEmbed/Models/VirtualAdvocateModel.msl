@@ -1,0 +1,1289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="VirtualAdvocateModelStoreContainer" CdmEntityContainer="VirtualAdvocateEntities">
+    <FunctionImportMapping FunctionImportName="Get_InvoiceList" FunctionName="VirtualAdvocateModel.Store.InvoiceList_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.InvoiceList_Result">
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="InvoiceDocumentName" ColumnName="InvoiceDocumentName" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="groupid" ColumnName="groupid" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetorganizationUserList_sp" FunctionName="VirtualAdvocateModel.Store.GetorganizationUserList_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetorganizationUserList_sp_Result">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Get_OrgUserList" FunctionName="VirtualAdvocateModel.Store.GetorganizationUserList_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetorganizationUserList_Result">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCurrentMonthCount" FunctionName="VirtualAdvocateModel.Store.GetCurrentMonthCount_sp" />
+    <FunctionImportMapping FunctionImportName="GetTotalDocumentCountOrgUser_sp" FunctionName="VirtualAdvocateModel.Store.GetTotalDocumentCountOrgUser_sp" />
+    <FunctionImportMapping FunctionImportName="GenerateReport" FunctionName="VirtualAdvocateModel.Store.ReportsGenerate">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GenerateReport_Result">
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="OrgName" ColumnName="OrgName" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="groupid" ColumnName="groupid" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetTotalDocumentCountByOrganization_sp" FunctionName="VirtualAdvocateModel.Store.GetTotalDocumentCountByOrganization_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetTotalDocumentCountByOrganization_sp_Result">
+          <ScalarProperty Name="OrgName" ColumnName="OrgName" />
+          <ScalarProperty Name="TotalDocumentCount" ColumnName="TotalDocumentCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetOrganizationCountByCategoy" FunctionName="VirtualAdvocateModel.Store.GetOrganizationCountByCategoy">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetOrganizationCountByCategoy_Result">
+          <ScalarProperty Name="OrganizationType" ColumnName="OrganizationType" />
+          <ScalarProperty Name="NewCount" ColumnName="NewCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCategoriesOrgUsersCurrnetMonthTotalCount" FunctionName="VirtualAdvocateModel.Store.GetCategoriesOrgUsersCurrnetMonthTotalCount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetCategoriesOrgUsersCurrnetMonthTotalCount_Result">
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCategoriesOrgUsersTotalCount" FunctionName="VirtualAdvocateModel.Store.GetCategoriesOrgUsersTotalCount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetCategoriesOrgUsersTotalCount_Result">
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCategoriesTotalCount" FunctionName="VirtualAdvocateModel.Store.GetCategoriesTotalCount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetCategoriesTotalCount_Result">
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="InvoiceListAcAdmin_sp" FunctionName="VirtualAdvocateModel.Store.InvoiceListAcAdmin_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.InvoiceListAcAdmin_sp_Result">
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="InvoiceDocumentName" ColumnName="InvoiceDocumentName" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="groupid" ColumnName="groupid" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="getGraphMonthlyCompanyRegister" FunctionName="VirtualAdvocateModel.Store.GraphMonthlyCompanyRegister">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.getGraphMonthlyCompanyRegister_Result">
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="January" ColumnName="January" />
+          <ScalarProperty Name="February" ColumnName="February" />
+          <ScalarProperty Name="March" ColumnName="March" />
+          <ScalarProperty Name="April" ColumnName="April" />
+          <ScalarProperty Name="May" ColumnName="May" />
+          <ScalarProperty Name="June" ColumnName="June" />
+          <ScalarProperty Name="July" ColumnName="July" />
+          <ScalarProperty Name="August" ColumnName="August" />
+          <ScalarProperty Name="September" ColumnName="September" />
+          <ScalarProperty Name="October" ColumnName="October" />
+          <ScalarProperty Name="November" ColumnName="November" />
+          <ScalarProperty Name="December" ColumnName="December" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="NewEnquiriesDueDiligence_sp" FunctionName="VirtualAdvocateModel.Store.NewEnquiriesDueDiligence_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.NewEnquiriesDueDiligence_sp_Result">
+          <ScalarProperty Name="newEQTotal" ColumnName="newEQTotal" />
+          <ScalarProperty Name="EnquiryType" ColumnName="EnquiryType" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="getGraphMonthlyIndividualRegister" FunctionName="VirtualAdvocateModel.Store.GraphMonthlyIndividualRegister">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GraphMonthlyIndividualRegister_Result">
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="mymonth" ColumnName="mymonth" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CategoryInvoiceTotalAmount" FunctionName="VirtualAdvocateModel.Store.CategoryInvoiceTotalAmount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.CategoryInvoiceTotalAmount_Result">
+          <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="DueInvoiceThisMonth" FunctionName="VirtualAdvocateModel.Store.DueInvoiceThisMonth">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.DueInvoiceThisMonth_Result">
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="EnquiryType" ColumnName="EnquiryType" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GraphInvoiceTotalAmount" FunctionName="VirtualAdvocateModel.Store.GraphInvoiceTotalAmount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GraphInvoiceTotalAmount_Result">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="MnthName" ColumnName="MnthName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="InvoiceTotalAmount" FunctionName="VirtualAdvocateModel.Store.InvoiceTotalAmount" />
+    <FunctionImportMapping FunctionImportName="GetCategoriesCurrnetMonthTotalCount" FunctionName="VirtualAdvocateModel.Store.GetCategoriesCurrnetMonthTotalCount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetCategoriesCurrnetMonthTotalCount_Result">
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogCategory" FunctionName="VirtualAdvocateModel.Store.ViewLogCategory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogCategory_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+          <ScalarProperty Name="DocumentCategoryDescription" ColumnName="DocumentCategoryDescription" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="ServicesDescription" ColumnName="ServicesDescription" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogSubCategory" FunctionName="VirtualAdvocateModel.Store.ViewLogSubCategory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogSubCategory_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+          <ScalarProperty Name="SubCategoryDescription" ColumnName="SubCategoryDescription" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogSubSubCategory" FunctionName="VirtualAdvocateModel.Store.ViewLogSubSubCategory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogSubSubCategory_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DocumentSubSubCategoryId" ColumnName="DocumentSubSubCategoryId" />
+          <ScalarProperty Name="SubSubCategoryDescription" ColumnName="SubSubCategoryDescription" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogTemplateUpload" FunctionName="VirtualAdvocateModel.Store.ViewLogTemplateUpload">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogTemplateUpload_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+          <ScalarProperty Name="TemplateCost" ColumnName="TemplateCost" />
+          <ScalarProperty Name="TemplateFileName" ColumnName="TemplateFileName" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="LogRegistrationList" FunctionName="VirtualAdvocateModel.Store.LogRegistrationList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.LogRegistrationList_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="orgName" ColumnName="orgName" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogRegistration" FunctionName="VirtualAdvocateModel.Store.ViewLogRegistration">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogRegistration_Result1">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="orgName" ColumnName="orgName" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ModifierId" ColumnName="ModifierId" />
+          <ScalarProperty Name="ModifierName" ColumnName="ModifierName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ViewLogDueRegistration" FunctionName="VirtualAdvocateModel.Store.ViewLogDueRegistration">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogDueRegistration_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ModifierId" ColumnName="ModifierId" />
+          <ScalarProperty Name="ModifierName" ColumnName="ModifierName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="DocumentCategoryByUser_sp" FunctionName="VirtualAdvocateModel.Store.DocumentCategoryByUser_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.DocumentCategoryByUser_sp_Result1">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetIndividualUserList" FunctionName="VirtualAdvocateModel.Store.GetIndividualUserList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetIndividualUserList_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="UpdateAssociateTemplate" FunctionName="VirtualAdvocateModel.Store.UpdateAssociateTemplate" />
+    <FunctionImportMapping FunctionImportName="ViewLogService" FunctionName="VirtualAdvocateModel.Store.ViewLogService">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.ViewLogService_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+          <ScalarProperty Name="ServiceDescription" ColumnName="ServiceDescription" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetAssociatedDocuments" FunctionName="VirtualAdvocateModel.Store.GetAssociatedDocuments">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetAssociatedDocuments_Result">
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="Selected" ColumnName="Selected" />
+          <ScalarProperty Name="Mandatory" ColumnName="Mandatory" />
+          <ScalarProperty Name="AssociatedTemplateId" ColumnName="AssociatedTemplateId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCustomerTemplates" FunctionName="VirtualAdvocateModel.Store.GetCustomerTemplates" />
+    <FunctionImportMapping FunctionImportName="LogDueRegistrationList" FunctionName="VirtualAdvocateModel.Store.LogDueRegistrationList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.LogDueRegistrationList_Result">
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SplitString" FunctionName="VirtualAdvocateModel.Store.SplitString" />
+    <FunctionImportMapping FunctionImportName="GetReportData" FunctionName="VirtualAdvocateModel.Store.GetReportData">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetReportData_Result">
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="OrgName" ColumnName="OrgName" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="groupid" ColumnName="groupid" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetMaxlengthOfUserInputs" FunctionName="VirtualAdvocateModel.Store.GetMaxlengthOfUserInputs">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetMaxlengthOfUserInputs_Result">
+          <ScalarProperty Name="lettercount" ColumnName="lettercount" />
+          <ScalarProperty Name="groupname" ColumnName="groupname" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetAssociatedKeysGroup" FunctionName="VirtualAdvocateModel.Store.GetAssociatedKeysGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetAssociatedKeysGroup_Result">
+          <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetAssociatedGroupKeys" FunctionName="VirtualAdvocateModel.Store.GetAssociatedGroupKeys">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetAssociatedGroupKeys_Result">
+          <ScalarProperty Name="TemplateKeyId" ColumnName="TemplateKeyId" />
+          <ScalarProperty Name="KeyID" ColumnName="KeyID" />
+          <ScalarProperty Name="TemplateKeyValue" ColumnName="TemplateKeyValue" />
+          <ScalarProperty Name="TemplateKeyLabels" ColumnName="TemplateKeyLabels" />
+          <ScalarProperty Name="Selected" ColumnName="Selected" />
+          <ScalarProperty Name="keyorder" ColumnName="keyorder" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetReportDetails" FunctionName="VirtualAdvocateModel.Store.GetReportDetails">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VirtualAdvocateModel.GetReportDetails_Result">
+          <ScalarProperty Name="Document_Title" ColumnName="Document Title" />
+          <ScalarProperty Name="Created_By" ColumnName="Created By" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer Name" />
+          <ScalarProperty Name="Organization_Name" ColumnName="Organization Name" />
+          <ScalarProperty Name="Created_Date" ColumnName="Created Date" />
+          <ScalarProperty Name="Document_Category_Name" ColumnName="Document Category Name" />
+          <ScalarProperty Name="Document_Sub_Category_Name" ColumnName="Document Sub Category Name" />
+          <ScalarProperty Name="Sub_Document_Category_Name" ColumnName="Sub Document Category Name" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="groupid" ColumnName="groupid" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="AccountServices">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.AccountService">
+        <MappingFragment StoreEntitySet="AccountServices">
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="ServicesDescription" ColumnName="ServicesDescription" />
+          <ScalarProperty Name="Service" ColumnName="Service" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationConfigurations">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ApplicationConfiguration">
+        <MappingFragment StoreEntitySet="ApplicationConfiguration">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="KeyValue" ColumnName="KeyValue" />
+          <ScalarProperty Name="KeyName" ColumnName="KeyName" />
+          <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssociatedKeyGroups">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.AssociatedKeyGroup">
+        <MappingFragment StoreEntitySet="AssociatedKeyGroup">
+          <ScalarProperty Name="KeyLabel" ColumnName="KeyLabel" />
+          <ScalarProperty Name="AutoNumberStartsFrom" ColumnName="AutoNumberStartsFrom" />
+          <ScalarProperty Name="FirstColumn" ColumnName="FirstColumn" />
+          <ScalarProperty Name="DesignType" ColumnName="DesignType" />
+          <ScalarProperty Name="Statement" ColumnName="Statement" />
+          <ScalarProperty Name="KeyOrder" ColumnName="KeyOrder" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="KeyID" ColumnName="KeyID" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssociateTemplateDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.AssociateTemplateDetail">
+        <MappingFragment StoreEntitySet="AssociateTemplateDetails">
+          <ScalarProperty Name="Mandatory" ColumnName="Mandatory" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="AssociateTemplateId" ColumnName="AssociateTemplateId" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="AssociateId" ColumnName="AssociateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BulkTemplateLogs">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.BulkTemplateLog">
+        <MappingFragment StoreEntitySet="BulkTemplateLog">
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BulkTemplateValues">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.BulkTemplateValue">
+        <MappingFragment StoreEntitySet="BulkTemplateValues">
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="UserInputs" ColumnName="UserInputs" />
+          <ScalarProperty Name="TemplateKey" ColumnName="TemplateKey" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClientWiseCustomerTemplates">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ClientWiseCustomerTemplate">
+        <MappingFragment StoreEntitySet="ClientWiseCustomerTemplate">
+          <ScalarProperty Name="Show" ColumnName="Show" />
+          <ScalarProperty Name="KeyName" ColumnName="KeyName" />
+          <ScalarProperty Name="KeyID" ColumnName="KeyID" />
+          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Clice">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Clouse">
+        <MappingFragment StoreEntitySet="Clouse">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Clouse1" ColumnName="Clouse" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClouseandCategoryMapings">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ClouseandCategoryMaping">
+        <MappingFragment StoreEntitySet="ClouseandCategoryMaping">
+          <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+          <ScalarProperty Name="clouseID" ColumnName="clouseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClouseLogs">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ClouseLog">
+        <MappingFragment StoreEntitySet="ClouseLog">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="ClouseDescription" ColumnName="ClouseDescription" />
+          <ScalarProperty Name="ClouseName" ColumnName="ClouseName" />
+          <ScalarProperty Name="ClouseId" ColumnName="ClouseId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CoverLetters">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.CoverLetter">
+        <MappingFragment StoreEntitySet="CoverLetter">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="BankAddress" ColumnName="BankAddress" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CoverLetterId" ColumnName="CoverLetterId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.CustomerDetail">
+        <MappingFragment StoreEntitySet="CustomerDetails">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerTemplateDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.CustomerTemplateDetail">
+        <MappingFragment StoreEntitySet="CustomerTemplateDetails">
+          <ScalarProperty Name="Show" ColumnName="Show" />
+          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+          <ScalarProperty Name="More" ColumnName="More" />
+          <ScalarProperty Name="FieldID" ColumnName="FieldID" />
+          <ScalarProperty Name="FieldValue" ColumnName="FieldValue" />
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Department">
+        <MappingFragment StoreEntitySet="Department">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepartmentLogs">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DepartmentLog">
+        <MappingFragment StoreEntitySet="DepartmentLog">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentCategory">
+        <MappingFragment StoreEntitySet="DocumentCategory">
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="DocumentCategoryDescription" ColumnName="DocumentCategoryDescription" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentSubCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentSubCategory">
+        <MappingFragment StoreEntitySet="DocumentSubCategory">
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="SubCategoryDescription" ColumnName="SubCategoryDescription" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+          <ScalarProperty Name="DocumentSubCategoryId" ColumnName="DocumentSubCategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentSubSubCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentSubSubCategory">
+        <MappingFragment StoreEntitySet="DocumentSubSubCategory">
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubCategoryId" ColumnName="DocumentSubCategoryId" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+          <ScalarProperty Name="SubSubCategoryDescription" ColumnName="SubSubCategoryDescription" />
+          <ScalarProperty Name="DocumentSubSubCategoryId" ColumnName="DocumentSubSubCategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentTemplates">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentTemplate">
+        <MappingFragment StoreEntitySet="DocumentTemplate">
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Mandatory" ColumnName="Mandatory" />
+          <ScalarProperty Name="AssociateTemplateId" ColumnName="AssociateTemplateId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubSubCategory" ColumnName="DocumentSubSubCategory" />
+          <ScalarProperty Name="DocumentSubCategory" ColumnName="DocumentSubCategory" />
+          <ScalarProperty Name="DocumentCategory" ColumnName="DocumentCategory" />
+          <ScalarProperty Name="TemplateFileName" ColumnName="TemplateFileName" />
+          <ScalarProperty Name="TemplateCost" ColumnName="TemplateCost" />
+          <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DueDiligenceCosts">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DueDiligenceCost">
+        <MappingFragment StoreEntitySet="DueDiligenceCost">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="DueDiligenceType" ColumnName="DueDiligenceType" />
+          <ScalarProperty Name="CostId" ColumnName="CostId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DueDiligenceEnquiries">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DueDiligenceEnquiry">
+        <MappingFragment StoreEntitySet="DueDiligenceEnquiry">
+          <ScalarProperty Name="ReplyStatus" ColumnName="ReplyStatus" />
+          <ScalarProperty Name="InvoiceDocument" ColumnName="InvoiceDocument" />
+          <ScalarProperty Name="ReportDocument" ColumnName="ReportDocument" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="TimeLine" ColumnName="TimeLine" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="EnquiryType" ColumnName="EnquiryType" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="Municipality" ColumnName="Municipality" />
+          <ScalarProperty Name="Area" ColumnName="Area" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="CertificateTitleNo" ColumnName="CertificateTitleNo" />
+          <ScalarProperty Name="BusinessRegistrationNumber" ColumnName="BusinessRegistrationNumber" />
+          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+          <ScalarProperty Name="CompanyRegName" ColumnName="CompanyRegName" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="EnquiryId" ColumnName="EnquiryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DueDiligenceEnquiryTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DueDiligenceEnquiryType">
+        <MappingFragment StoreEntitySet="DueDiligenceEnquiryType">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="EnquiryType" ColumnName="EnquiryType" />
+          <ScalarProperty Name="EnquiryTypeId" ColumnName="EnquiryTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FilledTemplateDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.FilledTemplateDetail">
+        <MappingFragment StoreEntitySet="FilledTemplateDetails">
+          <ScalarProperty Name="BulkTemplateID" ColumnName="BulkTemplateID" />
+          <ScalarProperty Name="CoverLetter" ColumnName="CoverLetter" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="ArchiveStatus" ColumnName="ArchiveStatus" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="FilledTemplateName" ColumnName="FilledTemplateName" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Inquiries">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Inquiry">
+        <MappingFragment StoreEntitySet="Inquiries">
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Issue" ColumnName="Issue" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Organization" ColumnName="Organization" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InvoiceDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.InvoiceDetail">
+        <MappingFragment StoreEntitySet="InvoiceDetails">
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="PaidStatus" ColumnName="PaidStatus" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InvoiceDocumentName" ColumnName="InvoiceDocumentName" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogAccountServices">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogAccountService">
+        <MappingFragment StoreEntitySet="LogAccountService">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="ServiceDescription" ColumnName="ServiceDescription" />
+          <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogDocumentCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogDocumentCategory">
+        <MappingFragment StoreEntitySet="LogDocumentCategory">
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentCategoryName" ColumnName="DocumentCategoryName" />
+          <ScalarProperty Name="DocumentCategoryDescription" ColumnName="DocumentCategoryDescription" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogDocumentSubCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogDocumentSubCategory">
+        <MappingFragment StoreEntitySet="LogDocumentSubCategory">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="SubCategoryDescription" ColumnName="SubCategoryDescription" />
+          <ScalarProperty Name="DocumentSubCategoryName" ColumnName="DocumentSubCategoryName" />
+          <ScalarProperty Name="DocumentCategoryId" ColumnName="DocumentCategoryId" />
+          <ScalarProperty Name="DocumentSubCategoryId" ColumnName="DocumentSubCategoryId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogDueDiligenceUsers">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogDueDiligenceUser">
+        <MappingFragment StoreEntitySet="LogDueDiligenceUser">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="EnquiryType" ColumnName="EnquiryType" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifierId" ColumnName="ModifierId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogDueUserPaymentTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogDueUserPaymentType">
+        <MappingFragment StoreEntitySet="LogDueUserPaymentType">
+          <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LoginHistories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LoginHistory">
+        <MappingFragment StoreEntitySet="LoginHistory">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogKeywordCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogKeywordCategory">
+        <MappingFragment StoreEntitySet="LogKeywordCategory">
+          <ScalarProperty Name="CategoryOrder" ColumnName="CategoryOrder" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="KeywordCategoryId" ColumnName="KeywordCategoryId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogOrganizationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogOrganizationDetail">
+        <MappingFragment StoreEntitySet="LogOrganizationDetails">
+          <ScalarProperty Name="ModifierId" ColumnName="ModifierId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="UserAccountType" ColumnName="UserAccountType" />
+          <ScalarProperty Name="OrganizationTypeId" ColumnName="OrganizationTypeId" />
+          <ScalarProperty Name="OrgBuildingName" ColumnName="OrgBuildingName" />
+          <ScalarProperty Name="OrgLandmark" ColumnName="OrgLandmark" />
+          <ScalarProperty Name="OrgRegion" ColumnName="OrgRegion" />
+          <ScalarProperty Name="OrgPlotNumber" ColumnName="OrgPlotNumber" />
+          <ScalarProperty Name="OrgBlockNumber" ColumnName="OrgBlockNumber" />
+          <ScalarProperty Name="OrgStreetName" ColumnName="OrgStreetName" />
+          <ScalarProperty Name="OrgPhoneNumber" ColumnName="OrgPhoneNumber" />
+          <ScalarProperty Name="OrgName" ColumnName="OrgName" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogRegistrations">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogRegistration">
+        <MappingFragment StoreEntitySet="LogRegistrations">
+          <ScalarProperty Name="Services" ColumnName="Services" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="PersonalEmailAddress" ColumnName="PersonalEmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="ModifierId" ColumnName="ModifierId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogSubSubCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogSubSubCategory">
+        <MappingFragment StoreEntitySet="LogSubSubCategory">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubCategoryId" ColumnName="DocumentSubCategoryId" />
+          <ScalarProperty Name="SubDocumentCategoryName" ColumnName="SubDocumentCategoryName" />
+          <ScalarProperty Name="SubSubCategoryDescription" ColumnName="SubSubCategoryDescription" />
+          <ScalarProperty Name="DocumentSubSubCategoryId" ColumnName="DocumentSubSubCategoryId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogTemplateUploads">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogTemplateUpload">
+        <MappingFragment StoreEntitySet="LogTemplateUpload">
+          <ScalarProperty Name="Mandatory" ColumnName="Mandatory" />
+          <ScalarProperty Name="AssociateTemplateId" ColumnName="AssociateTemplateId" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="DocumentSubSubCategory" ColumnName="DocumentSubSubCategory" />
+          <ScalarProperty Name="DocumentSubCategory" ColumnName="DocumentSubCategory" />
+          <ScalarProperty Name="DocumentCategory" ColumnName="DocumentCategory" />
+          <ScalarProperty Name="TemplateFileName" ColumnName="TemplateFileName" />
+          <ScalarProperty Name="TemplateCost" ColumnName="TemplateCost" />
+          <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+          <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+          <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogUserPaymentTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogUserPaymentType">
+        <MappingFragment StoreEntitySet="LogUserPaymentType">
+          <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogUserServices">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.LogUserService">
+        <MappingFragment StoreEntitySet="LogUserServices">
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.OrganizationDetail">
+        <MappingFragment StoreEntitySet="OrganizationDetails">
+          <ScalarProperty Name="OrganizationTypeId" ColumnName="OrganizationTypeId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserAccountsType" ColumnName="UserAccountsType" />
+          <ScalarProperty Name="OrgLandMark" ColumnName="OrgLandMark" />
+          <ScalarProperty Name="OrgRegion" ColumnName="OrgRegion" />
+          <ScalarProperty Name="OrgBlockNo" ColumnName="OrgBlockNo" />
+          <ScalarProperty Name="OrgPlotNo" ColumnName="OrgPlotNo" />
+          <ScalarProperty Name="OrgBuildingName" ColumnName="OrgBuildingName" />
+          <ScalarProperty Name="OrgStreetName" ColumnName="OrgStreetName" />
+          <ScalarProperty Name="OrgEmail" ColumnName="OrgEmail" />
+          <ScalarProperty Name="OrgPhoneNumber" ColumnName="OrgPhoneNumber" />
+          <ScalarProperty Name="OrgName" ColumnName="OrgName" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.OrganizationType">
+        <MappingFragment StoreEntitySet="OrganizationType">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="OrganizationDescription" ColumnName="OrganizationDescription" />
+          <ScalarProperty Name="OrganizationType1" ColumnName="OrganizationType" />
+          <ScalarProperty Name="OrganizationTypeId" ColumnName="OrganizationTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PasswordRequests">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.PasswordRequest">
+        <MappingFragment StoreEntitySet="PasswordRequests">
+          <ScalarProperty Name="RquestTime" ColumnName="RquestTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentMethods">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.PaymentMethod">
+        <MappingFragment StoreEntitySet="PaymentMethod">
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="PaymentDescription" ColumnName="PaymentDescription" />
+          <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ReportType">
+        <MappingFragment StoreEntitySet="ReportTypes">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="ReportTypeName" ColumnName="ReportTypeName" />
+          <ScalarProperty Name="ReportTypeId" ColumnName="ReportTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SelectedAccountServices">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.SelectedAccountService">
+        <MappingFragment StoreEntitySet="SelectedAccountServices">
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowID" ColumnName="RowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SelectedDepartments">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.SelectedDepartment">
+        <MappingFragment StoreEntitySet="SelectedDepartment">
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="OrgID" ColumnName="OrgID" />
+          <ScalarProperty Name="RowID" ColumnName="RowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SelectedPaymentMethods">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.SelectedPaymentMethod">
+        <MappingFragment StoreEntitySet="SelectedPaymentMethods">
+          <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowID" ColumnName="RowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SystemConfigs">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.SystemConfig">
+        <MappingFragment StoreEntitySet="SystemConfig">
+          <ScalarProperty Name="ApplicationUrlEncryptionKey" ColumnName="ApplicationUrlEncryptionKey" />
+          <ScalarProperty Name="DueDays" ColumnName="DueDays" />
+          <ScalarProperty Name="AdminMailAddress" ColumnName="AdminMailAddress" />
+          <ScalarProperty Name="ApplicationTitle" ColumnName="ApplicationTitle" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateDynamicFormValues">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.TemplateDynamicFormValue">
+        <MappingFragment StoreEntitySet="TemplateDynamicFormValues">
+          <ScalarProperty Name="ParentkeyId" ColumnName="ParentkeyId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="UserInputs" ColumnName="UserInputs" />
+          <ScalarProperty Name="TemplateKey" ColumnName="TemplateKey" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowId" ColumnName="RowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateGroupDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.TemplateGroupDetail">
+        <MappingFragment StoreEntitySet="TemplateGroupDetails">
+          <ScalarProperty Name="DesignType" ColumnName="DesignType" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateKeysPointers">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.TemplateKeysPointer">
+        <MappingFragment StoreEntitySet="TemplateKeysPointer">
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="TemplateKeyId" ColumnName="TemplateKeyId" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="TemplateKeyRowId" ColumnName="TemplateKeyRowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tickets">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Ticket">
+        <MappingFragment StoreEntitySet="Ticket">
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Issue" ColumnName="Issue" />
+          <ScalarProperty Name="Organization" ColumnName="Organization" />
+          <ScalarProperty Name="BusinessImpact" ColumnName="BusinessImpact" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserAccountTypes">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.UserAccountType">
+        <MappingFragment StoreEntitySet="UserAccountType">
+          <ScalarProperty Name="UserAccountDescription" ColumnName="UserAccountDescription" />
+          <ScalarProperty Name="UserAccountTypeId" ColumnName="UserAccountTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserAddressDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.UserAddressDetail">
+        <MappingFragment StoreEntitySet="UserAddressDetails">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+          <ScalarProperty Name="PlotNumber" ColumnName="PlotNumber" />
+          <ScalarProperty Name="BuildingName" ColumnName="BuildingName" />
+          <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RowID" ColumnName="RowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserProfiles">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.UserProfile">
+        <MappingFragment StoreEntitySet="UserProfile">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="UnusedUser" ColumnName="UnusedUser" />
+          <ScalarProperty Name="UserPasswordLastExpieredOn" ColumnName="UserPasswordLastExpieredOn" />
+          <ScalarProperty Name="TermsConditions" ColumnName="TermsConditions" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ReasonForReject" ColumnName="ReasonForReject" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IsMailSent" ColumnName="IsMailSent" />
+          <ScalarProperty Name="HasActivated" ColumnName="HasActivated" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Properties">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Property">
+        <MappingFragment StoreEntitySet="Property">
+          <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KeyCategories">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.KeyCategory">
+        <MappingFragment StoreEntitySet="KeyCategory">
+          <ScalarProperty Name="CanAddInsurance" ColumnName="CanAddInsurance" />
+          <ScalarProperty Name="CategoryOrder" ColumnName="CategoryOrder" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="CategoryDescription" ColumnName="CategoryDescription" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateKeywords">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.TemplateKeyword">
+        <MappingFragment StoreEntitySet="TemplateKeywords">
+          <ScalarProperty Name="IsAssetName" ColumnName="IsAssetName" />
+          <ScalarProperty Name="ClonedFrom" ColumnName="ClonedFrom" />
+          <ScalarProperty Name="Cloned" ColumnName="Cloned" />
+          <ScalarProperty Name="BigTextArea" ColumnName="BigTextArea" />
+          <ScalarProperty Name="TextArea" ColumnName="TextArea" />
+          <ScalarProperty Name="SecurityAlert" ColumnName="SecurityAlert" />
+          <ScalarProperty Name="KeyCategoryName" ColumnName="KeyCategoryName" />
+          <ScalarProperty Name="AddedByClient" ColumnName="AddedByClient" />
+          <ScalarProperty Name="MultipleKeys" ColumnName="MultipleKeys" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+          <ScalarProperty Name="TemplateKeyDescription" ColumnName="TemplateKeyDescription" />
+          <ScalarProperty Name="TemplateKeyLabels" ColumnName="TemplateKeyLabels" />
+          <ScalarProperty Name="TemplateKeyValue" ColumnName="TemplateKeyValue" />
+          <ScalarProperty Name="TemplateKeyCategory" ColumnName="TemplateKeyCategory" />
+          <ScalarProperty Name="TemplateKeyId" ColumnName="TemplateKeyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecursiveNotificationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.RecursiveNotificationDetail">
+        <MappingFragment StoreEntitySet="RecursiveNotificationDetails">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="RecurrsAfterDays" ColumnName="RecurrsAfterDays" />
+          <ScalarProperty Name="RecurrsBeforeDays" ColumnName="RecurrsBeforeDays" />
+          <ScalarProperty Name="OrgId" ColumnName="OrgId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProbationDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.ProbationDetail">
+        <MappingFragment StoreEntitySet="ProbationDetails">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+          <ScalarProperty Name="ProbationPeriod" ColumnName="ProbationPeriod" />
+          <ScalarProperty Name="DateOfJoining" ColumnName="DateOfJoining" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentDetailsStatus">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentDetailsStatu">
+        <MappingFragment StoreEntitySet="DocumentDetailsStatus">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentStatusChangeRequests">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentStatusChangeRequest">
+        <MappingFragment StoreEntitySet="DocumentStatusChangeRequests">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ChangeTo" ColumnName="ChangeTo" />
+          <ScalarProperty Name="ChangeFrom" ColumnName="ChangeFrom" />
+          <ScalarProperty Name="DocumentDetailId" ColumnName="DocumentDetailId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentDetails">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.DocumentDetail">
+        <MappingFragment StoreEntitySet="DocumentDetails">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="RejectionReason" ColumnName="RejectionReason" />
+          <ScalarProperty Name="DocumentStatus" ColumnName="DocumentStatus" />
+          <ScalarProperty Name="DateToBeSubmitted" ColumnName="DateToBeSubmitted" />
+          <ScalarProperty Name="DateHanded" ColumnName="DateHanded" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+          <ScalarProperty Name="Vendor" ColumnName="Vendor" />
+          <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Insurances">
+      <EntityTypeMapping TypeName="VirtualAdvocateModel.Insurance">
+        <MappingFragment StoreEntitySet="Insurance">
+          <ScalarProperty Name="Currency" ColumnName="Currency" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+          <ScalarProperty Name="DateOfInsurance" ColumnName="DateOfInsurance" />
+          <ScalarProperty Name="AmountInsured" ColumnName="AmountInsured" />
+          <ScalarProperty Name="Insurer" ColumnName="Insurer" />
+          <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

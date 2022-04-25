@@ -91,7 +91,6 @@
     <script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-                debugger;
             $.ajax({
                     async: false,
                     cache: false,
@@ -150,7 +149,6 @@
 
 
         @*$(function () {
-            debugger;
             var availableTags = new Array();
             $.ajax({
                 async: false,
@@ -213,7 +211,6 @@
     <script type="text/javascript">
         function checkCustomer(id)
         {
-            debugger;
             if ($("#customersearch").val() != null && $("#customersearch").val() != "" && $("#customersearch").val() != " ")
             {
                
@@ -224,7 +221,6 @@
                     url: "@(Url.Action("CheckCustomer", "DocumentManagement"))",
                     data: { "id": $("#customersearch").val() },
                 success: function (data) {
-                    debugger;
                     if (data == "true")
                     {
                         document.form.action ="@(Url.Content("~/DocumentManagement/CreateDynamicForm/" ))"+id;
