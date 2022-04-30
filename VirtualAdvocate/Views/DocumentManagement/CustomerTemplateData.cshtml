@@ -1,6 +1,6 @@
 ﻿
 @{ ViewBag.MenuActive = "Customers";
-                Layout = "~/Views/Shared/_Layoutmain.cshtml"; }
+    Layout = "~/Views/Shared/_Layoutmain.cshtml"; }
 
 <h2>Customer List</h2>
 <!-- DataTables CSS -->
@@ -49,10 +49,11 @@
 
 @if (ViewData["CustomerData"] != null)
 {
-<table class="table table-striped table-hover dataTable table-custom-border" id="tblCustomerList">
+
+<table class="table table-striped table-hover dataTable table-custom-border"
+       id="tblCustomerList">
     <thead>
         <tr>
-            @*<th>#</th>*@
             @foreach (System.Data.DataColumn col in (ViewData["CustomerData"] as System.Data.DataTable).Columns)
             {
                 if (col.Caption == "CustID")
@@ -60,7 +61,7 @@
 <th>Actions</th> }
                     else
                     {
-<th>@col.Caption</th>                    }
+<th>@col.Caption</th>}
                 }
 
             <th></th>
@@ -141,16 +142,18 @@
                     processData: false, // Not to process data
                     data: fileData,
                     success: function (result) {
-                        if (result == 999) {
+                        if (result.id == 999) {
                             $('#FileUpload').val('');
-                            bootbox.alert('File uploaded successfully');
-                            location.reload();
-                        } else if (result == 0) {
-                            bootbox.alert('No files selected.');
+                            bootbox.alert({
+                                title: "File uploaded successfully",
+                                message: result.Message,
+                                callback: function () {
+                                    location.reload();
+                                }
+                            })
                         } else {
-                            bootbox.alert(result);
+                            bootbox.alert(result.Message);
                         }
-                        
                     },
                     error: function (err) {
                         bootbox.alert(err.statusText);

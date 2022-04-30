@@ -155,7 +155,6 @@ C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\obj
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.dll
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.pdb
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.xml
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.AssemblyReference.cache
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.CoreCompileInputs.cache
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\csc.exe
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll

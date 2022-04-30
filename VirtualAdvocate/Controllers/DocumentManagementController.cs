@@ -4268,8 +4268,8 @@ namespace VirtualAdvocate.Controllers
                                     if ((templateDynamicFormValue.UserInputs ?? "").Trim().Length > 0)
                                     {
                                         var cnt = Pololst
-                                                  .Where(c => 
-                                                  string.Compare(c.TemplateKey, 
+                                                  .Where(c =>
+                                                  string.Compare(c.TemplateKey,
                                                   templateDynamicFormValue.TemplateKey, true) == 0).Count();
                                         if (cnt == 0)
                                             Pololst.Add(templateDynamicFormValue);
@@ -10123,6 +10123,8 @@ namespace VirtualAdvocate.Controllers
         public ActionResult BulkUpload()
         {
             string fname = string.Empty;
+            int insertedCount = 0;
+            int updatedCount = 0;
             if (Request.Files.Count > 0)
             {
                 try
@@ -10168,7 +10170,8 @@ namespace VirtualAdvocate.Controllers
                                     string excelCustomerName = string.Empty;
                                     string excelColumnName = string.Empty;
                                     string excelColumnValue = string.Empty;
-                                    int custId = db.CustomerDetails.Count();
+                                    int custId = db.CustomerDetails
+                                                .Select(c => c.CustomerId).Max();
 
                                     foreach (DataRow dr in dataTable.Rows)
                                     {
@@ -10181,6 +10184,9 @@ namespace VirtualAdvocate.Controllers
                                              string.Compare(c.CustomerName.ToString(), excelCustomerName,
                                              true) == 0).FirstOrDefault();
                                         }
+                                        if (customerDetail != null)
+                                            updatedCount++;
+
                                         if (customerDetail == null &&
                                             !string.IsNullOrEmpty(excelCustomerName))
                                         {
@@ -10193,6 +10199,7 @@ namespace VirtualAdvocate.Controllers
                                                 customerDetail.CustomerId = ++custId;
                                                 customerDetail.createdBy = Session["UserId"].ToString().ToInteger();
                                                 customerDetail.CreatedOn = DateTime.UtcNow;
+                                                insertedCount++;
                                                 db.CustomerDetails.Add(customerDetail);
                                                 db.SaveChanges();
                                             }
@@ -10264,13 +10271,17 @@ namespace VirtualAdvocate.Controllers
                                 }
                             }
                         }
-
                     }
-                    return Json(999);
+                    return Json(new
+                    {
+                        id = 999,
+                        Message = string.Format("No Of rows Inserted : <b>{0}</b><br><br>" +
+                        "No of rows Updated : <b>{1}</b><br><br>", insertedCount, updatedCount)
+                    }); ;
                 }
                 catch (Exception ex)
                 {
-                    return Json("Error occurred. Error details: " + ex.Message);
+                    return Json(new { id = 998, Message = "Error occurred. Error details: " + ex.Message });
                 }
                 finally
                 {
@@ -10282,11 +10293,12 @@ namespace VirtualAdvocate.Controllers
             }
             else
             {
-                return Json("No files selected.");
+                return Json(new { id = 0, Message = "No files selected." });
             }
         }
         #endregion
 
+        #region ExcelConnection
         private string ExcelConnection(string fileName)
         {
             return @"Provider=Microsoft.Jet.OLEDB.4.0;" +
@@ -10294,6 +10306,8 @@ namespace VirtualAdvocate.Controllers
                    @"Extended Properties=" + Convert.ToChar(34).ToString() +
                    @"Excel 8.0" + Convert.ToChar(34).ToString() + ";";
         }
+        #endregion
+
         public JsonResult CheckCustomer(string id)
         {
             try
