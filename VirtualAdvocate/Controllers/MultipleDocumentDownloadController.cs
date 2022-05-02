@@ -1,39 +1,41 @@
-﻿//using Microsoft.Office.Interop.Word;
+﻿#region NameSpaces
+using DocumentFormat.OpenXml.Packaging;
+using Ionic.Zip;
+using Microsoft.Office.Interop.Word;
+using OpenXmlPowerTools;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using System.Xml.Linq;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
 using VirtualAdvocate.Models;
-using Ionic.Zip;
-using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Packaging;
-using OpenXmlPowerTools;
-using System.Xml.Linq;
-using Microsoft.Office.Interop.Word;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
+    #region MultipleDocumentDownloadController
     public class MultipleDocumentDownloadController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-        private VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
+        #region Global Variables
+        public int userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
+        public int orgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        public int deptID = Convert.ToInt32(System.Web.HttpContext.Current.Session["DepartmentID"]);
+        public int roleId = Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]);
 
-        public  int userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
-        public  int orgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-        public  int deptID = Convert.ToInt32(System.Web.HttpContext.Current.Session["DepartmentID"]);
-        public  int roleId = Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]);
+        #endregion
 
+        #region MultipleDownload
         // GET: MultipleDocumentDownload
         public ActionResult MultipleDownload(int? id)
         {
             Session.Remove("Displayorder");
-         
+
             Session["AssociateCount"] = 0;
             DocumentTemplateListModel objTempList = new DocumentTemplateListModel();
             GetCustomerNameList();
@@ -42,14 +44,14 @@ namespace VirtualAdvocate.Controllers
                 int roleID = Convert.ToInt32(Session["RoleId"]);
                 int department = Convert.ToInt32(Session["DepartmentID"]);
 
-                var objTemplates = (from ut in db.DocumentTemplates
-                                    join dc in db.DocumentCategories on ut.DocumentCategory equals dc.DocumentCategoryId
-                                    where ut.IsEnabled == true && dc.ServiceId==orgId
+                var objTemplates = (from ut in VAEDB.DocumentTemplates
+                                    join dc in VAEDB.DocumentCategories on ut.DocumentCategory equals dc.DocumentCategoryId
+                                    where ut.IsEnabled == true && dc.ServiceId == orgId
                                     && (((roleID != 6) && (roleID != 5)) || ((roleID == 6 && ut.DepartmentID == department) || (roleID == 5 && ut.DepartmentID == department) || roleID == 3))
 
                                     select new DocumentTemplateListModel { TemplateName = ut.DocumentTitle, TemplateId = ut.TemplateId, DocumentFileName = ut.TemplateFileName, DocumentCategory = dc.DocumentCategoryName, Cost = ut.TemplateCost, AssociatedDocumentId = ut.AssociateTemplateId, AssociatedDocument = null, ServiceId = dc.ServiceId, DocumentSubCategoryId = ut.DocumentSubCategory, DocumentSubSubCategoryId = ut.DocumentSubSubCategory, DocumentSubCategoryName = null, DocumentSubSubCategoryName = null }
                         );
-            
+
                 var query = objTemplates.Select(p => new DocumentTemplateListModel
                 {
                     TemplateName = p.TemplateName,
@@ -58,15 +60,15 @@ namespace VirtualAdvocate.Controllers
                     DocumentCategory = p.DocumentCategory,
                     Cost = p.Cost,
                     AssociatedDocumentId = p.AssociatedDocumentId,
-                    AssociatedDocument = "", //(from utt in db.DocumentTemplates where utt.TemplateId == p.AssociatedDocumentId select utt.DocumentTitle).FirstOrDefault(),
+                    AssociatedDocument = "", //(from utt in VAEDB.DocumentTemplates where utt.TemplateId == p.AssociatedDocumentId select utt.DocumentTitle).FirstOrDefault(),
                     ServiceId = p.ServiceId,
                     DocumentSubCategoryId = p.DocumentSubCategoryId,
                     DocumentSubSubCategoryId = p.DocumentSubSubCategoryId,
-                    DocumentSubCategoryName = (from dsc in db.DocumentSubCategories where dsc.DocumentSubCategoryId == p.DocumentSubCategoryId select dsc.DocumentSubCategoryName).FirstOrDefault(),
-                    DocumentSubSubCategoryName = (from dssc in db.DocumentSubSubCategories where dssc.DocumentSubSubCategoryId == p.DocumentSubSubCategoryId select dssc.SubDocumentCategoryName).FirstOrDefault()
+                    DocumentSubCategoryName = (from dsc in VAEDB.DocumentSubCategories where dsc.DocumentSubCategoryId == p.DocumentSubCategoryId select dsc.DocumentSubCategoryName).FirstOrDefault(),
+                    DocumentSubSubCategoryName = (from dssc in VAEDB.DocumentSubSubCategories where dssc.DocumentSubSubCategoryId == p.DocumentSubSubCategoryId select dssc.SubDocumentCategoryName).FirstOrDefault()
 
-                });             
-              
+                });
+
                 return View(query);
             }
             catch (Exception ex)
@@ -75,8 +77,9 @@ namespace VirtualAdvocate.Controllers
             }
             return View();
         }
+        #endregion
 
-
+        #region CreateDynamicForm
         public ActionResult CreateDynamicForm(int? id)
         {
             try
@@ -119,9 +122,9 @@ namespace VirtualAdvocate.Controllers
                                 string[] emailAddress1 = customerDetails1[1].Split(':');
 
                                 string email1 = emailAddress1[1].ToString().Replace(" ", "");
-                                var customerID1 = db.CustomerDetails.Where(c => c.EmailAddress == email1).Select(c => c.CustomerId).FirstOrDefault();
+                                var customerID1 = VAEDB.CustomerDetails.Where(c => c.EmailAddress == email1).Select(c => c.CustomerId).FirstOrDefault();
 
-                                CustomerNames = CustomerNames + db.CustomerDetails.Where(c => c.EmailAddress == email1).Select(c => c.CustomerName).FirstOrDefault() + ", ";
+                                CustomerNames = CustomerNames + VAEDB.CustomerDetails.Where(c => c.EmailAddress == email1).Select(c => c.CustomerName).FirstOrDefault() + ", ";
 
                                 ViewBag.MultiName = CustomerNames.Trim(',');
                                 Session["MultiName"] = ViewBag.MultiName;
@@ -137,7 +140,7 @@ namespace VirtualAdvocate.Controllers
                         string[] emailAddress = customerDetails[1].Split(':');
 
                         string email = emailAddress[1].ToString().Replace(" ", "");
-                        var customerID = db.CustomerDetails.Where(c => c.EmailAddress == email).Select(c => c.CustomerId).FirstOrDefault();
+                        var customerID = VAEDB.CustomerDetails.Where(c => c.EmailAddress == email).Select(c => c.CustomerId).FirstOrDefault();
 
                         customer = customerID;
                         //  var customerDetails=
@@ -160,7 +163,7 @@ namespace VirtualAdvocate.Controllers
                 int? associateId = null;
                 int userId = Convert.ToInt32(Session["UserId"]);
 
-                var objCurrentTemplate = db.DocumentTemplates.Find(id); // To get Parent Template Name
+                var objCurrentTemplate = VAEDB.DocumentTemplates.Find(id); // To get Parent Template Name
 
                 AssociateName = objCurrentTemplate.DocumentTitle;
                 //ViewBag.Head = "Form  " + objCurrentTemplate.DocumentTitle;
@@ -168,7 +171,7 @@ namespace VirtualAdvocate.Controllers
 
 
                 // Checking associate template
-                var objAssociateIds = db.AssociateTemplateDetails.Where(c => c.TemplateId == CommonTempId && c.IsEnabled == true).OrderBy(c => c.DisplayOrder);
+                var objAssociateIds = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == CommonTempId && c.IsEnabled == true).OrderBy(c => c.DisplayOrder);
 
                 if (objAssociateIds != null && objAssociateIds.Count() >= 1)
                 {
@@ -186,7 +189,7 @@ namespace VirtualAdvocate.Controllers
                         AssociateName = "Associated Documents >> ";
                         foreach (AssociateTemplateDetail item in objAssociateIds)
                         {
-                            var objAssociate = db.DocumentTemplates.Find(item.AssociateTemplateId);
+                            var objAssociate = VAEDB.DocumentTemplates.Find(item.AssociateTemplateId);
                             if (objAssociate != null)
                             {
                                 string currentdoc = string.Empty;
@@ -247,9 +250,9 @@ namespace VirtualAdvocate.Controllers
                 }
                 str.Append(DynamicFormTop());
                 List<TemplateKeysPointer> lst = new List<TemplateKeysPointer>();
-                var objkeyCategory = (from c in db.KeyCategories
-                                      join k in db.TemplateKeywords on c.Id equals k.TemplateKeyCategory
-                                      join p in db.TemplateKeysPointers on k.TemplateKeyId equals p.TemplateKeyId
+                var objkeyCategory = (from c in VAEDB.KeyCategories
+                                      join k in VAEDB.TemplateKeywords on c.Id equals k.TemplateKeyCategory
+                                      join p in VAEDB.TemplateKeysPointers on k.TemplateKeyId equals p.TemplateKeyId
                                       where p.TemplateId == id
                                       orderby c.CategoryOrder
                                       select new
@@ -265,9 +268,9 @@ namespace VirtualAdvocate.Controllers
 
                     str.Append("<div class=col-lg-12> <legend>" + category.CategoryName + "</legend></div><div class=col-lg-6>");
 
-                    var objkey = (from c in db.KeyCategories
-                                  join k in db.TemplateKeywords on c.Id equals k.TemplateKeyCategory
-                                  join p in db.TemplateKeysPointers on k.TemplateKeyId equals p.TemplateKeyId
+                    var objkey = (from c in VAEDB.KeyCategories
+                                  join k in VAEDB.TemplateKeywords on c.Id equals k.TemplateKeyCategory
+                                  join p in VAEDB.TemplateKeysPointers on k.TemplateKeyId equals p.TemplateKeyId
                                   where p.TemplateId == id && c.CategoryName == category.CategoryName
                                   select new
                                   {
@@ -287,7 +290,7 @@ namespace VirtualAdvocate.Controllers
 
                     foreach (var li in lst1)
                     {
-                        var TempKeyobj = objData.getKeyDetails(li.TemplateKeyId); // Fetch Keyword Details 
+                        var TempKeyobj = new VirtualAdvocateDocumentData().getKeyDetails(li.TemplateKeyId); // Fetch Keyword Details 
                         if (TempKeyobj != null)
                         {
                             if (keycount == tempkeycount && lst1.Count != 1) // Spiliting columns for two fields per row
@@ -295,7 +298,7 @@ namespace VirtualAdvocate.Controllers
                                 str.Append(" </div><div class=col-lg-6>");
                             }
 
-                            var existkeyval = db.BulkTemplateValues.Where(b => b.TemplateKey == TempKeyobj.TemplateKeyValue.Trim() && b.CustomerId == multiCustomers && b.IsEnabled == true).OrderByDescending(x => x.RowId).FirstOrDefault();
+                            var existkeyval = VAEDB.BulkTemplateValues.Where(b => b.TemplateKey == TempKeyobj.TemplateKeyValue.Trim() && b.CustomerId == multiCustomers && b.IsEnabled == true).OrderByDescending(x => x.RowId).FirstOrDefault();
 
                             if (existkeyval != null) // Checking for same key value Already Exists
                             {
@@ -320,7 +323,7 @@ namespace VirtualAdvocate.Controllers
                 ViewBag.Dynamic = str;
 
 
-                //var objkey = db.TemplateKeysPointers.Where(m => m.TemplateId == id).ToList(); //fetching all the keys for current template
+                //var objkey = VAEDB.TemplateKeysPointers.Where(m => m.TemplateId == id).ToList(); //fetching all the keys for current template
                 //lst = objkey.GroupBy(p => p.TemplateKeyId)
                 //    .Select(grp => grp.First()).ToList();
                 //int keycount = 0;
@@ -346,7 +349,9 @@ namespace VirtualAdvocate.Controllers
             return View();
 
         }
+        #endregion
 
+        #region DynamicFormName
         public string DynamicFormName(string AssociateDocName)
         {
             string row = "";
@@ -355,27 +360,33 @@ namespace VirtualAdvocate.Controllers
             //row = "<h4 style='background-color: gold;padding: 8px;border-radius: 5px;margin-top: 0px'> Form " + AssociateDocName + "</h4>";
             return row;
         }
+        #endregion
 
+        #region DynamicFormBottom
         public string DynamicFormBottom(int customerId)
         {
             string row = "";
             row = "</ div></ div></ div></ fieldset ></ div><input type=hidden name='customerId' value=" + customerId + "></ div>";
             return row;
         }
+        #endregion
 
+        #region BuildSubmitButton
         public string BuildSubmitButton(int? id, int orgId, int? associateId)
         {
             string row = "";
             row = "</div><div class=row><div class=col-lg-12><div class=col-md-2><input type=hidden value=" + associateId + " name=AssociateTemplateId /><input type=hidden value=" + id + " name=TemplateId /> <input class='btn btn-default' id=btnSubmit type=submit value=Submit /></div><div><button type=button value=Cancel class='btn btn-cancel'  onclick=location.href='" + Url.Action("SearchTemplate", "DocumentManagement", new { id = orgId }) + "'>Cancel</button></div></div></div></ form>";
             return row;
         }
+        #endregion
 
+        #region BuildDataList
         public string BuildDataList(string KeyValue, int[] CustomerId)
         {
             string row = "";
             string rowval = "";
 
-            var objkeyInputs = db.TemplateDynamicFormValues.Where(m => m.TemplateKey == KeyValue && CustomerId.Contains(m.CustomerId)).ToList();
+            var objkeyInputs = VAEDB.TemplateDynamicFormValues.Where(m => m.TemplateKey == KeyValue && CustomerId.Contains(m.CustomerId)).ToList();
             if (objkeyInputs != null && objkeyInputs.Count != 0)
             {
                 var lst = objkeyInputs.Select(p => p.UserInputs).Distinct().ToList();
@@ -388,7 +399,9 @@ namespace VirtualAdvocate.Controllers
 
             return row;
         }
+        #endregion
 
+        #region BuildDynamicForm
         public string BuildDynamicForm(string field, string label, string value, int[] customerId)
         {
             string row = "";
@@ -400,6 +413,9 @@ namespace VirtualAdvocate.Controllers
             return row;
         }
 
+        #endregion
+
+        #region DynamicFormStepCount
         public string DynamicFormStepCount(int stepCount, string AssociateDocName)
         {
             string row = "";
@@ -408,13 +424,18 @@ namespace VirtualAdvocate.Controllers
             //row = "<h4 style='background-color: gold;padding: 8px;border-radius: 5px;margin-top: 0px'>STEP " + stepCount + " :  " + AssociateDocName + "</h4>";
             return row;
         }
+        #endregion
+
+        #region DynamicFormTop
         public string DynamicFormTop()
         {
             string row = "";
             row = "<form class=form-horizontal  method=post action='" + Url.Content("~/MultipleDocumentDownload/FillDynamicForm/") + "'><div class=row><div class=col-lg-12><div class=well bs-component><fieldset><div class=row>";
             return row;
         }
+        #endregion
 
+        #region FillDynamicForm
         public ActionResult FillDynamicForm(FormCollection obj)
         {
             List<TemplateKeysPointer> lst = new List<TemplateKeysPointer>();
@@ -437,25 +458,25 @@ namespace VirtualAdvocate.Controllers
 
                 // Get Already Filled Details For This Template
                 bool ExistsData = false;
-                var objAlreadyFilled = db.BulkTemplateValues.Where(a => a.TemplateId == id && a.UserId == userId && a.IsEnabled == true && a.CustomerId == customerid);
+                var objAlreadyFilled = VAEDB.BulkTemplateValues.Where(a => a.TemplateId == id && a.UserId == userId && a.IsEnabled == true && a.CustomerId == customerid);
                 if (objAlreadyFilled != null && objAlreadyFilled.Count() > 0)
                 {
                     ExistsData = true;
                 }
 
-                var objkey = db.TemplateKeysPointers.Where(m => m.TemplateId == id).ToList();
+                var objkey = VAEDB.TemplateKeysPointers.Where(m => m.TemplateId == id).ToList();
                 lst = objkey.GroupBy(p => p.TemplateKeyId)
                     .Select(grp => grp.First()).ToList();
 
                 BulkTemplateValue objDynamicForm = new BulkTemplateValue();
                 foreach (var li in lst)
                 {
-                    var TempKeyobj = objData.getKeyDetails(li.TemplateKeyId); // Fetch Keyword Details 
+                    var TempKeyobj = new VirtualAdvocateDocumentData().getKeyDetails(li.TemplateKeyId); // Fetch Keyword Details 
 
                     // Update or insert dynamic data
                     if (ExistsData)
                     {
-                        objDynamicForm = db.BulkTemplateValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.TemplateKey == TempKeyobj.TemplateKeyValue && b.CustomerId == customerid).FirstOrDefault();
+                        objDynamicForm = VAEDB.BulkTemplateValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.TemplateKey == TempKeyobj.TemplateKeyValue && b.CustomerId == customerid).FirstOrDefault();
                         objDynamicForm.UserInputs = Request.Form[TempKeyobj.TemplateKeyValue];
                     }
                     else
@@ -467,10 +488,10 @@ namespace VirtualAdvocate.Controllers
                         objDynamicForm.UserInputs = Request.Form[TempKeyobj.TemplateKeyValue];
                         objDynamicForm.CreatedDate = DateTime.Now;
                         objDynamicForm.CustomerId = customerid;
-                        db.BulkTemplateValues.Add(objDynamicForm);
+                        VAEDB.BulkTemplateValues.Add(objDynamicForm);
                     }
 
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
 
 
@@ -483,8 +504,10 @@ namespace VirtualAdvocate.Controllers
 
             return RedirectToAction("PreviewDocument", "MultipleDocumentDownload", new { id = id });
         }
+        #endregion
 
-        public ActionResult PreviewDocument(int? id,bool associated, int[] customers)
+        #region PreviewDocument
+        public ActionResult PreviewDocument(int? id, bool associated, int[] customers)
         {
             int customer = customers[0];
             string wordContent = "";
@@ -495,9 +518,9 @@ namespace VirtualAdvocate.Controllers
             }
 
             ViewBag.TemplateId = id;
-        
+
             // Checking associate template
-            var objAssociate = db.DocumentTemplates.Find(id);
+            var objAssociate = VAEDB.DocumentTemplates.Find(id);
             if (objAssociate != null)
             {
                 ViewBag.Title = "Preview Filled Form  " + objAssociate.DocumentTitle;
@@ -512,9 +535,9 @@ namespace VirtualAdvocate.Controllers
 
             try
             {
-                var objTemplate = db.DocumentTemplates.Find(id);
+                var objTemplate = VAEDB.DocumentTemplates.Find(id);
                 wordContent = getWordContent(objTemplate.TemplateFileName);
-                var inputs = db.CustomerTemplateDetails.Where(w => w.CustID == customer).ToList();
+                var inputs = VAEDB.CustomerTemplateDetails.Where(w => w.CustID == customer).ToList();
 
                 foreach (CustomerTemplateDetail tem in inputs)
                 {
@@ -527,17 +550,20 @@ namespace VirtualAdvocate.Controllers
                 ErrorLog.LogThisError(ex);
             }
             ViewBag.WordContent = wordContent;
-            
+
             return View();
         }
+        #endregion
 
+        #region htmlEditor
         public ActionResult htmlEditor()
         {
             ViewBag.WordContent = "Test";
             return View("HTMLEditor");
         }
+        #endregion
 
-
+        #region getWordContent
         public string getWordContent(string filename)
         {
             string totaltext = "";
@@ -580,215 +606,216 @@ namespace VirtualAdvocate.Controllers
 
             return totaltext;
         }
+        #endregion
+
+        //   public ActionResult FormsConfirmation()
+        //   {
+        //       string newFilename = "";
+        //       string path = "";
+        //       string newpath = "";
+        //       int customerId = 0;
+        //       int GroupId = 1;
+        //       bool associatedDocument = false;
+        //       int templateId = Convert.ToInt32(Session["TemplateId"]);
+        //       int displayOrder = 0;
+        //       bool Mandatory = false;
+        //       int associatedTemplateID = 0;
 
 
-     //   public ActionResult FormsConfirmation()
-     //   {
-     //       string newFilename = "";
-     //       string path = "";
-     //       string newpath = "";
-     //       int customerId = 0;
-     //       int GroupId = 1;
-     //       bool associatedDocument = false;
-     //       int templateId = Convert.ToInt32(Session["TemplateId"]);
-     //       int displayOrder = 0;
-     //       bool Mandatory = false;
-     //       int associatedTemplateID = 0;
+        //       try
+        //       {
+        //           int? id = null;
+        //           int? userId = null;
+        //           string wordContent = "";
+
+        //           if (Session["CurrentTemplateId"] != null)
+        //           {
+        //               id = Convert.ToInt32(Session["CurrentTemplateId"]);
+        //               userId = Convert.ToInt32(Session["UserId"]);
+        //           }
+
+        //           // Updating status for create document
+        //           if (id != null)
+        //           {
+        //               string multicustomerid = Session["MultipleCustomerIDS"].ToString();
+
+        //               string[] customerIds = multicustomerid.Split(',');
+        //               for (int i = 0; i < customerIds.Length - 1; i++)
+        //               {
+        //                   customerId = Convert.ToInt32(customerIds[i]);
+        //                   var objDocumentTemplate = VAEDB.DocumentTemplates.Find(id);
+        //                   wordContent = getWordContent(objDocumentTemplate.TemplateFileName);
+
+        //                   List<BulkTemplateValue> objDynamicForm = new List<BulkTemplateValue>();
+        //                   objDynamicForm = VAEDB.BulkTemplateValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.CustomerId == multicustomerid).ToList();
+        //                   //Replace Keyvalues from word Document
+
+        //                   Random rnd = new Random();
+        //                   newFilename = "U" + userId + "T" + rnd.Next(1, 999999999) + objDocumentTemplate.TemplateFileName; // Create New File with unique name
+        //                   path = Path.Combine(Server.MapPath("~/TemplateFiles/" + objDocumentTemplate.TemplateFileName)); // Getting Original File For Create a new one with filled details
+        //                   newpath = Path.Combine(Server.MapPath("~/FilledTemplateFiles/" + newFilename)); // New File Path with File Name
+        //                   System.IO.File.Copy(path, newpath);
+
+        //                   DoSearchAndReplaceInWord(newpath, objDynamicForm);// Replace process
 
 
-     //       try
-     //       {
-     //           int? id = null;
-     //           int? userId = null;
-     //           string wordContent = "";
+        //                   if (customerIds.Length - 2 == i)
+        //                   {
+        //                       //Update the status for creating new word document
+        //                       foreach (var frmList in objDynamicForm)
+        //                       {
+        //                           frmList.IsEnabled = false;
+        //                       }
+        //                       VAEDB.SaveChanges();
+        //                   }
+        //                   ConvertToPdfFile(newpath); // Convert to pdf file
+        //                   Session["newFilename"] = newFilename;
+        //                   // Insert Filled Form Details For Billing
+        //                   var objFilledForm = VAEDB.FilledTemplateDetails.Where(c => c.UserId == userId);
 
-     //           if (Session["CurrentTemplateId"] != null)
-     //           {
-     //               id = Convert.ToInt32(Session["CurrentTemplateId"]);
-     //               userId = Convert.ToInt32(Session["UserId"]);
-     //           }
+        //                   if (Session["Displayorder"] != null && Convert.ToInt32(Session["Displayorder"]) > 0)
+        //                   {
+        //                       GroupId = Convert.ToInt32(Session["GroupId"]);
 
-     //           // Updating status for create document
-     //           if (id != null)
-     //           {
-     //               string multicustomerid = Session["MultipleCustomerIDS"].ToString();
+        //                   }
+        //                   else
+        //                   {
+        //                       if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
+        //                       {
+        //                       }
+        //                       else
+        //                       {
+        //                           var GroupForm = objFilledForm.OrderByDescending(d => d.GroupId).FirstOrDefault();
 
-     //               string[] customerIds = multicustomerid.Split(',');
-     //               for (int i = 0; i < customerIds.Length - 1; i++)
-     //               {
-     //                   customerId = Convert.ToInt32(customerIds[i]);
-     //                   var objDocumentTemplate = db.DocumentTemplates.Find(id);
-     //                   wordContent = getWordContent(objDocumentTemplate.TemplateFileName);
-
-     //                   List<BulkTemplateValue> objDynamicForm = new List<BulkTemplateValue>();
-     //                   objDynamicForm = db.BulkTemplateValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.CustomerId == multicustomerid).ToList();
-     //                   //Replace Keyvalues from word Document
-
-     //                   Random rnd = new Random();
-     //                   newFilename = "U" + userId + "T" + rnd.Next(1, 999999999) + objDocumentTemplate.TemplateFileName; // Create New File with unique name
-     //                   path = Path.Combine(Server.MapPath("~/TemplateFiles/" + objDocumentTemplate.TemplateFileName)); // Getting Original File For Create a new one with filled details
-     //                   newpath = Path.Combine(Server.MapPath("~/FilledTemplateFiles/" + newFilename)); // New File Path with File Name
-     //                   System.IO.File.Copy(path, newpath);
-
-     //                   DoSearchAndReplaceInWord(newpath, objDynamicForm);// Replace process
-
-
-     //                   if (customerIds.Length - 2 == i)
-     //                   {
-     //                       //Update the status for creating new word document
-     //                       foreach (var frmList in objDynamicForm)
-     //                       {
-     //                           frmList.IsEnabled = false;
-     //                       }
-     //                       db.SaveChanges();
-     //                   }
-     //                   ConvertToPdfFile(newpath); // Convert to pdf file
-     //                   Session["newFilename"] = newFilename;
-     //                   // Insert Filled Form Details For Billing
-     //                   var objFilledForm = db.FilledTemplateDetails.Where(c => c.UserId == userId);
-
-     //                   if (Session["Displayorder"] != null && Convert.ToInt32(Session["Displayorder"]) > 0)
-     //                   {
-     //                       GroupId = Convert.ToInt32(Session["GroupId"]);
-
-     //                   }
-     //                   else
-     //                   {
-     //                       if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
-     //                       {
-     //                       }
-     //                       else
-     //                       {
-     //                           var GroupForm = objFilledForm.OrderByDescending(d => d.GroupId).FirstOrDefault();
-
-     //                           // Assign Group Id
-     //                           if (GroupForm != null)
-     //                           {
-     //                               GroupId = GroupForm.GroupId + 1;
-     //                               Session["GroupId"] = GroupId;
-     //                           }
-     //                           if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
-     //                           {
-     //                               if (Convert.ToInt32(Session["AssociateCount"]) >= 1)
-     //                               {
-     //                                   // Holding same Group Id
-     //                                   GroupId = Convert.ToInt32(Session["GroupId"]);
-     //                               }
-     //                           }
-     //                       }
-     //                   }
+        //                           // Assign Group Id
+        //                           if (GroupForm != null)
+        //                           {
+        //                               GroupId = GroupForm.GroupId + 1;
+        //                               Session["GroupId"] = GroupId;
+        //                           }
+        //                           if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
+        //                           {
+        //                               if (Convert.ToInt32(Session["AssociateCount"]) >= 1)
+        //                               {
+        //                                   // Holding same Group Id
+        //                                   GroupId = Convert.ToInt32(Session["GroupId"]);
+        //                               }
+        //                           }
+        //                       }
+        //                   }
 
 
 
 
-     //                   // Insert Filled Form Details
-     //                   FilledTemplateDetail objFilledTemp = new FilledTemplateDetail();
-     //                   objFilledTemp.GroupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
-     //                   objFilledTemp.PaidStatus = false;
-     //                   objFilledTemp.UserId = userId.Value;
-     //                   objFilledTemp.TemplateId = id.Value;
-     //                   objFilledTemp.FilledTemplateName = newFilename;
-     //                   objFilledTemp.Amount = objDocumentTemplate.TemplateCost;
-     //                   objFilledTemp.CreatedDate = DateTime.Now;
-     //                   objFilledTemp.CustomerId = customerId;
-     //                   objFilledTemp.OrgId = Convert.ToInt32(Session["OrgId"]);
-     //                   db.FilledTemplateDetails.Add(objFilledTemp);
-     //                   db.SaveChanges();
+        //                   // Insert Filled Form Details
+        //                   FilledTemplateDetail objFilledTemp = new FilledTemplateDetail();
+        //                   objFilledTemp.GroupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
+        //                   objFilledTemp.PaidStatus = false;
+        //                   objFilledTemp.UserId = userId.Value;
+        //                   objFilledTemp.TemplateId = id.Value;
+        //                   objFilledTemp.FilledTemplateName = newFilename;
+        //                   objFilledTemp.Amount = objDocumentTemplate.TemplateCost;
+        //                   objFilledTemp.CreatedDate = DateTime.Now;
+        //                   objFilledTemp.CustomerId = customerId;
+        //                   objFilledTemp.OrgId = Convert.ToInt32(Session["OrgId"]);
+        //                   VAEDB.FilledTemplateDetails.Add(objFilledTemp);
+        //                   VAEDB.SaveChanges();
 
-     //                   if (Convert.ToInt32(Session["ATCount"]) >= 1 && customerIds.Length - 2 == i)
-     //                   {
-     //                       if (Session["Displayorder"] != null)
-     //                       {
-     //                           displayOrder = Convert.ToInt32(Session["Displayorder"]);
-     //                       }
-     //                       var objAssociateIds = db.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder).FirstOrDefault();
+        //                   if (Convert.ToInt32(Session["ATCount"]) >= 1 && customerIds.Length - 2 == i)
+        //                   {
+        //                       if (Session["Displayorder"] != null)
+        //                       {
+        //                           displayOrder = Convert.ToInt32(Session["Displayorder"]);
+        //                       }
+        //                       var objAssociateIds = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder).FirstOrDefault();
 
-     //                       if (objAssociateIds != null)
-     //                       {
-     //                           Session["Displayorder"] = objAssociateIds.DisplayOrder;
-     //                           displayOrder = Convert.ToInt32(objAssociateIds.DisplayOrder);
-     //                           associatedDocument = true;
-     //                           Mandatory = objAssociateIds.Mandatory;
-     //                           associatedTemplateID = objAssociateIds.AssociateTemplateId;
-     //                       }
-     //                       else
-     //                       {
-     //                           associatedDocument = false;
-     //                       }
-     //                   }
-     //                   if (Convert.ToInt32(Session["ATCount"]) == 0 && customerIds.Length - 2 == i)
-     //                   {
+        //                       if (objAssociateIds != null)
+        //                       {
+        //                           Session["Displayorder"] = objAssociateIds.DisplayOrder;
+        //                           displayOrder = Convert.ToInt32(objAssociateIds.DisplayOrder);
+        //                           associatedDocument = true;
+        //                           Mandatory = objAssociateIds.Mandatory;
+        //                           associatedTemplateID = objAssociateIds.AssociateTemplateId;
+        //                       }
+        //                       else
+        //                       {
+        //                           associatedDocument = false;
+        //                       }
+        //                   }
+        //                   if (Convert.ToInt32(Session["ATCount"]) == 0 && customerIds.Length - 2 == i)
+        //                   {
 
-     //                       Session.Remove("Displayorder");
+        //                       Session.Remove("Displayorder");
 
-     //                       int groupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
+        //                       int groupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
 
-     //                       var filledDocs = db.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
-     //.ToList();
+        //                       var filledDocs = VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
+        //.ToList();
 
-     //                       foreach (FilledTemplateDetail temp in filledDocs)
-     //                       {
-     //                           int Group = 0;
-     //                           var GroupForm = objFilledForm.OrderByDescending(d => d.GroupId).FirstOrDefault();
-     //                           if (GroupForm != null)
-     //                           {
-     //                               Group = GroupForm.GroupId + 1;
-     //                           }
-     //                           db.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
-     //                           db.SaveChanges();
-     //                           Session["GroupId"] = Group;
+        //                       foreach (FilledTemplateDetail temp in filledDocs)
+        //                       {
+        //                           int Group = 0;
+        //                           var GroupForm = objFilledForm.OrderByDescending(d => d.GroupId).FirstOrDefault();
+        //                           if (GroupForm != null)
+        //                           {
+        //                               Group = GroupForm.GroupId + 1;
+        //                           }
+        //                           VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
+        //                           VAEDB.SaveChanges();
+        //                           Session["GroupId"] = Group;
 
-     //                           var templateName = db.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
+        //                           var templateName = VAEDB.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
 
-     //                           CreateCoverLetteronHold(templateName.FilledTemplateName, temp.CustomerId);
-     //                       }
-     //                       Session.Remove("ATCount");
-     //                       Session.Remove("AssociateCount");
-     //                       Session.Remove("GroupId");
-     //                       Session.Remove("customerId");
-     //                       Session.Remove("newFilename");
-     //                       Session.Remove("MultipleCustomerIDS");
-     //                       Session.Remove("TemplateId");
-     //                       Session.Remove("CurrentTemplateId");
-     //                       Session.Remove("MultipleCustomer");
-     //                   }
+        //                           CreateCoverLetteronHold(templateName.FilledTemplateName, temp.CustomerId);
+        //                       }
+        //                       Session.Remove("ATCount");
+        //                       Session.Remove("AssociateCount");
+        //                       Session.Remove("GroupId");
+        //                       Session.Remove("customerId");
+        //                       Session.Remove("newFilename");
+        //                       Session.Remove("MultipleCustomerIDS");
+        //                       Session.Remove("TemplateId");
+        //                       Session.Remove("CurrentTemplateId");
+        //                       Session.Remove("MultipleCustomer");
+        //                   }
 
-     //               }
+        //               }
 
-     //               if (associatedDocument)
-     //               {
+        //               if (associatedDocument)
+        //               {
 
-     //                   var lastdoc = db.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder + 1).FirstOrDefault();
+        //                   var lastdoc = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder + 1).FirstOrDefault();
 
-     //                   if (lastdoc == null)
-     //                       ViewBag.lastdoc = "true";
-     //                   else
-     //                       ViewBag.lastdoc = "false";
-     //                   int i = Convert.ToInt32(Session["ATCount"]);
-     //                   if (Mandatory)
-     //                   {
+        //                   if (lastdoc == null)
+        //                       ViewBag.lastdoc = "true";
+        //                   else
+        //                       ViewBag.lastdoc = "false";
+        //                   int i = Convert.ToInt32(Session["ATCount"]);
+        //                   if (Mandatory)
+        //                   {
 
-     //                       Session["ATCount"] = i - 1;
-     //                       return RedirectToAction("CreateDynamicForm", "MultipleDocumentDownload", new { id = associatedTemplateID });
-     //                   }
-     //                   else
-     //                   {
-     //                       Session["ATCount"] = i - 1;
-     //                       return RedirectToAction("CoverLetterConfirm", "MultipleDocumentDownload", new { id = associatedTemplateID });
-     //                   }
+        //                       Session["ATCount"] = i - 1;
+        //                       return RedirectToAction("CreateDynamicForm", "MultipleDocumentDownload", new { id = associatedTemplateID });
+        //                   }
+        //                   else
+        //                   {
+        //                       Session["ATCount"] = i - 1;
+        //                       return RedirectToAction("CoverLetterConfirm", "MultipleDocumentDownload", new { id = associatedTemplateID });
+        //                   }
 
-     //               }
-     //           }
+        //               }
+        //           }
 
-     //       }
-     //       catch (Exception ex)
-     //       {
-     //           ErrorLog.LogThisError(ex);
-     //       }
+        //       }
+        //       catch (Exception ex)
+        //       {
+        //           ErrorLog.LogThisError(ex);
+        //       }
 
-     //       return RedirectToAction("FormsHistory", "DocumentManagement");
-     //   }
+        //       return RedirectToAction("FormsHistory", "DocumentManagement");
+        //   }
 
+        #region CreateCoverLetteronHold
         public void CreateCoverLetteronHold(string newFilename, int customerID)
         {
             int customerId = customerID;
@@ -807,16 +834,16 @@ namespace VirtualAdvocate.Controllers
                     System.IO.File.Delete(coverLetterpath);
                 }
                 System.IO.File.Copy(path, coverLetterpath);
-                var objDT = db.FilledTemplateDetails.Where(dc => dc.CustomerId == customerId && dc.GroupId == GroupId).ToList();
+                var objDT = VAEDB.FilledTemplateDetails.Where(dc => dc.CustomerId == customerId && dc.GroupId == GroupId).ToList();
 
-                CustomerDetail objCD = db.CustomerDetails.Find(customerId);
+                CustomerDetail objCD = VAEDB.CustomerDetails.Find(customerId);
 
                 List<DocumentTemplate> objDocumentTemp = new List<DocumentTemplate>();
                 if (objDT != null && objDT.Count() > 0)
                 {
                     foreach (FilledTemplateDetail objFilled in objDT)
                     {
-                        var objdc = db.DocumentTemplates.Find(objFilled.TemplateId);
+                        var objdc = VAEDB.DocumentTemplates.Find(objFilled.TemplateId);
                         objDocumentTemp.Add(new DocumentTemplate { DocumentTitle = objdc.DocumentTitle });
 
                     }
@@ -824,7 +851,7 @@ namespace VirtualAdvocate.Controllers
 
                 string docList = DocumentListForCoverLetter(objDocumentTemp);
                 //CoverLetterInWord(coverLetterpath, objCD, docList);//CoverLetter Create 
-               // ConvertToPdfFile(coverLetterpath); // Convert to pdf file
+                // ConvertToPdfFile(coverLetterpath); // Convert to pdf file
 
             }
             catch (Exception ex)
@@ -834,7 +861,9 @@ namespace VirtualAdvocate.Controllers
 
 
         }
+        #endregion
 
+        #region DocumentListForCoverLetter
         public string DocumentListForCoverLetter(List<DocumentTemplate> objDocument)
         {
             string docList = "";
@@ -847,6 +876,7 @@ namespace VirtualAdvocate.Controllers
 
             return docList;
         }
+        #endregion
 
         //public static void CoverLetterInWord(string filepath, CustomerDetail objcustomer, string docList)
         //{
@@ -936,6 +966,7 @@ namespace VirtualAdvocate.Controllers
 
         //}
 
+        #region ConvertToPdfFile
         public static void ConvertToPdfFile(string path)
         {
             try
@@ -952,106 +983,109 @@ namespace VirtualAdvocate.Controllers
 
 
         }
+        #endregion
 
-
-        public static void DoSearchAndReplaceInWord(string filepath, int customerID,DateTime? date)
+        #region DoSearchAndReplaceInWord
+        public static void DoSearchAndReplaceInWord(string filepath, int customerID, DateTime? date)
         {
             try
-            { 
-            //string[] customerIds = obj[0].CustomerId.Split(',');
-            //for (int i = 0; i < customerIds.Length; i++)
-            //{
-
-            // Create the Word application and declare a document
-            Application word = new Application();
-                Microsoft.Office.Interop.Word.Document doc = word.Documents.Add();
-               // Document doc = new Document();
-
-            // Define an object to pass to the API for missing parameters
-            object missing = System.Type.Missing;
-
-            try
             {
-                // Everything that goes to the interop must be an object
-                object fileName = filepath;
+                //string[] customerIds = obj[0].CustomerId.Split(',');
+                //for (int i = 0; i < customerIds.Length; i++)
+                //{
 
-                // Open the Word document.
-                // Pass the "missing" object defined above to all optional
-                // parameters.  All parameters must be of type object,
-                // and passed by reference.
-                doc = word.Documents.Open(ref fileName,
-                    ref missing, ref missing, ref missing);//, ref missing,
-                                                           //ref missing, ref missing, ref missing, ref missing,
-                                                           //ref missing, ref missing, ref missing, ref missing,
-                                                           //ref missing, ref missing, ref missing);
+                // Create the Word application and declare a document
+                Application word = new Application();
+                Microsoft.Office.Interop.Word.Document doc = word.Documents.Add();
+                // Document doc = new Document();
 
-                // Activate the document
-                doc.Activate();
+                // Define an object to pass to the API for missing parameters
+                object missing = System.Type.Missing;
+
+                try
+                {
+                    // Everything that goes to the interop must be an object
+                    object fileName = filepath;
+
+                    // Open the Word document.
+                    // Pass the "missing" object defined above to all optional
+                    // parameters.  All parameters must be of type object,
+                    // and passed by reference.
+                    doc = word.Documents.Open(ref fileName,
+                        ref missing, ref missing, ref missing);//, ref missing,
+                                                               //ref missing, ref missing, ref missing, ref missing,
+                                                               //ref missing, ref missing, ref missing, ref missing,
+                                                               //ref missing, ref missing, ref missing);
+
+                    // Activate the document
+                    doc.Activate();
 
 
 
-                string input = string.Empty;
-                VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-                var inputs = db.CustomerTemplateDetails.Where(w => w.CustID == customerID).ToList();
+                    string input = string.Empty;
+                    VirtualAdvocateEntities db = new VirtualAdvocateEntities();
+                    var inputs = db.CustomerTemplateDetails.Where(w => w.CustID == customerID).ToList();
                     CustomerTemplateDetail obj = new CustomerTemplateDetail();
                     obj.FieldName = "Date";
-                    if(date!=null)
-                    obj.FieldValue = date.Value.ToString("dd-MMM-yyyy");
+                    if (date != null)
+                        obj.FieldValue = date.Value.ToString("dd-MMM-yyyy");
                     inputs.Add(obj);
-                foreach (CustomerTemplateDetail tem in inputs)
-                {
-                    // Loop through the StoryRanges (sections of the Word doc)
-                    foreach (Range tmpRange in doc.StoryRanges)
+                    foreach (CustomerTemplateDetail tem in inputs)
                     {
-                        // Set the text to find and replace
-                        tmpRange.Find.Text = "<" + tem.FieldName.Replace(" ", "_") + ">";
-                        tmpRange.Find.Replacement.Text = tem.FieldValue;
-                        //tmpRange.Find.Text = "<Date>";
-                        //tmpRange.Find.Replacement.Text = date.Value.ToString("dd-MMM-yyyy");
-                        // Set the Find.Wrap property to continue (so it doesn't
-                        // prompt the user or stop when it hits the end of
-                        // the section)
-                        tmpRange.Find.Wrap = WdFindWrap.wdFindContinue;
+                        // Loop through the StoryRanges (sections of the Word doc)
+                        foreach (Range tmpRange in doc.StoryRanges)
+                        {
+                            // Set the text to find and replace
+                            tmpRange.Find.Text = "<" + tem.FieldName.Replace(" ", "_") + ">";
+                            tmpRange.Find.Replacement.Text = tem.FieldValue;
+                            //tmpRange.Find.Text = "<Date>";
+                            //tmpRange.Find.Replacement.Text = date.Value.ToString("dd-MMM-yyyy");
+                            // Set the Find.Wrap property to continue (so it doesn't
+                            // prompt the user or stop when it hits the end of
+                            // the section)
+                            tmpRange.Find.Wrap = WdFindWrap.wdFindContinue;
 
-                        // Declare an object to pass as a parameter that sets
-                        // the Replace parameter to the "wdReplaceAll" enum
-                        object replaceAll = WdReplace.wdReplaceAll;
+                            // Declare an object to pass as a parameter that sets
+                            // the Replace parameter to the "wdReplaceAll" enum
+                            object replaceAll = WdReplace.wdReplaceAll;
 
-                        // Execute the Find and Replace -- notice that the
-                        // 11th parameter is the "replaceAll" enum object
-                        tmpRange.Find.Execute(ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref replaceAll,
-                            ref missing, ref missing, ref missing, ref missing);
+                            // Execute the Find and Replace -- notice that the
+                            // 11th parameter is the "replaceAll" enum object
+                            tmpRange.Find.Execute(ref missing, ref missing, ref missing,
+                                ref missing, ref missing, ref missing, ref missing,
+                                ref missing, ref missing, ref missing, ref replaceAll,
+                                ref missing, ref missing, ref missing, ref missing);
+                        }
+
+
+
                     }
 
+                    // Save the changes
+                    doc.Save();
 
-
+                    // Close the doc and exit the app
+                    doc.Close(ref missing, ref missing, ref missing);
+                    word.Application.Quit(ref missing, ref missing, ref missing);
                 }
 
-                // Save the changes
-                doc.Save();
-
-                // Close the doc and exit the app
-                doc.Close(ref missing, ref missing, ref missing);
-                word.Application.Quit(ref missing, ref missing, ref missing);
-            }
-
-            catch (Exception ex)
-            {
-                Logger(ex.Message);
-                ErrorLog.LogThisError(ex);
-                doc.Close(ref missing, ref missing, ref missing);
-                word.Application.Quit(ref missing, ref missing, ref missing);
-            }
+                catch (Exception ex)
+                {
+                    Logger(ex.Message);
+                    ErrorLog.LogThisError(ex);
+                    doc.Close(ref missing, ref missing, ref missing);
+                    word.Application.Quit(ref missing, ref missing, ref missing);
+                }
             }
             catch (Exception ex)
             {
                 Logger(ex.Message);
-               
+
             }
         }
+        #endregion
 
+        #region CoverLetterConfirm
         public ActionResult CoverLetterConfirm(int? id)
         {
             if (id == null)
@@ -1062,7 +1096,9 @@ namespace VirtualAdvocate.Controllers
             ViewBag.AssociateId = id;
             return View();
         }
+        #endregion
 
+        #region CoverLetterConfirmed
         //Manually creating CoverLetter
         public ActionResult CoverLetterConfirmed()
         {
@@ -1071,7 +1107,7 @@ namespace VirtualAdvocate.Controllers
             int GroupId = 1;
             Int32 userId = Convert.ToInt32(Session["UserId"]);
             int templateId = Convert.ToInt32(Session["TemplateId"]);
-            var objFilledForm = db.FilledTemplateDetails.Where(c => c.UserId == userId);
+            var objFilledForm = VAEDB.FilledTemplateDetails.Where(c => c.UserId == userId);
 
 
             if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
@@ -1105,7 +1141,7 @@ namespace VirtualAdvocate.Controllers
 
                 int groupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
 
-                var filledDocs = db.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
+                var filledDocs = VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
 .ToList();
 
                 foreach (FilledTemplateDetail temp in filledDocs)
@@ -1116,11 +1152,11 @@ namespace VirtualAdvocate.Controllers
                     {
                         Group = GroupForm.GroupId + 1;
                     }
-                    db.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
-                    db.SaveChanges();
+                    VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
+                    VAEDB.SaveChanges();
                     Session["GroupId"] = Group;
 
-                    var templateName = db.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
+                    var templateName = VAEDB.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
 
                     CreateCoverLetteronHold(templateName.FilledTemplateName, temp.CustomerId);
                 }
@@ -1142,7 +1178,9 @@ namespace VirtualAdvocate.Controllers
             //Session["customerId"] = null;
             return RedirectToAction("FormsHistory", "DocumentManagement");
         }
+        #endregion
 
+        #region Skip
         public ActionResult Skip()
         {
             int templateId = Convert.ToInt32(Session["TemplateId"]);
@@ -1151,11 +1189,11 @@ namespace VirtualAdvocate.Controllers
             {
                 displayOrder = Convert.ToInt32(Session["Displayorder"]);
             }
-            var objAssociateIds = db.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder).FirstOrDefault();
+            var objAssociateIds = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder).FirstOrDefault();
 
             if (objAssociateIds != null)
             {
-                var lastdoc = db.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder + 1).FirstOrDefault();
+                var lastdoc = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == templateId && c.IsEnabled == true && (c.DisplayOrder == null || c.DisplayOrder > displayOrder)).OrderBy(c => c.DisplayOrder + 1).FirstOrDefault();
                 Session["Displayorder"] = displayOrder + 1;
                 if (lastdoc == null)
                     ViewBag.lastdoc = "true";
@@ -1178,7 +1216,7 @@ namespace VirtualAdvocate.Controllers
 
                 int GroupId = 1;
                 Int32 userId = Convert.ToInt32(Session["UserId"]);
-                var objFilledForm = db.FilledTemplateDetails.Where(c => c.UserId == userId);
+                var objFilledForm = VAEDB.FilledTemplateDetails.Where(c => c.UserId == userId);
 
 
                 if (Session["GroupId"] != null && Convert.ToInt32(Session["GroupId"]) != 0)
@@ -1212,7 +1250,7 @@ namespace VirtualAdvocate.Controllers
 
                     int groupId = (Session["GroupId"] != null) ? Convert.ToInt32(Session["GroupId"]) : GroupId;
 
-                    var filledDocs = db.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
+                    var filledDocs = VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId).GroupBy(s => s.CustomerId).ToList().Select(g => g.First())
     .ToList();
 
                     foreach (FilledTemplateDetail temp in filledDocs)
@@ -1223,11 +1261,11 @@ namespace VirtualAdvocate.Controllers
                         {
                             Group = GroupForm.GroupId + 1;
                         }
-                        db.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
-                        db.SaveChanges();
+                        VAEDB.FilledTemplateDetails.Where(g => g.GroupId == groupId && g.CustomerId == temp.CustomerId).ToList().ForEach(g => g.GroupId = Group);
+                        VAEDB.SaveChanges();
                         Session["GroupId"] = Group;
 
-                        var templateName = db.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
+                        var templateName = VAEDB.FilledTemplateDetails.Where(t => t.TemplateId == templateId && t.GroupId == Group && t.CustomerId == temp.CustomerId).FirstOrDefault();
 
                         CreateCoverLetteronHold(templateName.FilledTemplateName, temp.CustomerId);
                     }
@@ -1249,33 +1287,34 @@ namespace VirtualAdvocate.Controllers
 
 
         }
+        #endregion
 
-
-        public string CreateDocument(Int32 id,Int32 custID,Int32 groupID,Int32 bulkID,DateTime Date)
+        #region CreateDocument
+        public string CreateDocument(Int32 id, Int32 custID, Int32 groupID, Int32 bulkID, DateTime Date)
         {
             string newFilename = "";
             string path = "";
             string newpath = "";
             int userId = Convert.ToInt32(Session["UserId"]);
-           // string wordContent = string.Empty;
+            // string wordContent = string.Empty;
 
-            var objDocumentTemplate = db.DocumentTemplates.Find(id);
+            var objDocumentTemplate = VAEDB.DocumentTemplates.Find(id);
             //  wordContent = getWordContent(objDocumentTemplate.TemplateFileName);
-            string customerName = db.CustomerDetails.Single(s => s.CustomerId == custID).CustomerName;
+            string customerName = VAEDB.CustomerDetails.Single(s => s.CustomerId == custID).CustomerName;
             newFilename = customerName + DateTime.Now.Ticks + objDocumentTemplate.TemplateFileName.Replace(" ", ""); // Create New File with unique name
             path = Path.Combine(Server.MapPath("~/TemplateFiles/" + objDocumentTemplate.TemplateFileName.Replace(" ", ""))); // Getting Original File For Create a new one with filled details
-            newpath = Path.Combine(Server.MapPath("~/FilledTemplateFiles/" + newFilename.Replace(" ","_"))); // New File Path with File Name
+            newpath = Path.Combine(Server.MapPath("~/FilledTemplateFiles/" + newFilename.Replace(" ", "_"))); // New File Path with File Name
             System.IO.File.Copy(path, newpath);
 
-           // CreateDocument(newpath, custID,Date);
+            // CreateDocument(newpath, custID,Date);
 
 
 
-            DoSearchAndReplaceInWord(newpath, custID,Date);// Replace process                       
+            DoSearchAndReplaceInWord(newpath, custID, Date);// Replace process                       
             ConvertToPdfFile(newpath); // Convert to pdf file
 
             // Insert Filled Form Details For Billing
-            var objFilledForm = db.FilledTemplateDetails.Where(c => c.UserId == userId);
+            var objFilledForm = VAEDB.FilledTemplateDetails.Where(c => c.UserId == userId);
 
             // Insert Filled Form Details
             FilledTemplateDetail objFilledTemp = new FilledTemplateDetail();
@@ -1291,15 +1330,16 @@ namespace VirtualAdvocate.Controllers
             objFilledTemp.CoverLetter = false;
             objFilledTemp.BulkTemplateID = bulkID;
 
-            db.FilledTemplateDetails.Add(objFilledTemp);
-            db.SaveChanges();
+            VAEDB.FilledTemplateDetails.Add(objFilledTemp);
+            VAEDB.SaveChanges();
 
             return newFilename;
 
         }
+        #endregion
 
-
-        public void CreateDocument(string filepath, int customerID,DateTime Date)
+        #region CreateDocument
+        public void CreateDocument(string filepath, int customerID, DateTime Date)
         {
             string totaltext = "";
             try
@@ -1328,7 +1368,7 @@ namespace VirtualAdvocate.Controllers
                 }
                 string input = string.Empty;
                 VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-                var inputs = db.CustomerTemplateDetails.Where(w => w.CustID == customerID).ToList();
+                var inputs = VAEDB.CustomerTemplateDetails.Where(w => w.CustID == customerID).ToList();
 
                 foreach (CustomerTemplateDetail tem in inputs)
                 {
@@ -1347,8 +1387,9 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
 
-
+        #region CreateDocumentFromHiQpdf
         public void CreateDocumentFromHiQpdf(string html, string FilePath)
         {
             try
@@ -1388,7 +1429,9 @@ namespace VirtualAdvocate.Controllers
 
             }
         }
+        #endregion
 
+        #region PdfSharpConvert
         public static Byte[] PdfSharpConvert(String html)
         {
             Byte[] res = null;
@@ -1402,14 +1445,14 @@ namespace VirtualAdvocate.Controllers
 
             return res = (new NReco.PdfGenerator.HtmlToPdfConverter()).GeneratePdf(html);
         }
+        #endregion
 
-
-      
-        public ActionResult Download(int? id,bool associated,int[] customers,DateTime? Date)
+        #region Download
+        public ActionResult Download(int? id, bool associated, int[] customers, DateTime? Date)
         {
-           
+
             string customerIds = string.Empty;
-                int userId = Convert.ToInt32(Session["UserId"]);
+            int userId = Convert.ToInt32(Session["UserId"]);
             if (Date == null)
                 Date = DateTime.UtcNow.Date;
             BulkTemplateLog objLog = new BulkTemplateLog();
@@ -1417,55 +1460,57 @@ namespace VirtualAdvocate.Controllers
             objLog.TemplateID = id.Value;
             objLog.CreatedOn = DateTime.UtcNow;
 
-            db.BulkTemplateLogs.Add(objLog);
+            VAEDB.BulkTemplateLogs.Add(objLog);
 
-            db.SaveChanges();
+            VAEDB.SaveChanges();
             try
-                {
+            {
 
                 ///Insert into bulk template log table
 
-               
+
                 int customerId = 0;
-                    
-                    for (int i = 0; i < customers.Length; i++)
-                    {
+
+                for (int i = 0; i < customers.Length; i++)
+                {
                     int groupID = 0;
-                        var GroupForm = db.FilledTemplateDetails.OrderByDescending(d => d.GroupId).FirstOrDefault();
+                    var GroupForm = VAEDB.FilledTemplateDetails.OrderByDescending(d => d.GroupId).FirstOrDefault();
                     if (GroupForm == null)
                         groupID = 1;
                     else
                         groupID = GroupForm.GroupId + 1;
-                  customerId = Convert.ToInt32(customers[i]);
-                        var customerID = db.CustomerDetails.Where(c => c.CustomerId == customerId).Select(c => c.CustomerId).FirstOrDefault();
+                    customerId = Convert.ToInt32(customers[i]);
+                    var customerID = VAEDB.CustomerDetails.Where(c => c.CustomerId == customerId).Select(c => c.CustomerId).FirstOrDefault();
 
-                        customerId = customerID;
-                        string filename=  CreateDocument(id.Value, customerId,groupID,objLog.ID,Date.Value);
+                    customerId = customerID;
+                    string filename = CreateDocument(id.Value, customerId, groupID, objLog.ID, Date.Value);
 
-                        if (associated)
+                    if (associated)
+                    {
+                        var objAssociateIds = VAEDB.AssociateTemplateDetails.Where(c => c.TemplateId == id.Value && c.IsEnabled == true).ToList();
+
+                        if (objAssociateIds != null && objAssociateIds.Count > 0)
                         {
-                            var objAssociateIds = db.AssociateTemplateDetails.Where(c => c.TemplateId == id.Value && c.IsEnabled == true).ToList();
-
-                            if (objAssociateIds != null && objAssociateIds.Count > 0)
+                            foreach (AssociateTemplateDetail objAss in objAssociateIds)
                             {
-                                foreach (AssociateTemplateDetail objAss in objAssociateIds)
-                                {
-                                    CreateDocument(objAss.AssociateTemplateId, customerId, GroupForm.GroupId + 1, objLog.ID,Date.Value);
-                                }
+                                CreateDocument(objAss.AssociateTemplateId, customerId, GroupForm.GroupId + 1, objLog.ID, Date.Value);
                             }
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    ErrorLog.LogThisError(ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+            }
             return Json(objLog.ID, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region CheckAssociatedDocs
         public JsonResult CheckAssociatedDocs(int? id)
         {
-           var assObj= db.AssociateTemplateDetails.Where(a => a.TemplateId == id.Value).FirstOrDefault();
+            var assObj = VAEDB.AssociateTemplateDetails.Where(a => a.TemplateId == id.Value).FirstOrDefault();
 
             if (assObj != null)
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -1473,8 +1518,9 @@ namespace VirtualAdvocate.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
 
         }
+        #endregion
 
-
+        #region DownloadMultipleDocuments
         [HttpGet]
         public FileResult DownloadMultipleDocuments(IEnumerable<string> FilledTemplateName)
         {
@@ -1505,9 +1551,11 @@ namespace VirtualAdvocate.Controllers
             }
             else
 
-            return (null);
+                return (null);
         }
+        #endregion
 
+        #region BulkDownload
         /// <summary>
         /// Filled Document List Based on Logged in User
         /// </summary>
@@ -1520,14 +1568,14 @@ namespace VirtualAdvocate.Controllers
             {
                 int userId = Convert.ToInt32(Session["UserId"]);
 
-                var customer = (from user in db.UserProfiles.Where(u => u.UserID == userId) select user.OrganizationId).FirstOrDefault();
+                var customer = (from user in VAEDB.UserProfiles.Where(u => u.UserID == userId) select user.OrganizationId).FirstOrDefault();
 
-                var objFilledTemp = (from obj in db.FilledTemplateDetails
+                var objFilledTemp = (from obj in VAEDB.FilledTemplateDetails
 
-                                     join cust in db.CustomerDetails on obj.CustomerId equals cust.CustomerId
-                                     join doc in db.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
+                                     join cust in VAEDB.CustomerDetails on obj.CustomerId equals cust.CustomerId
+                                     join doc in VAEDB.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
                                      from subset in g.DefaultIfEmpty()
-                                     where obj.OrgId == customer && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CoverLetter==false
+                                     where obj.OrgId == customer && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CoverLetter == false
                                      select new FilledFormDetailModel { DocumentTitle = (subset == null ? "Template Deleted" : subset.DocumentTitle), Amount = obj.Amount, CreatedDate = obj.CreatedDate, FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId, CustomerName = cust.CustomerName }
                     );
                 objForm = objFilledTemp.OrderByDescending(x => x.GroupId).ThenBy(o => o.RowId).ToList();
@@ -1538,10 +1586,12 @@ namespace VirtualAdvocate.Controllers
             }
             return View(objForm);
         }
+        #endregion
 
+        #region Logger
         public static void Logger(string msg)
         {
-            string fileName = System.Configuration.ConfigurationManager.AppSettings["logPath"] ;
+            string fileName = System.Configuration.ConfigurationManager.AppSettings["logPath"];
 
             //Checks for folder if not it will create new folder 
             if (!Directory.Exists(fileName))
@@ -1559,7 +1609,9 @@ namespace VirtualAdvocate.Controllers
             writer.Dispose();
 
         }
+        #endregion
 
+        #region GetCustomerNameList
         private void GetCustomerNameList()
         {
             int orgid = 0;
@@ -1573,7 +1625,8 @@ namespace VirtualAdvocate.Controllers
                 int customerID = Convert.ToInt32(Session["CustHistoryID"]);
                 Session.Remove("CustHistoryID");
 
-                var customers = db.CustomerDetails.Where(m => m.IsEnabled == true && m.OrganizationId == orgid &&(roleId==6 || m.createdBy==userID)).Select(c => new {
+                var customers = VAEDB.CustomerDetails.Where(m => m.IsEnabled == true && m.OrganizationId == orgid && (roleId == 6 || m.createdBy == userID)).Select(c => new
+                {
                     customerID = c.CustomerId,
                     customerName = c.CustomerName
                 }).ToList();
@@ -1582,10 +1635,11 @@ namespace VirtualAdvocate.Controllers
             }
             else
             {
-               
+
                 if (orgid == 0 && Convert.ToInt32(Session["RoleId"]) == 1)
                 {
-                    var customers = db.CustomerDetails.Where(c => c.IsEnabled == true).Select(c => new {
+                    var customers = VAEDB.CustomerDetails.Where(c => c.IsEnabled == true).Select(c => new
+                    {
                         customerID = c.CustomerId,
                         customerName = c.CustomerName
                     }).ToList();
@@ -1594,7 +1648,8 @@ namespace VirtualAdvocate.Controllers
                 }
                 else
                 {
-                    var customers = db.CustomerDetails.Where(m => m.OrganizationId == orgid && m.IsEnabled == true && orgid != 0  && (m.createdBy == userID || (roleId == 2) || (m.Department == deptID && roleId == 5))).Select(c => new {
+                    var customers = VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgid && m.IsEnabled == true && orgid != 0 && (m.createdBy == userID || (roleId == 2) || (m.Department == deptID && roleId == 5))).Select(c => new
+                    {
                         customerID = c.CustomerId,
                         customerName = c.CustomerName
                     }).ToList();
@@ -1607,7 +1662,9 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
 
+        #region BulkDocuments
         public ActionResult BulkDocuments()
         {
             try
@@ -1615,14 +1672,22 @@ namespace VirtualAdvocate.Controllers
                 int roleID = Convert.ToInt32(Session["RoleId"]);
                 int department = Convert.ToInt32(Session["DepartmentID"]);
 
-                var objTemplates = (from ut in db.DocumentTemplates
-                                    join dc in db.DocumentCategories on ut.DocumentCategory equals dc.DocumentCategoryId
-                                    join bu in db.BulkTemplateLogs  on ut.TemplateId equals  bu.TemplateID
+                var objTemplates = (from ut in VAEDB.DocumentTemplates
+                                    join dc in VAEDB.DocumentCategories on ut.DocumentCategory equals dc.DocumentCategoryId
+                                    join bu in VAEDB.BulkTemplateLogs on ut.TemplateId equals bu.TemplateID
                                     where ut.IsEnabled == true && ut.IsEnabled == true && dc.ServiceId == orgId
-                                                                        && (((roleID != 6) && (roleID != 5)) || ((roleID == 6 && ut.DepartmentID == department) || (roleID == 5 && ut.DepartmentID == department))) orderby bu.CreatedOn descending
-                                    
+                                                                        && (((roleID != 6) && (roleID != 5)) || ((roleID == 6 && ut.DepartmentID == department) || (roleID == 5 && ut.DepartmentID == department)))
+                                    orderby bu.CreatedOn descending
 
-                                    select new BulkDocumentTemplateListModel { TemplateName = ut.DocumentTitle, TemplateId = ut.TemplateId, BulkTemplateID = bu.ID, DocumentCategory = dc.DocumentCategoryName, Cost = ut.TemplateCost,CreatedOn=bu.CreatedOn
+
+                                    select new BulkDocumentTemplateListModel
+                                    {
+                                        TemplateName = ut.DocumentTitle,
+                                        TemplateId = ut.TemplateId,
+                                        BulkTemplateID = bu.ID,
+                                        DocumentCategory = dc.DocumentCategoryName,
+                                        Cost = ut.TemplateCost,
+                                        CreatedOn = bu.CreatedOn
 
                                     }
                         ).OrderByDescending(s => s.CreatedOn);
@@ -1637,20 +1702,22 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
 
+        #region GetDocuments
         public ActionResult GetDocuments(int id)
         {
             GetCustomerNameList();
             List<FilledFormDetailModel> objForm = new List<FilledFormDetailModel>();
             try
             {
-                
-                var objFilledTemp = (from obj in db.FilledTemplateDetails
 
-                                     join cust in db.CustomerDetails on obj.CustomerId equals cust.CustomerId
-                                     join doc in db.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
+                var objFilledTemp = (from obj in VAEDB.FilledTemplateDetails
+
+                                     join cust in VAEDB.CustomerDetails on obj.CustomerId equals cust.CustomerId
+                                     join doc in VAEDB.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
                                      from subset in g.DefaultIfEmpty()
-                                     where obj.OrgId == orgId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CoverLetter == false && obj.BulkTemplateID==id
+                                     where obj.OrgId == orgId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CoverLetter == false && obj.BulkTemplateID == id
                                      select new FilledFormDetailModel { DocumentTitle = (subset == null ? "Template Deleted" : subset.DocumentTitle), Amount = obj.Amount, CreatedDate = obj.CreatedDate, FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId, CustomerName = cust.CustomerName }
                     );
                 objForm = objFilledTemp.OrderByDescending(x => x.GroupId).ThenBy(o => o.RowId).ToList();
@@ -1661,16 +1728,18 @@ namespace VirtualAdvocate.Controllers
             }
             return View("BulkDownload", objForm);
         }
+        #endregion
 
+        #region BulkDocumentDownload
         [HttpGet]
         public FileResult BulkDocumentDownload(int id)
         {
             List<FilledFormDetailModel> objForm = new List<FilledFormDetailModel>();
 
-            var objFilledTemp = (from obj in db.FilledTemplateDetails
+            var objFilledTemp = (from obj in VAEDB.FilledTemplateDetails
 
                                  where obj.OrgId == orgId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CoverLetter == false && obj.BulkTemplateID == id
-                                 select new FilledFormDetailModel {FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId }
+                                 select new FilledFormDetailModel { FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId }
                  );
             objForm = objFilledTemp.OrderByDescending(x => x.GroupId).ThenBy(o => o.RowId).ToList();
 
@@ -1683,7 +1752,7 @@ namespace VirtualAdvocate.Controllers
                 {
                     foreach (FilledFormDetailModel filename in objForm)
                     {
-                        string filepath = Server.MapPath("~/FilledTemplateFiles/") + filename.FilledTemplateName.Replace("docx","pdf");
+                        string filepath = Server.MapPath("~/FilledTemplateFiles/") + filename.FilledTemplateName.Replace("docx", "pdf");
                         Logger(filepath);
                         if (System.IO.File.Exists(filepath))
                         {
@@ -1702,6 +1771,9 @@ namespace VirtualAdvocate.Controllers
             else
 
                 return (null);
-        }
-    }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

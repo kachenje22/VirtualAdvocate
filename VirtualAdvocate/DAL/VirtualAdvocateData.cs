@@ -1,15 +1,15 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity.Core.Objects;
-using System.Collections;
 using System.Data;
-using VirtualAdvocate.Models;
+using System.Linq;
 using VirtualAdvocate.Common;
-
+using VirtualAdvocate.Models;
+#endregion
+#region VirtualAdvocate.DAL
 namespace VirtualAdvocate.DAL
 {
+    #region VirtualAdvocateData
     public class VirtualAdvocateData
     {
         #region Account Services and Payment Methods
@@ -160,8 +160,8 @@ namespace VirtualAdvocate.DAL
         /// <returns>User Id</returns>
         public int SaveUserProfile(UserProfile objUserProfile)
         {
-            int newUserid=0;
-            if(objUserProfile != null)
+            int newUserid = 0;
+            if (objUserProfile != null)
             {
                 using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
                 {
@@ -180,7 +180,7 @@ namespace VirtualAdvocate.DAL
         /// <returns>Organization Id</returns>
         public int SaveOrganizationDetails(OrganizationDetail objOrgDetails)
         {
-            int newOrgId = 0;           
+            int newOrgId = 0;
             if (objOrgDetails != null)
             {
                 using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
@@ -219,11 +219,11 @@ namespace VirtualAdvocate.DAL
         /// <returns></returns>
         public UserRegistrationModel getDefaultRegistration(int? id)
         {
-           
+
             UserRegistrationModel obj = new UserRegistrationModel();
-           
+
             obj.AvailablePaymentMethods = ServicesRepository.GetAllPaymentMethods().ToList(); // Getting all payment methods         
-           // obj.AvailableService = ServicesRepository.GetAllAccountServices().ToList();   // Getting all account services 
+                                                                                              // obj.AvailableService = ServicesRepository.GetAllAccountServices().ToList();   // Getting all account services 
 
             var selectedAccServices = new List<AccountServicesModel>();
             var selectedPayMethods = new List<PaymentMethodModel>();
@@ -232,12 +232,12 @@ namespace VirtualAdvocate.DAL
             if (id != null)
             {
                 serveId = id.Value;
-               // selectedAccServices.Add(ServicesRepository.GetDefaultService(serveId));
+                // selectedAccServices.Add(ServicesRepository.GetDefaultService(serveId));
             }
             obj.SelectedService = selectedAccServices;
 
 
-          
+
             return obj;
         }
 
@@ -256,11 +256,11 @@ namespace VirtualAdvocate.DAL
         //    return obj;
         //}
 
-            /// <summary>
-            /// Getting services which are permitted for a company
-            /// </summary>
-            /// <param name="Orgid"></param>
-            /// <returns></returns>
+        /// <summary>
+        /// Getting services which are permitted for a company
+        /// </summary>
+        /// <param name="Orgid"></param>
+        /// <returns></returns>
         public OrgUserViewModel getOrgServicesForNewUser(int? Orgid)
         {
 
@@ -294,7 +294,7 @@ namespace VirtualAdvocate.DAL
         //        {
         //            objAvail.Add(new AccountServicesModel { Id = AC.ServiceId, Name = AC.Service });
         //        }
-               
+
         //    }
         //    return objAvail;
         //}
@@ -304,24 +304,24 @@ namespace VirtualAdvocate.DAL
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-       //public List<AccountServicesModel> getUserSelectedServices(int? userId)
-       // {
-       //     List<AccountServicesModel> objSelected = new List<AccountServicesModel>();
-       //     using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
-       //     {
-       //         var objSelectedServices = (from acser in objContext.AccountServices
-       //                                    join selser in objContext.SelectedAccountServices
-       //                                    on acser.ServiceId equals selser.ServiceId
-       //                                    where selser.UserId == userId &&  acser.IsEnabled==true
-       //                                    select acser
-       //                                 );
-       //         foreach (var objservice in objSelectedServices)
-       //         {
-       //             objSelected.Add(ServicesRepository.GetDefaultService(objservice.ServiceId));
-       //         }
-       //     }
-       //     return objSelected;
-       // }
+        //public List<AccountServicesModel> getUserSelectedServices(int? userId)
+        // {
+        //     List<AccountServicesModel> objSelected = new List<AccountServicesModel>();
+        //     using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
+        //     {
+        //         var objSelectedServices = (from acser in objContext.AccountServices
+        //                                    join selser in objContext.SelectedAccountServices
+        //                                    on acser.ServiceId equals selser.ServiceId
+        //                                    where selser.UserId == userId &&  acser.IsEnabled==true
+        //                                    select acser
+        //                                 );
+        //         foreach (var objservice in objSelectedServices)
+        //         {
+        //             objSelected.Add(ServicesRepository.GetDefaultService(objservice.ServiceId));
+        //         }
+        //     }
+        //     return objSelected;
+        // }
 
         /// <summary>
         /// Getting permitted services and change it according to the user
@@ -335,9 +335,9 @@ namespace VirtualAdvocate.DAL
             var selectedAccServices = new List<AccountServicesModel>();
             List<AccountServicesModel> objAvail = new List<AccountServicesModel>();
             UserProfile objUp = objContext.UserProfiles.Find(userId);
-           // objAvail = getCompanyServices(objUp.OrganizationId);
+            // objAvail = getCompanyServices(objUp.OrganizationId);
             obj.AvailableService = objAvail;
-           // obj.SelectedService = getUserSelectedServices(userId);
+            // obj.SelectedService = getUserSelectedServices(userId);
             foreach (AccountServicesModel a in obj.AvailableService)
             {
                 foreach (AccountServicesModel s in obj.SelectedService)
@@ -393,10 +393,10 @@ namespace VirtualAdvocate.DAL
             using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
             {
                 var objSelectedPayment = (from acser in objContext.PaymentMethods
-                                           join selser in objContext.SelectedPaymentMethods
-                                           on acser.PaymentTypeId equals selser.PaymentTypeId
-                                           where selser.UserId == userId
-                                           select acser
+                                          join selser in objContext.SelectedPaymentMethods
+                                          on acser.PaymentTypeId equals selser.PaymentTypeId
+                                          where selser.UserId == userId
+                                          select acser
                                            );
                 foreach (var objpay in objSelectedPayment)
                 {
@@ -419,22 +419,22 @@ namespace VirtualAdvocate.DAL
                 {
                     var obj = context.UserAddressDetails.Where(ua => ua.UserId == objUser.UserId).FirstOrDefault();
                     var objMain = context.UserProfiles.Where(ua => ua.UserID == objUser.UserId).FirstOrDefault();
-                    if (objUser.Department!=0)
-                    objMain.Department = objUser.Department;
-                    if(objUser.roleID>0)
-                    objMain.RoleId = objUser.roleID;
+                    if (objUser.Department != 0)
+                        objMain.Department = objUser.Department;
+                    if (objUser.roleID > 0)
+                        objMain.RoleId = objUser.roleID;
 
                     if (objUser != null)
                     {
                         obj.FirstName = objUser.FirstName;
                         obj.LastName = objUser.LastName;
-                       // obj.EmailAddress = objUser.EmailAddress;
+                        // obj.EmailAddress = objUser.EmailAddress;
                         obj.StreetName = objUser.StreetName;
                         obj.BuildingName = objUser.BuildingName;
                         obj.BlockNumber = objUser.BlockNo;
                         obj.PlotNumber = objUser.PlotNo;
                         obj.Region = objUser.Region;
-                        obj.LandMark = objUser.LandMark;                       
+                        obj.LandMark = objUser.LandMark;
                         obj.Designation = objUser.Designation;
                         context.SaveChanges();
                     }
@@ -442,14 +442,14 @@ namespace VirtualAdvocate.DAL
             }
             catch (Exception ex)
             {
-                 ErrorLog.LogThisError(ex);
+                ErrorLog.LogThisError(ex);
                 return 1;
             }
             return 0;
         }
         public int LogDueDiligenceUsers(DueDiligenceUserViewModel objUserRegistration, int userId)
         {
-            int logId=0;
+            int logId = 0;
             try
             {
                 using (VirtualAdvocateEntities context = new VirtualAdvocateEntities())
@@ -476,13 +476,13 @@ namespace VirtualAdvocate.DAL
             }
             catch (Exception ex)
             {
-                ErrorLog.LogThisError(ex);               
+                ErrorLog.LogThisError(ex);
             }
             return logId;
         }
-        public void LogDuePersonalDetails(PersonalDetailsViewModel objUserRegistration,int Modifier)
+        public void LogDuePersonalDetails(PersonalDetailsViewModel objUserRegistration, int Modifier)
         {
-           
+
             try
             {
                 using (VirtualAdvocateEntities context = new VirtualAdvocateEntities())
@@ -511,9 +511,9 @@ namespace VirtualAdvocate.DAL
             catch (Exception ex)
             {
                 ErrorLog.LogThisError(ex);
-            }         
+            }
         }
-        public void LogPersonalDetails(PersonalDetailsViewModel objUserRegistration, int Modifier,int RoleId,int OrgId)
+        public void LogPersonalDetails(PersonalDetailsViewModel objUserRegistration, int Modifier, int RoleId, int OrgId)
         {
 
             try
@@ -550,6 +550,7 @@ namespace VirtualAdvocate.DAL
             }
         }
         #endregion
+
         #region Organization
 
         /// <summary>
@@ -571,7 +572,7 @@ namespace VirtualAdvocate.DAL
         {
             OrganizationDetail objOrg = new OrganizationDetail();
             try
-            {               
+            {
                 using (VirtualAdvocateEntities context = new VirtualAdvocateEntities())
                 {
                     objOrg = context.OrganizationDetails.Where(ua => ua.OrganizationId == id).FirstOrDefault();
@@ -603,6 +604,7 @@ namespace VirtualAdvocate.DAL
         }
 
         #endregion
+
         #region Due Diligence Form submit
         /// <summary>
         /// Binding all organization types into ListItem
@@ -610,7 +612,7 @@ namespace VirtualAdvocate.DAL
         /// <returns></returns>
         public List<OptionsModel> getAllEnquiryType()
         {
-            List<DueDiligenceEnquiryType> objDue= new List<DueDiligenceEnquiryType>();
+            List<DueDiligenceEnquiryType> objDue = new List<DueDiligenceEnquiryType>();
             objDue = GetDueDiligenceEnquiryTypes();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (DueDiligenceEnquiryType dsc in objDue)
@@ -627,7 +629,7 @@ namespace VirtualAdvocate.DAL
             {
 
                 VirtualAdvocateEntities context = new VirtualAdvocateEntities(); ;
-                obj= context.DueDiligenceEnquiryTypes.Where(x => x.IsEnabled == true).ToList<DueDiligenceEnquiryType>();
+                obj = context.DueDiligenceEnquiryTypes.Where(x => x.IsEnabled == true).ToList<DueDiligenceEnquiryType>();
             }
             catch (Exception ex)
             {
@@ -636,6 +638,7 @@ namespace VirtualAdvocate.DAL
             return obj;
         }
         #endregion
+
         #region Reports
         public List<OptionsModel> getAllReportsType()
         {
@@ -683,8 +686,8 @@ namespace VirtualAdvocate.DAL
             try
             {
 
-                VirtualAdvocateEntities context = new VirtualAdvocateEntities(); 
-                obj = context.OrganizationDetails.Where(x => x.IsEnabled == true && x.UserAccountsType==2).ToList<OrganizationDetail>();
+                VirtualAdvocateEntities context = new VirtualAdvocateEntities();
+                obj = context.OrganizationDetails.Where(x => x.IsEnabled == true && x.UserAccountsType == 2).ToList<OrganizationDetail>();
             }
             catch (Exception ex)
             {
@@ -772,7 +775,7 @@ namespace VirtualAdvocate.DAL
             return logid;
         }
 
-        public void LogDueRegistrations(int userid,bool IsEnabled,int Modifier)
+        public void LogDueRegistrations(int userid, bool IsEnabled, int Modifier)
         {
             try
             {
@@ -797,7 +800,7 @@ namespace VirtualAdvocate.DAL
                 objLog.RoleId = obj.RoleId;
                 objLog.ModifiedDate = DateTime.Now;
                 objLog.IsEnabled = IsEnabled;
-                if(IsEnabled==true)
+                if (IsEnabled == true)
                 {
                     objLog.Action = "Active";
                 }
@@ -814,7 +817,7 @@ namespace VirtualAdvocate.DAL
             }
         }
 
-        public void LogDuePaymentType(int logid,int userid,int paymenttypeid)
+        public void LogDuePaymentType(int logid, int userid, int paymenttypeid)
         {
             try
             {
@@ -868,5 +871,7 @@ namespace VirtualAdvocate.DAL
         //    }
         //}
         #endregion
-    }
-}
+    } 
+    #endregion
+} 
+#endregion

@@ -45,14 +45,14 @@
 
                                 @foreach (var g in Model.getAllCategory)
                                 {
-
+                                <div class="form-group">
                                     <input type="checkbox"
                                            name="SelectedGroups" value="@g.DocumentCategoryId" id="@g.DocumentCategoryId"
-                                           @{if (Model.SelectedGroups.Contains(g.DocumentCategoryId)) { <text> checked='checked' </text>    } } />
-                                    <label for="@g.DocumentCategoryId">@g.DocumentCategoryName</label>
-    }
+                                           @{if (Model.SelectedGroups.Contains(g.DocumentCategoryId)) { <text> checked='checked' </text>  } } />
+                                    <label for="@g.DocumentCategoryId">@g.DocumentCategoryName</label></div>
+                                }
                             </div>
-                        </div>
+                                            </div>
 
                     </div>
                 </fieldset>

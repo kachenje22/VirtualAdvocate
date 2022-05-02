@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿#region NameSpaces
+using Elmah;
+using System;
+using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.IO;
-using System.Configuration;
-using Elmah;
-
+#endregion
+#region VirtualAdvocate.Common
 namespace VirtualAdvocate.Common
 {
+    #region Email
     public class Email
     {
+        #region IEmail
         private IEmail emailProperties;
+        #endregion
 
+        #region Email
         public Email(IEmail emailProperties)
         {
             this.emailProperties = emailProperties;
         }
+        #endregion
 
+        #region SendEmail
         /// <summary>
         /// To send email by collecting email body, to addresses and email subject
         /// </summary>
@@ -35,7 +39,7 @@ namespace VirtualAdvocate.Common
                 using (SmtpClient smtp = new SmtpClient())
                 {
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.ServicePoint.MaxIdleTime = 1;                   
+                    smtp.ServicePoint.MaxIdleTime = 1;
                     smtp.EnableSsl = true;
                     smtp.Timeout = 180000;
                     smtp.Send(webMail);
@@ -71,7 +75,9 @@ namespace VirtualAdvocate.Common
 
             return returnValue;
         }
+        #endregion
 
+        #region ReturnMailMessage
         private MailMessage ReturnMailMessage()
         {
             MailMessage webMail = new MailMessage();
@@ -127,7 +133,9 @@ namespace VirtualAdvocate.Common
 
             return webMail;
         }
+        #endregion
 
+        #region SendEmailAttachment
         public bool SendEmailAttachment(string filename)
         {
             MailMessage webMail = ReturnMailMessageAttachment(filename);
@@ -173,11 +181,14 @@ namespace VirtualAdvocate.Common
 
             return returnValue;
         }
+        #endregion
+
+        #region ReturnMailMessageAttachment
         private MailMessage ReturnMailMessageAttachment(string filename)
         {
             MailMessage webMail = new MailMessage();
             string headerImage = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/Images/Logo.png");
-            string attachFile= System.Web.Hosting.HostingEnvironment.MapPath("~/DueInvoiceFiles/"+ filename);
+            string attachFile = System.Web.Hosting.HostingEnvironment.MapPath("~/DueInvoiceFiles/" + filename);
             LinkedResource[] Images = new LinkedResource[2];
             try
             {
@@ -223,6 +234,9 @@ namespace VirtualAdvocate.Common
             }
 
             return webMail;
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

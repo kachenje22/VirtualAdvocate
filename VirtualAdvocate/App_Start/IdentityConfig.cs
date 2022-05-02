@@ -1,46 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿#region NameSpaces
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate
 namespace VirtualAdvocate
 {
+    #region EmailService
     public class EmailService : IIdentityMessageService
     {
+        #region SendAsync
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
             return Task.FromResult(0);
-        }
+        } 
+        #endregion
     }
+    #endregion
 
+    #region SmsService
     public class SmsService : IIdentityMessageService
     {
+        #region SendAsync
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your SMS service here to send a text message.
             return Task.FromResult(0);
-        }
+        } 
+        #endregion
     }
+    #endregion
 
+    #region ApplicationUserManager
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+        #region ApplicationUserManager
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
         }
+        #endregion
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        #region Create
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
@@ -81,29 +91,40 @@ namespace VirtualAdvocate
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
-        }
+        } 
+        #endregion
     }
+    #endregion
 
+    #region ApplicationSignInManager
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
+        #region ApplicationSignInManager
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
         {
         }
+        #endregion
 
+        #region CreateUserIdentityAsync
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
+        #endregion
 
+        #region Create
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

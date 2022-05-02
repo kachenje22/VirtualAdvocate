@@ -311,3 +311,4 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\Vir
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.pdb
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\license.elic.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Pdf.xml
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.AssemblyReference.cache

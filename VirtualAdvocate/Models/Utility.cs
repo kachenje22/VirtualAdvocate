@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using VirtualAdvocate.BLL;
 using VirtualAdvocate.Common;
+using VirtualAdvocate.Helpers;
 #endregion
 #region VirtualAdvocate.Models
 namespace VirtualAdvocate.Models
@@ -230,6 +231,8 @@ namespace VirtualAdvocate.Models
         public static int? OrgId { get; set; }
         public static int RoleId { get; set; }
         public static int? DepartmentId { get; set; }
+
+        public static UserRoles Role { get; set; }
 
     }
     #endregion

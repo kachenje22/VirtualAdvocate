@@ -99,7 +99,8 @@
         }
     </style>
 </head>
-
+@using VirtualAdvocate.Models;
+@using VirtualAdvocate.Helpers;
 
 
 <body onload="StartTimers();" onmousemove="StartTimers();" onkeypress="StartTimers();">
@@ -164,9 +165,8 @@
                 <div class="list-group">
                     @{ var navaction = "";
                         var menuHighlight = "";
-                        int? orgid = null;
-                    }
-                    @if (Convert.ToInt32(Session["RoleId"]) == 1)
+                        int? orgid = null; }
+                    @if (CurrentUser.Role == UserRoles.SuperAdmin) //Convert.ToInt32(Session["RoleId"]) == 1)
                     {
                         navaction = "UserList";
                     }
@@ -176,146 +176,103 @@
                         orgid = Convert.ToInt32(Session["OrgId"]);
                     }
 
-                    @if (ViewBag.MenuActive == "DashBoard") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                    <a href="@Url.Action("DashBoard","DocumentManagement")" title="Dash Board" class="list-group-item @menuHighlight">Dash Board</a>
+                    @if (ViewBag.MenuActive == "DashBoard")
+                    {
+                        menuHighlight = "active";
+                    }
+                    else
+                    {
+                        menuHighlight = "";
+                    }
 
-                    @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
+                    <a href="@Url.Action("DashBoard","DocumentManagement")" 
+                       title="Dash Board" 
+                       class="list-group-item @menuHighlight">Dash Board</a>
+
+
+                    @if (new UserRoles[] {
+                        UserRoles.SuperAdmin,
+                        UserRoles.AccountAdmin,
+                        UserRoles.DepartmentAdmin }
+                        .Contains(CurrentUser.Role)
+                        )
+                    //if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
                     {
                         if (ViewBag.MenuActive == "UserManagement") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action(navaction,"UsersManagement",new { id = orgid })" title="User Management" class="list-group-item @menuHighlight">User Management</a>
-                    }
+                        <a href="@Url.Action(navaction,"UsersManagement",new { id = orgid })" title="User Management" class="list-group-item @menuHighlight">User Management</a>}
                     @if (Convert.ToInt32(Session["RoleId"]) == 1)
-                    {
-                        @*if (ViewBag.MenuActive == "Service") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                            <a href="@Url.Action("AccountServiceList", "DocumentManagement")" title="Client" class="list-group-item @menuHighlight">Client</a>*@
-
-                        if (ViewBag.MenuActive == "Department") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("DepartmentList","Department")" title="Department" class="list-group-item @menuHighlight">Department</a>
-
-                        if (ViewBag.MenuActive == "Organization") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("OrganizationList", "UsersManagement")" title="Organization Management" class="list-group-item @menuHighlight">Organization Management</a>
-
-                        if (ViewBag.MenuActive == "DocumentManagement") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Index","DocumentManagement")" title="Document Category" class="list-group-item @menuHighlight">Document Category</a>
-
-                        if (ViewBag.MenuActive == "Templates") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Templates","DocumentManagement")" title="Upload Documents" class="list-group-item @menuHighlight">Upload Document</a>
-
-                        if (ViewBag.MenuActive == "KeyCategoryList") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("KeyCategoryList","KeyCategoryList")" title="Key Category" class="list-group-item @menuHighlight">Key Category</a>
-
-                        if (ViewBag.MenuActive == "Templatekey") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("KeywordIndex","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Document Keys</a>
-                        if (ViewBag.MenuActive == "AssociatedKey") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("AssociatedKeysGroup","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Associated Key Groups</a>
-                        if (ViewBag.MenuActive == "Clause") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("ClouseList","ClouseManagement")" title="Clause" class="list-group-item @menuHighlight">Clauses</a>
-                        if (ViewBag.MenuActive == "ArchiveDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a>
-
-                        if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>
-                    }
+                    {@*if (ViewBag.MenuActive == "Service") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("AccountServiceList", "DocumentManagement")" title="Client" class="list-group-item @menuHighlight">Client</a>*@ if (ViewBag.MenuActive == "Department") { menuHighlight = "active"; } else { menuHighlight = ""; }
+    <a href="@Url.Action("DepartmentList","Department")" title="Department" class="list-group-item @menuHighlight">Department</a> if (ViewBag.MenuActive == "Organization") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("OrganizationList", "UsersManagement")" title="Organization Management" class="list-group-item @menuHighlight">Organization Management</a> if (ViewBag.MenuActive == "DocumentManagement") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("Index","DocumentManagement")" title="Document Category" class="list-group-item @menuHighlight">Document Category</a> if (ViewBag.MenuActive == "Templates") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("Templates","DocumentManagement")" title="Upload Documents" class="list-group-item @menuHighlight">Upload Document</a> if (ViewBag.MenuActive == "KeyCategoryList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("KeyCategoryList","KeyCategoryList")" title="Key Category" class="list-group-item @menuHighlight">Key Category</a> if (ViewBag.MenuActive == "Templatekey") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("KeywordIndex","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Document Keys</a> if (ViewBag.MenuActive == "AssociatedKey") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("AssociatedKeysGroup","DocumentManagement")" title="Document Keys" class="list-group-item @menuHighlight">Associated Key Groups</a> if (ViewBag.MenuActive == "Clause") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("ClouseList","ClouseManagement")" title="Clause" class="list-group-item @menuHighlight">Clauses</a> if (ViewBag.MenuActive == "ArchiveDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a> if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) == 5 || Convert.ToInt32(Session["RoleId"]) == 6)
                     {
                         if (ViewBag.MenuActive == "Tracker") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Index", "Tracker")" title="Tracker" class="list-group-item @menuHighlight">Tracker</a>
-
-                        if (ViewBag.MenuActive == "Recursive") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Index", "RecursiveNotification")" title="Recursive Notification" class="list-group-item @menuHighlight">Recursive Notification Details</a>
-                    }
+        <a href="@Url.Action("Index", "Tracker")" title="Tracker" class="list-group-item @menuHighlight">Tracker</a> if (ViewBag.MenuActive == "Recursive") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("Index", "RecursiveNotification")" title="Recursive Notification" class="list-group-item @menuHighlight">Recursive Notification Details</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) == 5)
                     {
                         if (ViewBag.MenuActive == "Customers") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { id = orgid })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>
-                    }
+        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { id = orgid })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3 || Convert.ToInt32(Session["RoleId"]) == 6)
                     {
                         if (ViewBag.MenuActive == "Customers") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { enable="Active" })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>
-                    }
+        <a href="@Url.Action("GetCustomerList", "DocumentManagement", new { enable="Active" })" title="Customer List" class="list-group-item @menuHighlight">Customers Management</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
                     {
                         if (ViewBag.MenuActive == "ArchiveDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a>
-
-                        if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>
-                    }
+        <a href="@Url.Action("ArchiveDocument","DocumentManagement")" title="Archive Documents" class="list-group-item @menuHighlight">Archive Documents</a> if (ViewBag.MenuActive == "ArchivedDocument") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("ArchivedDocument","DocumentManagement")" title="Archived Documents" class="list-group-item @menuHighlight">Archived Documents</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) != 7)
                     {
                         if (ViewBag.MenuActive == "Reports") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Reports", "DocumentManagement")" title="Reports" class="list-group-item @menuHighlight">Reports</a>
-
-
-                    }
+        <a href="@Url.Action("Reports", "DocumentManagement")" title="Reports" class="list-group-item @menuHighlight">Reports</a>}
                     @if (Convert.ToInt32(Session["RoleId"]) != 7 && Convert.ToInt32(Session["RoleId"]) != 1)
                     {
                         if (ViewBag.MenuActive == "FormsHistory") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("FormsHistory","DocumentManagement")" title="Forms History" class="list-group-item @menuHighlight">Filled Forms</a>
-
-                        if (ViewBag.MenuActive == "SearchTemplate") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("SearchCategory","DocumentManagement",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Fill Template</a>
-
-                        if (ViewBag.MenuActive == "MultipleDownload") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("MultipleDownload","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Template Download</a>
-
-                        if (ViewBag.MenuActive == "BulkDocuments") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("BulkDocuments","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Documents</a>
-
-                    }
+        <a href="@Url.Action("FormsHistory","DocumentManagement")" title="Forms History" class="list-group-item @menuHighlight">Filled Forms</a> if (ViewBag.MenuActive == "SearchTemplate") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("SearchCategory","DocumentManagement",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Fill Template</a> if (ViewBag.MenuActive == "MultipleDownload") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("MultipleDownload","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Template Download</a> if (ViewBag.MenuActive == "BulkDocuments") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("BulkDocuments","MultipleDocumentDownload",new { id = orgid })" title="Search Template" class="list-group-item @menuHighlight">Bulk Documents</a>}
 
                     @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 6)
                     {
                         if (ViewBag.MenuActive == "AllFormsList") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("AllFilledFormsList","DocumentManagement", new { id = orgid })" title="Filled Form History" class="list-group-item @menuHighlight">All Filled Forms List</a>
-                    }
+        <a href="@Url.Action("AllFilledFormsList","DocumentManagement", new { id = orgid })" title="Filled Form History" class="list-group-item @menuHighlight">All Filled Forms List</a>}
                     @if (Convert.ToInt32(Session["RoleId"]) == 7)
                     {
                         if (ViewBag.MenuActive == "DueDiligence") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("Enquiry", "DueDiligence")" title="Enquiry Form" class="list-group-item @menuHighlight">Enquiry Form</a>
-
-                    }
+        <a href="@Url.Action("Enquiry", "DueDiligence")" title="Enquiry Form" class="list-group-item @menuHighlight">Enquiry Form</a>}
                     @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 7)
                     {
                         if (ViewBag.MenuActive == "DueDiligenceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("InquiryList", "DueDiligence")" title="Enquiry List" class="list-group-item @menuHighlight">Enquiry List</a>
-
-                    }
-
-                    @*@if (Convert.ToInt32(Session["RoleId"]) == 4)
-                        {
-                            if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                            <a href="@Url.Action("InvoiceList", "DueDiligence")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>
-                        }*@
+        <a href="@Url.Action("InquiryList", "DueDiligence")" title="Enquiry List" class="list-group-item @menuHighlight">Enquiry List</a> } @*@if (Convert.ToInt32(Session["RoleId"]) == 4)
+        {
+            if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+            <a href="@Url.Action("InvoiceList", "DueDiligence")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>
+        }*@
                     @if (Convert.ToInt32(Session["RoleId"]) == 1)
-                    {
-
-                        @*if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                            <a href="@Url.Action("InvoiceList", "DocumentManagement")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>*@
-                        if (ViewBag.MenuActive == "RegistrationLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("RegistrationLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Registration Log</a>
-                        if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
-
-                        @*if (ViewBag.MenuActive == "ServiceLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                            <a href="@Url.Action("ServiceLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Client Log</a>*@
-                        if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("CategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Category Log</a>
-                        if (ViewBag.MenuActive == "LogSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("SubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">SubCategory Log</a>
-                        if (ViewBag.MenuActive == "LogSubSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("SubSubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Sub-SubCategory Log</a>
-
-                        if (ViewBag.MenuActive == "TemplateLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
-                        <a href="@Url.Action("TemplateLog", "DocumentManagement")" title="Template Log" class="list-group-item @menuHighlight">Template Log</a>
-
-
-                    }
+                    {@*if (ViewBag.MenuActive == "InvoiceList") { menuHighlight = "active"; } else { menuHighlight = ""; }
+                            <a href="@Url.Action("InvoiceList", "DocumentManagement")" title="Invoice List" class="list-group-item @menuHighlight">Invoice List</a>*@ if (ViewBag.MenuActive == "RegistrationLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+    <a href="@Url.Action("RegistrationLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Registration Log</a> if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; } @*if (ViewBag.MenuActive == "ServiceLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+        <a href="@Url.Action("ServiceLog", "DocumentManagement")" title="Registration Log List" class="list-group-item @menuHighlight">Client Log</a>*@ if (ViewBag.MenuActive == "LogCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("CategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Category Log</a> if (ViewBag.MenuActive == "LogSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("SubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">SubCategory Log</a> if (ViewBag.MenuActive == "LogSubSubCategory") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("SubSubCategoryLog", "DocumentManagement")" title="Category Log List" class="list-group-item @menuHighlight">Sub-SubCategory Log</a> if (ViewBag.MenuActive == "TemplateLog") { menuHighlight = "active"; } else { menuHighlight = ""; }
+<a href="@Url.Action("TemplateLog", "DocumentManagement")" title="Template Log" class="list-group-item @menuHighlight">Template Log</a>}
 
                 </div>
             </div>
@@ -375,12 +332,12 @@
             onResize();
         });
 
-                    //$body = $("body");
+                                //$body = $("body");
 
-                    //$(document).on({
-                    //    ajaxStart: function () { $body.addClass("loading"); },
-                    //    ajaxStop: function () { $body.removeClass("loading"); }
-                    //});
+                                //$(document).on({
+                                //    ajaxStart: function () { $body.addClass("loading"); },
+                                //    ajaxStop: function () { $body.removeClass("loading"); }
+                                //});
     </script>
 
 

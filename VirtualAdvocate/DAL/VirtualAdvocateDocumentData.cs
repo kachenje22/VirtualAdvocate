@@ -1,48 +1,59 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using VirtualAdvocate.Models;
+#endregion
+#region VirtualAdvocate.DAL
 namespace VirtualAdvocate.DAL
 {
+    #region VirtualAdvocateDocumentData
     public class VirtualAdvocateDocumentData
     {
+        #region Global Variables
         private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
+        #endregion
 
+        #region GetDocumentCategories
         public List<DocumentCategory> GetDocumentCategories()
         {
             return db.DocumentCategories.ToList<DocumentCategory>();
         }
+        #endregion
 
+        #region GetDocumentSubCategories
         public List<DocumentSubCategory> GetDocumentSubCategories()
         {
             return db.DocumentSubCategories.ToList<DocumentSubCategory>();
         }
+        #endregion
 
+        #region GetDocumentSubSubCategories
         public List<DocumentSubSubCategory> GetDocumentSubSubCategories(int? id)
         {
-            return db.DocumentSubSubCategories.Where(m=>m.DocumentSubCategoryId==id).ToList<DocumentSubSubCategory>();
+            return db.DocumentSubSubCategories.Where(m => m.DocumentSubCategoryId == id).ToList<DocumentSubSubCategory>();
         }
+        #endregion
 
+        #region getCategoryOptionsList
         /// <summary>
         /// Getting Category List for binding dropdownlist - While adding sub category
         /// </summary>
         /// <returns></returns>
         public List<OptionsModel> getCategoryOptionsList()
-        {           
+        {
             List<DocumentCategory> objCat = new List<DocumentCategory>();
             objCat = GetDocumentCategories().Where(m => m.IsEnabled == true).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (DocumentCategory dsc in objCat)
             {
                 list.Add(new OptionsModel { ID = dsc.DocumentCategoryId, Name = dsc.DocumentCategoryName });
-            }            
+            }
             return list;
         }
+        #endregion
 
-
-       
-
+        #region getUserRolesOptionsList
         /// <summary>
         /// Getting Roles List for binding dropdownlist - While adding sub category
         /// </summary>
@@ -50,7 +61,7 @@ namespace VirtualAdvocate.DAL
         public List<OptionsModel> getUserRolesOptionsList()
         {
             List<Role> objRole = new List<Role>();
-            objRole = db.Roles.Where(r=>r.RoleId==2|| r.RoleId == 5|| r.RoleId == 6) .ToList();
+            objRole = db.Roles.Where(r => r.RoleId == 2 || r.RoleId == 5 || r.RoleId == 6).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (Role dsc in objRole)
             {
@@ -58,8 +69,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
-
+        #region getDepartmentOptionsList
         /// <summary>
         /// Getting Category List for binding dropdownlist - While adding sub category
         /// </summary>
@@ -67,7 +79,7 @@ namespace VirtualAdvocate.DAL
         public List<OptionsModel> getDepartmentOptionsList(int Org)
         {
             List<DepartmentModel> objCat = new List<DepartmentModel>();
-            objCat = (from d in db.Departments join s in db.SelectedDepartments on d.Id equals s.DepartmentID  where s.OrgID==Org && d.IsEnabled==true select new DepartmentModel { Department=d.Name,Id=d.Id}).ToList() ;
+            objCat = (from d in db.Departments join s in db.SelectedDepartments on d.Id equals s.DepartmentID where s.OrgID == Org && d.IsEnabled == true select new DepartmentModel { Department = d.Name, Id = d.Id }).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (DepartmentModel dsc in objCat)
             {
@@ -75,8 +87,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
-
+        #region getRoles
         public List<OptionsModel> getRoles(int roleID)
         {
             List<OptionsModel> list = new List<OptionsModel>();
@@ -84,7 +97,7 @@ namespace VirtualAdvocate.DAL
 
             if (roleID == 1)
             {
-                objRole = (from d in db.Roles where (d.RoleId != 1 && d.RoleId!=3) select new RoleModel { Role = d.RoleDescription, Id = d.RoleId }).ToList();
+                objRole = (from d in db.Roles where (d.RoleId != 1 && d.RoleId != 3) select new RoleModel { Role = d.RoleDescription, Id = d.RoleId }).ToList();
             }
             else if (roleID == 2)
             {
@@ -92,7 +105,7 @@ namespace VirtualAdvocate.DAL
             }
             else if (roleID == 6)
             {
-                objRole = (from d in db.Roles where (d.RoleId == 5 ) select new RoleModel { Role = d.RoleDescription, Id = d.RoleId }).ToList();
+                objRole = (from d in db.Roles where (d.RoleId == 5) select new RoleModel { Role = d.RoleDescription, Id = d.RoleId }).ToList();
             }
             foreach (RoleModel dsc in objRole)
             {
@@ -100,7 +113,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region getDepartmentOptionsList
         /// <summary>
         /// Getting Category List for binding dropdownlist - While adding sub category
         /// </summary>
@@ -116,6 +131,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
+
+        #region getSubCategoryOptionsList
         /// <summary>
         /// Getting Sub Category List for binding dropdownlist - While adding sub sub category
         /// </summary>
@@ -123,7 +141,7 @@ namespace VirtualAdvocate.DAL
         public List<OptionsModel> getSubCategoryOptionsList(int? id)
         {
             List<DocumentSubCategory> objCat = new List<DocumentSubCategory>();
-            objCat = GetDocumentSubCategories().Where(m=>m.DocumentCategoryId==id.Value && m.IsEnabled==true).ToList();
+            objCat = GetDocumentSubCategories().Where(m => m.DocumentCategoryId == id.Value && m.IsEnabled == true).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (DocumentSubCategory dsc in objCat)
             {
@@ -131,7 +149,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region getSubSubCategoryOptionsList
         /// <summary>
         /// Getting Sub Category List for binding dropdownlist - While adding sub sub category
         /// </summary>
@@ -139,7 +159,7 @@ namespace VirtualAdvocate.DAL
         public List<OptionsModel> getSubSubCategoryOptionsList(int? id)
         {
             List<DocumentSubSubCategory> objCat = new List<DocumentSubSubCategory>();
-            objCat = GetDocumentSubSubCategories(id).Where(m=>m.IsEnabled==true).ToList();
+            objCat = GetDocumentSubSubCategories(id).Where(m => m.IsEnabled == true).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (DocumentSubSubCategory dsc in objCat)
             {
@@ -147,7 +167,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region GetTemplateList
         /// <summary>
         /// Getting template list
         /// </summary>
@@ -156,7 +178,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.DocumentTemplates.ToList<DocumentTemplate>();
         }
+        #endregion
 
+        #region getTemplateList
         /// <summary>
         /// Getting Template List for binding dropdownlist - For Associate with others
         /// </summary>
@@ -172,7 +196,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region getAllServices
         public List<OptionsModel> getAllServices()
         {
             List<OrganizationDetail> objOrg = new List<OrganizationDetail>();
@@ -184,6 +210,7 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
         //public List<ServiceModel> getAllServicesforGrid()
         //{
@@ -214,6 +241,7 @@ namespace VirtualAdvocate.DAL
         //    return list;
         //}
 
+        #region AddTemplate
         /// <summary>
         /// Create new template
         /// </summary>
@@ -226,7 +254,9 @@ namespace VirtualAdvocate.DAL
             int result = obj.TemplateId;
             return result;
         }
+        #endregion
 
+        #region EditTemplate
         /// <summary>
         /// Edit Template
         /// </summary>
@@ -238,7 +268,9 @@ namespace VirtualAdvocate.DAL
             int result = int.MinValue;
             return result;
         }
+        #endregion
 
+        #region getKeyFieldId
         /// <summary>
         /// 
         /// </summary>
@@ -247,20 +279,24 @@ namespace VirtualAdvocate.DAL
         public TemplateKeyword getKeyFieldId(string keyvalue)
         {
             var obj = db.TemplateKeywords.Where(x => x.TemplateKeyValue == keyvalue && x.IsEnabled == true).FirstOrDefault(); // Get Key Details
-           
+
             return obj;
         }
+        #endregion
 
+        #region getKeyDetails
         public TemplateKeyword getKeyDetails(int keyId)
         {
-            var obj = db.TemplateKeywords.Where(x => x.TemplateKeyId == keyId && x.IsEnabled == true ).FirstOrDefault(); // Get Key Details
+            var obj = db.TemplateKeywords.Where(x => x.TemplateKeyId == keyId && x.IsEnabled == true).FirstOrDefault(); // Get Key Details
 
             return obj;
         }
+        #endregion
 
+        #region CheckTemplateKeyExist
         public bool CheckTemplateKeyExist(int TemplateId, int keyId)
         {
-            var objExist = db.TemplateKeysPointers.Where(m => m.TemplateKeyId ==keyId && m.TemplateId == TemplateId).FirstOrDefault(); // Check already key exists for this template
+            var objExist = db.TemplateKeysPointers.Where(m => m.TemplateKeyId == keyId && m.TemplateId == TemplateId).FirstOrDefault(); // Check already key exists for this template
             if (objExist != null)
             {
                 return false;
@@ -270,13 +306,17 @@ namespace VirtualAdvocate.DAL
                 return true;
             }
         }
+        #endregion
 
+        #region saveKeyId
         //public int saveKeyId(TemplateKeysPointer obj)
         //{
         //    db.TemplateKeysPointers.Add(obj);
 
-        //}
+        //} 
+        #endregion
 
+        #region GetAllInvoiceList
         /// <summary>
         /// Super admin - get all invoice list
         /// </summary>
@@ -285,21 +325,30 @@ namespace VirtualAdvocate.DAL
         {
             return db.Get_InvoiceList().ToList();
         }
+        #endregion
 
+        #region getInvoiceListAcAdmin_sp
         public List<InvoiceListAcAdmin_sp_Result> getInvoiceListAcAdmin_sp(int? orgId, int? userId)
         {
             return db.InvoiceListAcAdmin_sp(orgId, userId).ToList<InvoiceListAcAdmin_sp_Result>();
         }
+        #endregion
 
-        public List<GenerateReport_Result> GenerateReportsByFilter(int RoleId,int? reportType, DateTime? fromDate, DateTime? toDate, int? orgId, int? UserId, int? documentTypeId,int? documentSubId, int? documentSubSubId,int?DepartmentID)
+        #region GenerateReportsByFilter
+        public List<GenerateReport_Result> GenerateReportsByFilter(int RoleId, int? reportType, DateTime? fromDate, DateTime? toDate, int? orgId, int? UserId, int? documentTypeId, int? documentSubId, int? documentSubSubId, int? DepartmentID)
         {
-         return db.GenerateReport(RoleId,reportType,  fromDate, toDate,  orgId, UserId, documentTypeId, documentSubId, documentSubSubId,DepartmentID).ToList<GenerateReport_Result>();
+            return db.GenerateReport(RoleId, reportType, fromDate, toDate, orgId, UserId, documentTypeId, documentSubId, documentSubSubId, DepartmentID).ToList<GenerateReport_Result>();
         }
+        #endregion
+
+        #region GetorganizationUserList
         public List<GetorganizationUserList_sp_Result> GetorganizationUserList(int? orgId)
         {
             return db.GetorganizationUserList_sp(orgId).ToList<GetorganizationUserList_sp_Result>();
         }
+        #endregion
 
+        #region getUsersByOrganization
         public List<OptionsModel> getUsersByOrganization(int? orgid)
         {
             List<GetorganizationUserList_sp_Result> objOrgUsers = new List<GetorganizationUserList_sp_Result>();
@@ -311,29 +360,35 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
-        public List<OptionsModel> getUsersByDepartment(int? dept,int org)
+        #region getUsersByDepartment
+        public List<OptionsModel> getUsersByDepartment(int? dept, int org)
         {
 
             var objDepUsers = from u in db.UserProfiles
                               join ua in db.UserAddressDetails on u.UserID equals ua.UserId
-                              where u.Department == dept && u.OrganizationId == org && u.RoleId!=1 && u.RoleId!=2 
+                              where u.Department == dept && u.OrganizationId == org && u.RoleId != 1 && u.RoleId != 2
                               select new UserManagementModel
                               {
-                                  FirstName = ua.FirstName + " "+ ua.LastName,
-                                  UserId=ua.UserId
+                                  FirstName = ua.FirstName + " " + ua.LastName,
+                                  UserId = ua.UserId
                               };
-            List <OptionsModel> list = new List<OptionsModel>();
+            List<OptionsModel> list = new List<OptionsModel>();
             foreach (UserManagementModel dsc in objDepUsers)
             {
                 list.Add(new OptionsModel { ID = dsc.UserId, Name = dsc.FirstName });
             }
             return list;
         }
-        public List<OptionsModel> getIndividualusrs(int userId, int  roleId, int department, int orgId)
+        #endregion
+
+        #region getIndividualusrs
+
+        public List<OptionsModel> getIndividualusrs(int userId, int roleId, int department, int orgId)
         {
             List<GetIndividualUserList_Result> objUsers = new List<GetIndividualUserList_Result>();
-            objUsers = GetIndividualUserList(userId, roleId, department,  orgId);
+            objUsers = GetIndividualUserList(userId, roleId, department, orgId);
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (GetIndividualUserList_Result dsc in objUsers)
             {
@@ -341,19 +396,28 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
-        public List<GetIndividualUserList_Result> GetIndividualUserList(int userId,int roleId,int department,int orgId)
+        #endregion
+
+        #region GetIndividualUserList
+        public List<GetIndividualUserList_Result> GetIndividualUserList(int userId, int roleId, int department, int orgId)
         {
-            return db.GetIndividualUserList(userId,roleId,department, orgId).ToList<GetIndividualUserList_Result>();
+            return db.GetIndividualUserList(userId, roleId, department, orgId).ToList<GetIndividualUserList_Result>();
         }
+        #endregion
+
         //public  List<GetDocumentCategoryByUser_Result> getDocumentCategoryByUser(int? userID)
         //{
         //    return db.GetDocumentCategoryByUser(userID).ToList<GetDocumentCategoryByUser_Result>();
         //}
 
+        #region getDocumentCategoryByuser
         public List<DocumentCategoryByUser_sp_Result1> getDocumentCategoryByuser(int? userID)
         {
             return db.DocumentCategoryByUser_sp(userID).ToList<DocumentCategoryByUser_sp_Result1>();
         }
+        #endregion
+
+        #region getDocumentCategoryFilteredByUser
         public List<OptionsModel> getDocumentCategoryFilteredByUser(int? userID)
         {
             List<DocumentCategoryByUser_sp_Result1> objDocumentCategory = new List<DocumentCategoryByUser_sp_Result1>();
@@ -365,18 +429,22 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region GetCurrentMonthCount
         /// <summary>
         /// Total Number Of Documents Created For This Month- Account Admin(Organization), Account User, Individual User
         /// </summary>
         /// <param name="orgId"></param>
         /// <param name="userId"></param>
         /// <returns>Total</returns>
-        public int? GetCurrentMonthCount(int? orgId, int? userId,int? DepartmentID)
+        public int? GetCurrentMonthCount(int? orgId, int? userId, int? DepartmentID)
         {
-            return db.GetCurrentMonthCount(orgId, userId,DepartmentID).FirstOrDefault();
+            return db.GetCurrentMonthCount(orgId, userId, DepartmentID).FirstOrDefault();
         }
+        #endregion
 
+        #region GetTotalDocumentCountByOrganization_sp
         /// <summary>
         ///  Total Count For Each Organization
         /// </summary>
@@ -385,7 +453,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.GetTotalDocumentCountByOrganization_sp().ToList<GetTotalDocumentCountByOrganization_sp_Result>();
         }
+        #endregion
 
+        #region GetTotalDocumentCountOrgUser_sp
         /// <summary>
         /// Total Number Of Documents Created - Account Admin(Organization), Account User
         /// </summary>
@@ -396,12 +466,16 @@ namespace VirtualAdvocate.DAL
         {
             return db.GetTotalDocumentCountOrgUser_sp(orgId, userId).FirstOrDefault();
         }
+        #endregion
 
+        #region GetOrganizationCountByCategoy
         public List<GetOrganizationCountByCategoy_Result> GetOrganizationCountByCategoy()
         {
             return db.GetOrganizationCountByCategoy().ToList<GetOrganizationCountByCategoy_Result>();
         }
+        #endregion
 
+        #region getCategoriesOrgUsersCurrnetMonthTotalCount
         /// <summary>
         /// get Category, Sub, Subsub category count for current month - Account Admin, Individual Users,Company users
         /// </summary>
@@ -413,7 +487,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.GetCategoriesOrgUsersCurrnetMonthTotalCount(categoryType, orgId, userId).ToList<GetCategoriesOrgUsersCurrnetMonthTotalCount_Result>();
         }
+        #endregion
 
+        #region getCategoriesOrgUsersTotalCount
         /// <summary>
         /// get Category, Sub, Subsub category total count  - Account Admin, Individual Users
         /// </summary>
@@ -421,11 +497,13 @@ namespace VirtualAdvocate.DAL
         /// <param name="orgId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<GetCategoriesOrgUsersTotalCount_Result> getCategoriesOrgUsersTotalCount(int? categoryType, int? orgId, int? userId,int? DepartmentID)
+        public List<GetCategoriesOrgUsersTotalCount_Result> getCategoriesOrgUsersTotalCount(int? categoryType, int? orgId, int? userId, int? DepartmentID)
         {
-            return db.GetCategoriesOrgUsersTotalCount(categoryType, orgId, userId,DepartmentID).ToList<GetCategoriesOrgUsersTotalCount_Result>();
+            return db.GetCategoriesOrgUsersTotalCount(categoryType, orgId, userId, DepartmentID).ToList<GetCategoriesOrgUsersTotalCount_Result>();
         }
+        #endregion
 
+        #region GetCategoriesTotalCount
         /// <summary>
         /// get Category, Sub, Subsub category total count  - Super Admin
         /// </summary>
@@ -435,7 +513,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.GetCategoriesTotalCount(categoryType).ToList<GetCategoriesTotalCount_Result>();
         }
+        #endregion
 
+        #region getGraphMonthlyCompanyRegister
         /// <summary>
         /// Getting Company Registration users count based for each month
         /// </summary>
@@ -444,7 +524,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.getGraphMonthlyCompanyRegister().ToList<getGraphMonthlyCompanyRegister_Result>();
         }
+        #endregion
 
+        #region getNewEnquiriesDueDiligence
         /// <summary>
         /// 
         /// </summary>
@@ -454,7 +536,9 @@ namespace VirtualAdvocate.DAL
         {
             return db.NewEnquiriesDueDiligence_sp(month).ToList<NewEnquiriesDueDiligence_sp_Result>();
         }
+        #endregion
 
+        #region getGraphMonthlyIndividualRegister
         /// <summary>
         /// Individual User Registration Count per month
         /// </summary>
@@ -463,69 +547,104 @@ namespace VirtualAdvocate.DAL
         {
             return db.getGraphMonthlyIndividualRegister().ToList<GraphMonthlyIndividualRegister_Result>();
         }
+        #endregion
 
+        #region getCategoryInvoiceTotalAmount
         public List<CategoryInvoiceTotalAmount_Result> getCategoryInvoiceTotalAmount(int? userId)
         {
-          return db.CategoryInvoiceTotalAmount(userId).ToList<CategoryInvoiceTotalAmount_Result>();
+            return db.CategoryInvoiceTotalAmount(userId).ToList<CategoryInvoiceTotalAmount_Result>();
         }
+        #endregion
 
+        #region getDueInvoiceThisMonth
         public List<DueInvoiceThisMonth_Result> getDueInvoiceThisMonth()
         {
             return db.DueInvoiceThisMonth().ToList<DueInvoiceThisMonth_Result>();
         }
+        #endregion
 
+        #region getGraphInvoiceTotalAmount
         public List<GraphInvoiceTotalAmount_Result> getGraphInvoiceTotalAmount(int? userId)
         {
             return db.GraphInvoiceTotalAmount(userId).ToList<GraphInvoiceTotalAmount_Result>();
         }
+        #endregion
 
+        #region getInvoiceTotalAmount
         public decimal? getInvoiceTotalAmount(int? userId)
         {
             return db.InvoiceTotalAmount(userId).FirstOrDefault();
         }
+        #endregion
 
+        #region getCategoriesCurrnetMonthTotalCount
         public List<GetCategoriesCurrnetMonthTotalCount_Result> getCategoriesCurrnetMonthTotalCount(int? categoryType)
         {
             return db.GetCategoriesCurrnetMonthTotalCount(categoryType).ToList<GetCategoriesCurrnetMonthTotalCount_Result>();
         }
+        #endregion
 
         #region Log
 
-        public List<ViewLogCategory_Result> ViewLogCategory(int? logId,int id)
+        #region ViewLogCategory
+        public List<ViewLogCategory_Result> ViewLogCategory(int? logId, int id)
         {
-            return db.ViewLogCategory(logId,id).ToList<ViewLogCategory_Result>();
+            return db.ViewLogCategory(logId, id).ToList<ViewLogCategory_Result>();
         }
-        public List<ViewLogSubCategory_Result> ViewLogSubCategory(int? logId,int id)
+        #endregion
+
+        #region ViewLogSubCategory
+        public List<ViewLogSubCategory_Result> ViewLogSubCategory(int? logId, int id)
         {
-            return db.ViewLogSubCategory(logId,id).ToList<ViewLogSubCategory_Result>();
+            return db.ViewLogSubCategory(logId, id).ToList<ViewLogSubCategory_Result>();
         }
-        public List<ViewLogSubSubCategory_Result> ViewLogSubSubCategory(int? logId,int id)
+        #endregion
+
+        #region ViewLogSubSubCategory
+        public List<ViewLogSubSubCategory_Result> ViewLogSubSubCategory(int? logId, int id)
         {
-            return db.ViewLogSubSubCategory(logId,id).ToList<ViewLogSubSubCategory_Result>();
+            return db.ViewLogSubSubCategory(logId, id).ToList<ViewLogSubSubCategory_Result>();
         }
-        public List<ViewLogTemplateUpload_Result> ViewLogTemplateUpload(int? logId,int? id)
+        #endregion
+
+        #region ViewLogTemplateUpload
+        public List<ViewLogTemplateUpload_Result> ViewLogTemplateUpload(int? logId, int? id)
         {
-            return db.ViewLogTemplateUpload(logId,id).ToList<ViewLogTemplateUpload_Result>();
+            return db.ViewLogTemplateUpload(logId, id).ToList<ViewLogTemplateUpload_Result>();
         }
+        #endregion
+
+        #region LogRegistration
         public List<LogRegistrationList_Result> LogRegistration()
         {
-            return db.LogRegistrationList().ToList<LogRegistrationList_Result>(); 
+            return db.LogRegistrationList().ToList<LogRegistrationList_Result>();
         }
+        #endregion
+
+        #region ViewLogRegistration
         public List<ViewLogRegistration_Result1> ViewLogRegistration(int? logId)
         {
             return db.ViewLogRegistration(logId).ToList<ViewLogRegistration_Result1>();
         }
-        public List<ViewLogService_Result> ViewLogService(int? logId,int? serviceID)
-        {
-            return db.ViewLogService(logId,serviceID).ToList<ViewLogService_Result>();
-        }
         #endregion
+
+        #region ViewLogService
+        public List<ViewLogService_Result> ViewLogService(int? logId, int? serviceID)
+        {
+            return db.ViewLogService(logId, serviceID).ToList<ViewLogService_Result>();
+        } 
+        #endregion
+
+        #endregion
+
         #region Multiselect Dropdown
-        public void insertAssociateTemplate(int? templateId, int? associateTemplateId,int? ordervalue,bool?  mandatory)
+        public void insertAssociateTemplate(int? templateId, int? associateTemplateId, int? ordervalue, bool? mandatory)
         {
-            db.UpdateAssociateTemplate(templateId, associateTemplateId, ordervalue,mandatory);
+            db.UpdateAssociateTemplate(templateId, associateTemplateId, ordervalue, mandatory);
         }
         #endregion
+
+        #region getTemplateKeyCategoryList
         /// <summary>
         /// Getting Category List for binding dropdownlist - While adding Key category
         /// </summary>
@@ -533,7 +652,7 @@ namespace VirtualAdvocate.DAL
         public List<OptionsModel> getTemplateKeyCategoryList(int? id)
         {
             List<KeyCategory> objCat = new List<KeyCategory>();
-            objCat = GetKeyCategories().Where(m => (id == null || m.Id == id) && m.IsEnabled == true).OrderBy(m=>m.CategoryOrder).ToList();
+            objCat = GetKeyCategories().Where(m => (id == null || m.Id == id) && m.IsEnabled == true).OrderBy(m => m.CategoryOrder).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (KeyCategory dsc in objCat)
             {
@@ -541,11 +660,13 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region getTemplateKeyList
         public List<OptionsModel> getTemplateKeyList()
         {
             List<TemplateKeyword> objCat = new List<TemplateKeyword>();
-            objCat = db.TemplateKeywords.Where(m =>  m.IsEnabled == true && m.AddedByClient==false).OrderBy(m => m.TemplateKeyId).ToList();
+            objCat = db.TemplateKeywords.Where(m => m.IsEnabled == true && m.AddedByClient == false).OrderBy(m => m.TemplateKeyId).ToList();
             List<OptionsModel> list = new List<OptionsModel>();
             foreach (TemplateKeyword dsc in objCat)
             {
@@ -553,7 +674,9 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region getAllKeycategoriesforGrid
         public List<KeyCategoryModel> getAllKeycategoriesforGrid()
         {
             List<KeyCategory> objCat = new List<KeyCategory>();
@@ -565,24 +688,28 @@ namespace VirtualAdvocate.DAL
             }
             return list;
         }
+        #endregion
 
+        #region GetKeyCategories
         public List<KeyCategory> GetKeyCategories()
         {
             return db.KeyCategories.ToList<KeyCategory>();
         }
+        #endregion
 
-        public List<OptionsModel> getUserList(int roleID,int userID,int DepartmentID,int orgID)
+        #region getUserList
+        public List<OptionsModel> getUserList(int roleID, int userID, int DepartmentID, int orgID)
         {
             try
             {
                 //List<UserAddressDetail> objUsers = new List<UserAddressDetail>();
-               var objUsers = (from e in db.UserAddressDetails
-                            join p in db.UserProfiles on
-e.UserId equals p.UserID
-                            where p.IsEnabled == true && (roleID==1 || ( roleID==2 && p.OrganizationId==orgID) || (roleID==6 && p.OrganizationId == orgID &&  p.Department==DepartmentID))
-                            select new  { UserId = e.UserId, FirstName = e.FirstName, LastName = e.LastName }).ToList();
+                var objUsers = (from e in db.UserAddressDetails
+                                join p in db.UserProfiles on
+                                e.UserId equals p.UserID
+                                where p.IsEnabled == true && (roleID == 1 || (roleID == 2 && p.OrganizationId == orgID) || (roleID == 6 && p.OrganizationId == orgID && p.Department == DepartmentID))
+                                select new { UserId = e.UserId, FirstName = e.FirstName, LastName = e.LastName }).ToList();
                 List<OptionsModel> list = new List<OptionsModel>();
-                for (int i=0;i< objUsers.Count();i++)
+                for (int i = 0; i < objUsers.Count(); i++)
                 {
                     list.Add(new OptionsModel { ID = objUsers[i].UserId, Name = objUsers[i].FirstName + " " + objUsers[i].LastName });
                 }
@@ -590,6 +717,9 @@ e.UserId equals p.UserID
             }
             catch (Exception ex)
             { return null; }
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

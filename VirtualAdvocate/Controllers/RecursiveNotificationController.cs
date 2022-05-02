@@ -1,25 +1,31 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
+    #region RecursiveNotificationController
     public class RecursiveNotificationController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
+        #region Global Variables
         public int userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
         public int orgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         public int deptID = Convert.ToInt32(System.Web.HttpContext.Current.Session["DepartmentID"]);
         public int roleId = Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]);
 
+        #endregion
+
+        #region Index
         // GET: RecursiveNotification
         public ActionResult Index()
         {
-            var recursiveNotificationDetails = db.RecursiveNotificationDetails.Where(m => m.Status && m.OrgId == orgId).Include(r => r.OrganizationDetail).ToList();
+            var recursiveNotificationDetails = VAEDB.RecursiveNotificationDetails.Where(m => m.Status && m.OrgId == orgId).Include(r => r.OrganizationDetail).ToList();
             var recursive = new List<RecursiveNotificationModel>();
             foreach (var item in recursiveNotificationDetails)
             {
@@ -32,7 +38,9 @@ namespace VirtualAdvocate.Controllers
             }
             return View(recursive);
         }
+        #endregion
 
+        #region Details
         // GET: RecursiveNotification/Details/5
         public ActionResult Details(string id)
         {
@@ -40,21 +48,25 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecursiveNotificationDetail recursiveNotificationDetail = db.RecursiveNotificationDetails.Find(id);
+            RecursiveNotificationDetail recursiveNotificationDetail = VAEDB.RecursiveNotificationDetails.Find(id);
             if (recursiveNotificationDetail == null)
             {
                 return HttpNotFound();
             }
             return View(recursiveNotificationDetail);
         }
+        #endregion
 
+        #region Create
         // GET: RecursiveNotification/Create
         public ActionResult Create()
         {
-            ViewBag.OrgId = new SelectList(db.OrganizationDetails, "OrganizationId", "OrgName");
+            ViewBag.OrgId = new SelectList(VAEDB.OrganizationDetails, "OrganizationId", "OrgName");
             return View();
         }
+        #endregion
 
+        #region Create
         // POST: RecursiveNotification/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -72,8 +84,8 @@ namespace VirtualAdvocate.Controllers
                     CreatedDate = DateTime.Now,
                     Status = true,
                 };
-                db.RecursiveNotificationDetails.Add(recursiveDetail);
-                db.SaveChanges();
+                VAEDB.RecursiveNotificationDetails.Add(recursiveDetail);
+                VAEDB.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -81,6 +93,9 @@ namespace VirtualAdvocate.Controllers
             return View(recursiveNotificationModel);
         }
 
+        #endregion
+
+        #region Edit
         // GET: RecursiveNotification/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -88,7 +103,7 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecursiveNotificationDetail recursiveNotificationDetail = db.RecursiveNotificationDetails.Find(id);
+            RecursiveNotificationDetail recursiveNotificationDetail = VAEDB.RecursiveNotificationDetails.Find(id);
             if (recursiveNotificationDetail == null)
             {
                 return HttpNotFound();
@@ -101,7 +116,9 @@ namespace VirtualAdvocate.Controllers
             };
             return View(recursive);
         }
+        #endregion
 
+        #region Edit
         // POST: RecursiveNotification/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -111,19 +128,22 @@ namespace VirtualAdvocate.Controllers
         {
             if (ModelState.IsValid)
             {
-                var recursive = db.RecursiveNotificationDetails.FirstOrDefault(m => m.Id == recursiveNotificationModel.Id);
-                
+                var recursive = VAEDB.RecursiveNotificationDetails.FirstOrDefault(m => m.Id == recursiveNotificationModel.Id);
+
                 recursive.RecurrsAfterDays = recursiveNotificationModel.RecurrsAfterDays;
                 recursive.RecurrsBeforeDays = recursiveNotificationModel.RecurrsBeforeDays;
                 recursive.ModifiedDate = DateTime.Now;
-                
-                db.Entry(recursive).State = EntityState.Modified;
-                db.SaveChanges();
+
+                VAEDB.Entry(recursive).State = EntityState.Modified;
+                VAEDB.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(recursiveNotificationModel);
         }
 
+        #endregion
+
+        #region Delete
         // GET: InsuranceTracker/Delete/5
         public JsonResult Delete(int id)
         {
@@ -131,10 +151,10 @@ namespace VirtualAdvocate.Controllers
             {
                 if (id != 0)
                 {
-                    RecursiveNotificationDetail recursive = db.RecursiveNotificationDetails.Find(id);
+                    RecursiveNotificationDetail recursive = VAEDB.RecursiveNotificationDetails.Find(id);
                     recursive.Status = false;
-                    db.Entry(recursive).State = EntityState.Modified;
-                    db.SaveChanges();
+                    VAEDB.Entry(recursive).State = EntityState.Modified;
+                    VAEDB.SaveChanges();
                 }
                 else
                 {
@@ -148,25 +168,32 @@ namespace VirtualAdvocate.Controllers
                 return Json(500, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region DeleteConfirmed
         // POST: RecursiveNotification/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            RecursiveNotificationDetail recursiveNotificationDetail = db.RecursiveNotificationDetails.Find(id);
-            db.RecursiveNotificationDetails.Remove(recursiveNotificationDetail);
-            db.SaveChanges();
+            RecursiveNotificationDetail recursiveNotificationDetail = VAEDB.RecursiveNotificationDetails.Find(id);
+            VAEDB.RecursiveNotificationDetails.Remove(recursiveNotificationDetail);
+            VAEDB.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                VAEDB.Dispose();
             }
             base.Dispose(disposing);
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

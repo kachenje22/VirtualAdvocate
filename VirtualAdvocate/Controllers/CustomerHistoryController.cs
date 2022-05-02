@@ -1,29 +1,29 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
-    public class CustomerHistoryController : Controller
+    #region CustomerHistoryController
+    public class CustomerHistoryController : BaseController
     {
-
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-        private VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
+        #region Index
         // GET: CustomerHistory
         public ActionResult Index()
         {
             return View();
         }
+        #endregion
 
+        #region CustomerHistory
         public ActionResult CustomerHistory(int id)
         {
             Session["CustHistoryID"] = id;
@@ -31,11 +31,10 @@ namespace VirtualAdvocate.Controllers
             int userId = Convert.ToInt32(Session["UserId"]);
             try
             {
-               
-                var objFilledTemp = (from obj in db.FilledTemplateDetails
-                                     join doc in db.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
+                var objFilledTemp = (from obj in VAEDB.FilledTemplateDetails
+                                     join doc in VAEDB.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
                                      from subset in g.DefaultIfEmpty()
-                                     where obj.UserId == userId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false)&&obj.CustomerId==id
+                                     where obj.UserId == userId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CustomerId == id
                                      select new FilledFormDetailModel { DocumentTitle = (subset == null ? "Template Deleted" : subset.DocumentTitle), Amount = obj.Amount, CreatedDate = obj.CreatedDate, FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId }
                     );
                 objForm = objFilledTemp.OrderByDescending(x => x.RowId).ToList();
@@ -48,28 +47,30 @@ namespace VirtualAdvocate.Controllers
             //var clientID = db.SelectedAccountServices.Where(s => s.UserId == userId).FirstOrDefault();
             //ViewBag.ClientID =clientID.ServiceId;
             ViewBag.customerID = id;
-            ViewBag.active = db.CustomerDetails.Where(c => c.CustomerId==id).FirstOrDefault().IsEnabled;
-           
+            ViewBag.active = VAEDB.CustomerDetails.Where(c => c.CustomerId == id).FirstOrDefault().IsEnabled;
+
             return View("CustomerHistory", objForm);
 
         }
+        #endregion
 
+        #region ExportCustomerHistory
         public JsonResult ExportCustomerHistory()
         {
-           var id= (int)Session["CustHistoryID"] ;
+            var id = (int)Session["CustHistoryID"];
             List<FilledFormDetailModel> objForm = new List<FilledFormDetailModel>();
             int userId = Convert.ToInt32(Session["UserId"]);
             try
             {
 
-                var objFilledTemp = (from obj in db.FilledTemplateDetails
-                                     join doc in db.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
+                var objFilledTemp = (from obj in VAEDB.FilledTemplateDetails
+                                     join doc in VAEDB.DocumentTemplates on obj.TemplateId equals doc.TemplateId into g
                                      from subset in g.DefaultIfEmpty()
                                      where obj.UserId == userId && (obj.ArchiveStatus == null || obj.ArchiveStatus == false) && obj.CustomerId == id
                                      select new FilledFormDetailModel { DocumentTitle = (subset == null ? "Template Deleted" : subset.DocumentTitle), Amount = obj.Amount, CreatedDate = obj.CreatedDate, FilledTemplateName = obj.FilledTemplateName, GroupId = obj.GroupId, RowId = obj.RowId }
                     );
                 objForm = objFilledTemp.OrderByDescending(x => x.RowId).ToList();
-                var customerName= db.CustomerDetails.Where(c => c.CustomerId == id).FirstOrDefault().CustomerName;
+                var customerName = VAEDB.CustomerDetails.Where(c => c.CustomerId == id).FirstOrDefault().CustomerName;
                 ListToDataTable objTable = new ListToDataTable();
                 System.Data.DataTable dt = objTable.ToDataTable(objForm);
                 dt.Columns.Remove("FilledTemplateName");
@@ -105,10 +106,9 @@ namespace VirtualAdvocate.Controllers
                 ErrorLog.LogThisError(ex);
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-
-
-           
-
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

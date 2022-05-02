@@ -1,39 +1,41 @@
-﻿using System;
+﻿#region NameSpaces
+using Microsoft.Office.Interop.Word;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using VirtualAdvocate.BLL;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
 using VirtualAdvocate.Models;
-using EntityFramework.Extensions;
-using Microsoft.Office.Interop.Word;
-using VirtualAdvocate.BLL;
-using System.Configuration;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
+    #region DueDiligenceController
     public class DueDiligenceController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-        private VirtualAdvocateData objData = new VirtualAdvocateData();
+        #region Index
         // GET: DueDiligence
         public ActionResult Index()
         {
             return View();
         }
+        #endregion
 
+        #region Enquiry
         public ActionResult Enquiry()
         {
             DueDiligenceUserEnquiryViewModel obj = new DueDiligenceUserEnquiryViewModel();
-            obj.getAllEnquiryType = objData.getAllEnquiryType();
-
+            obj.getAllEnquiryType = new VirtualAdvocateData().getAllEnquiryType();
             return View(obj);
         }
+        #endregion
 
+        #region Enquiry
         [HttpPost]
         public ActionResult Enquiry(DueDiligenceUserEnquiryViewModel obj)
         {
@@ -51,7 +53,7 @@ namespace VirtualAdvocate.Controllers
                     {
                         objEnquiry.BusinessName = obj.BusinessName;
                         objEnquiry.BusinessRegistrationNumber = obj.BusinessRegistrationNumber;
-                        Field = "Business Name :"+ obj.BusinessName;
+                        Field = "Business Name :" + obj.BusinessName;
                         Field = Field + "<br />Business Registration Number :" + obj.BusinessRegistrationNumber;
                     }
                     else if (obj.EnquiryTypeId == 2) // Company Details
@@ -82,46 +84,46 @@ namespace VirtualAdvocate.Controllers
                     objEnquiry.IsEnabled = true;
                     objEnquiry.UserId = userid;
                     objEnquiry.CreatedDate = DateTime.Now;
-                    db.DueDiligenceEnquiries.Add(objEnquiry);
-                    db.SaveChanges();
-                  
+                    VAEDB.DueDiligenceEnquiries.Add(objEnquiry);
+                    VAEDB.SaveChanges();
+
                     string FullName = "";
                     string AdminName = "";
                     string EmailAddress = "";
                     string EnqType = "";
                     int days;
-                    //var objSysConfig = db.SystemConfigs.Find(1);
-                    var appConfig = db.ApplicationConfigurations.Where(x => x.KeyName == "DueDays").FirstOrDefault();
-                    if(appConfig != null)
+                    //var objSysConfig = VAEDB.SystemConfigs.Find(1);
+                    var appConfig = VAEDB.ApplicationConfigurations.Where(x => x.KeyName == "DueDays").FirstOrDefault();
+                    if (appConfig != null)
                     { days = Convert.ToInt32(appConfig.KeyValue); }
                     else
                     {
                         days = 5;
                     }
-                   
 
-                    var objadmin = db.UserProfiles.Where(c => c.RoleId == 1 && c.IsEnabled == true).FirstOrDefault();
-                    if(objadmin!=null)
+
+                    var objadmin = VAEDB.UserProfiles.Where(c => c.RoleId == 1 && c.IsEnabled == true).FirstOrDefault();
+                    if (objadmin != null)
                     {
-                        var objAdminUP = db.UserAddressDetails.Find(objadmin.UserID);
-                        if(objAdminUP!=null)
+                        var objAdminUP = VAEDB.UserAddressDetails.Find(objadmin.UserID);
+                        if (objAdminUP != null)
                         {
                             AdminName = objAdminUP.FirstName + " " + objAdminUP.LastName;
                         }
                     }
 
                     // Getting Amount 
-                    var objCost = db.DueDiligenceCosts.Where(m => m.DueDiligenceType == obj.EnquiryTypeId.ToString()).FirstOrDefault();
+                    var objCost = VAEDB.DueDiligenceCosts.Where(m => m.DueDiligenceType == obj.EnquiryTypeId.ToString()).FirstOrDefault();
                     decimal Cost = Convert.ToDecimal(objCost.Cost);
 
                     // Getting Enquiry Type
-                    var objEnqType = db.DueDiligenceEnquiryTypes.Find(obj.EnquiryTypeId);
+                    var objEnqType = VAEDB.DueDiligenceEnquiryTypes.Find(obj.EnquiryTypeId);
                     EnqType = objEnqType.EnquiryType;
 
                     // Getting Address Details
-                    var objAddress = db.UserAddressDetails.Where(m=>m.UserId==userid).FirstOrDefault();                   
-                    var objUP = db.UserProfiles.Find(userid);
-                    if (objAddress != null && objUP!=null)
+                    var objAddress = VAEDB.UserAddressDetails.Where(m => m.UserId == userid).FirstOrDefault();
+                    var objUP = VAEDB.UserProfiles.Find(userid);
+                    if (objAddress != null && objUP != null)
                     {
                         FullName = objAddress.FirstName + " " + objAddress.LastName;
                         EmailAddress = objUP.EmailAddress;
@@ -130,7 +132,7 @@ namespace VirtualAdvocate.Controllers
                     // Creating Invoice 
 
 
-                   
+
                     string invoicepath = Path.Combine(Server.MapPath("~/DueInvoiceFiles/" + newFilename)); // New File Path with File Name
                     var path = Path.Combine(Server.MapPath("~/Resources/DueInvoiceTemplate.docx")); // Getting Original File For Create a new one with filled details
                     if (System.IO.File.Exists(invoicepath))
@@ -138,20 +140,20 @@ namespace VirtualAdvocate.Controllers
                         System.IO.File.Delete(invoicepath);
                     }
                     System.IO.File.Copy(path, invoicepath);
-                    var appConfigVat = db.ApplicationConfigurations.Where(x => x.KeyName == "VAT").FirstOrDefault();
+                    var appConfigVat = VAEDB.ApplicationConfigurations.Where(x => x.KeyName == "VAT").FirstOrDefault();
                     if (appConfigVat != null)
                     {
-                        vat =Convert.ToDecimal(appConfigVat.KeyValue);
+                        vat = Convert.ToDecimal(appConfigVat.KeyValue);
                     }
                     else
                     {
                         vat = 18;
                     }
-                        vat = Cost * vat / 100;
+                    vat = Cost * vat / 100;
                     decimal FinalAmount = vat + Cost;
 
                     //Invoice Word File Create 
-                    DueDiligenceInvoice(invoicepath, objAddress, EnqType, Cost.ToString(),  vat, FinalAmount,1,Cost);
+                    DueDiligenceInvoice(invoicepath, objAddress, EnqType, Cost.ToString(), vat, FinalAmount, 1, Cost);
 
                     // Convert to pdf file
                     string dueFilename = newFilename;
@@ -160,10 +162,10 @@ namespace VirtualAdvocate.Controllers
 
                     // Update Invoice Document 
                     DueDiligenceEnquiry objdue;
-                    objdue = db.DueDiligenceEnquiries.Find(objEnquiry.EnquiryId);
-                    objdue.InvoiceDocument= dueFilename;
+                    objdue = VAEDB.DueDiligenceEnquiries.Find(objEnquiry.EnquiryId);
+                    objdue.InvoiceDocument = dueFilename;
                     objdue.Cost = FinalAmount;
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
 
                     // Mail Notification For Admin and Due User
                     MailSend objMail = new MailSend();
@@ -181,20 +183,23 @@ namespace VirtualAdvocate.Controllers
                     }
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ErrorLog.LogThisError(ex);
                 }
 
 
-            }else
+            }
+            else
             {
                 return RedirectToAction("Enquiry", "DueDiligence");
             }
 
             return RedirectToAction("InquiryList", "DueDiligence");
         }
+        #endregion
 
+        #region RandomName
         public string RandomName(string filename)
         {
             Random rnd = new Random();
@@ -206,12 +211,15 @@ namespace VirtualAdvocate.Controllers
             filename = "U" + filename + "DI" + rnd.Next(1, 999999999) + "dueinvoice.docx"; // Create New File with unique name
             return filename;
         }
+        #endregion
+
+        #region ConvertToPdfFile
         public static void ConvertToPdfFile(string path)
         {
             try
             {
 
-                Logger("pdf creation:" +path);
+                Logger("pdf creation:" + path);
                 Application appWord = new Application();
                 Document wordDocument = new Document();
                 wordDocument = appWord.Documents.Open(path);
@@ -223,7 +231,9 @@ namespace VirtualAdvocate.Controllers
                 ErrorLog.LogThisError(ex);
             }
         }
+        #endregion
 
+        #region Logger
         public static void Logger(string msg)
         {
             string fileName = System.Configuration.ConfigurationManager.AppSettings["logPath"];
@@ -244,7 +254,10 @@ namespace VirtualAdvocate.Controllers
             writer.Dispose();
 
         }
-        public static void DueDiligenceInvoice(string filepath, UserAddressDetail objcustomer, string ServiceType, string total, decimal vat, decimal FinalAmount, int quantity,decimal cost)
+        #endregion
+
+        #region DueDiligenceInvoice
+        public static void DueDiligenceInvoice(string filepath, UserAddressDetail objcustomer, string ServiceType, string total, decimal vat, decimal FinalAmount, int quantity, decimal cost)
         {
             try
             {
@@ -273,10 +286,10 @@ namespace VirtualAdvocate.Controllers
 
                     // Activate the document
                     doc.Activate();
-                    string[] coverKeys = new string[] { "date","Name", "Street", "Build", "Plot", "Block", "Region", "LandMark", "VAT", "TotalAmount", "FinalAmount" };
+                    string[] coverKeys = new string[] { "date", "Name", "Street", "Build", "Plot", "Block", "Region", "LandMark", "VAT", "TotalAmount", "FinalAmount" };
                     string[] CustomerDetail = new string[11];// { "date", "Name and address of Bank", "name of Bank", "CUSTOMER NAME" };
                     CustomerDetail[0] = DateTime.Now.ToShortDateString();
-                    CustomerDetail[1] = objcustomer.FirstName+" "+objcustomer.LastName;
+                    CustomerDetail[1] = objcustomer.FirstName + " " + objcustomer.LastName;
                     CustomerDetail[2] = objcustomer.StreetName;
                     CustomerDetail[3] = objcustomer.BuildingName;
                     CustomerDetail[4] = objcustomer.PlotNumber;
@@ -326,7 +339,7 @@ namespace VirtualAdvocate.Controllers
                         int coulmnsCount = table.Columns.Count;
                         int DocCount = 1;
                         for (int i = 0; i < DocCount; i++)
-                        {                            
+                        {
                             object beforeRow = tables[2].Rows[2];
                             Row row = table.Rows.Add(ref beforeRow);
                             // Row row = table.Rows.Add(ref missing);
@@ -383,49 +396,52 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
+
+        #region InquiryList
         public ActionResult InquiryList()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
-           List<DueDiligenceEnquiryListViewModel> objDueList = new List<DueDiligenceEnquiryListViewModel>();
+            List<DueDiligenceEnquiryListViewModel> objDueList = new List<DueDiligenceEnquiryListViewModel>();
             try
             {
-                var objDueFormsList = (from objDueEnquiry in db.DueDiligenceEnquiries
-                                       join objEnqType in db.DueDiligenceEnquiryTypes on objDueEnquiry.EnquiryType equals objEnqType.EnquiryTypeId
-                                       join up in db.UserAddressDetails on objDueEnquiry.UserId equals up.UserId
+                var objDueFormsList = (from objDueEnquiry in VAEDB.DueDiligenceEnquiries
+                                       join objEnqType in VAEDB.DueDiligenceEnquiryTypes on objDueEnquiry.EnquiryType equals objEnqType.EnquiryTypeId
+                                       join up in VAEDB.UserAddressDetails on objDueEnquiry.UserId equals up.UserId
                                        // where objDueEnquiry.UserId== userId
-                                       select new DueDiligenceEnquiryListViewModel { EnquiryType = objEnqType.EnquiryType, CreatedDate = objDueEnquiry.CreatedDate, IsEnabled = objDueEnquiry.IsEnabled,UserId=objDueEnquiry.UserId,EnquiryId=objDueEnquiry.EnquiryId, ReplyStatus=objDueEnquiry.ReplyStatus, ReportDocument=objDueEnquiry.ReportDocument,Name=up.FirstName,InvoiceDocument=objDueEnquiry.InvoiceDocument }
-               ).OrderByDescending(x=>x.CreatedDate).ToList();
-                objDueList = objDueFormsList.OrderByDescending(c=>c.CreatedDate).ToList();
-                if (Convert.ToInt32(Session["RoleId"])!=1)
+                                       select new DueDiligenceEnquiryListViewModel { EnquiryType = objEnqType.EnquiryType, CreatedDate = objDueEnquiry.CreatedDate, IsEnabled = objDueEnquiry.IsEnabled, UserId = objDueEnquiry.UserId, EnquiryId = objDueEnquiry.EnquiryId, ReplyStatus = objDueEnquiry.ReplyStatus, ReportDocument = objDueEnquiry.ReportDocument, Name = up.FirstName, InvoiceDocument = objDueEnquiry.InvoiceDocument }
+               ).OrderByDescending(x => x.CreatedDate).ToList();
+                objDueList = objDueFormsList.OrderByDescending(c => c.CreatedDate).ToList();
+                if (Convert.ToInt32(Session["RoleId"]) != 1)
                 {
                     var result = (from enquiryResult in objDueFormsList
                                   where enquiryResult.UserId == userId
                                   select enquiryResult);
                     result = result.OrderByDescending(x => x.CreatedDate).ToList();
                     return View(result);
-                }               
-               
+                }
+
             }
             catch (Exception ex)
             {
                 ErrorLog.LogThisError(ex);
             }
-                     
-
             return View(objDueList);
         }
+        #endregion
 
+        #region InquiryReply
         public ActionResult InquiryReply(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             DueDiligenceEnquiryViewModel obj = new DueDiligenceEnquiryViewModel();
-            obj.getAllEnquiryType = objData.getAllEnquiryType();
-            var objresult = db.DueDiligenceEnquiries.Find(id);
-            var objCost = db.DueDiligenceCosts.Where(m => m.DueDiligenceType == objresult.EnquiryType.ToString()).FirstOrDefault();
+            obj.getAllEnquiryType = new VirtualAdvocateData().getAllEnquiryType();
+            var objresult = VAEDB.DueDiligenceEnquiries.Find(id);
+            var objCost = VAEDB.DueDiligenceCosts.Where(m => m.DueDiligenceType == objresult.EnquiryType.ToString()).FirstOrDefault();
             if (objresult != null)
             {
                 obj.CreatedDate = objresult.CreatedDate;
@@ -457,15 +473,15 @@ namespace VirtualAdvocate.Controllers
                 obj.Cost = objresult.Cost;
                 obj.ReplyStatus = objresult.ReplyStatus;
             }
-            if (objCost!=null)
+            if (objCost != null)
             {
                 obj.Cost = objCost.Cost;
-            }           
-            
-
+            }
             return View(obj);
         }
+        #endregion
 
+        #region InquiryReply
         [HttpPost]
         public ActionResult InquiryReply(DueDiligenceEnquiryViewModel obj)
         {
@@ -474,39 +490,38 @@ namespace VirtualAdvocate.Controllers
                 string FullName = "";
                 string EmailAddress = "";
                 DueDiligenceEnquiry objdue;
-                objdue = db.DueDiligenceEnquiries.Find(obj.EnquiryId);               
-                var objCost = db.DueDiligenceCosts.Where(m => m.DueDiligenceType == objdue.EnquiryType.ToString()).FirstOrDefault();
+                objdue = VAEDB.DueDiligenceEnquiries.Find(obj.EnquiryId);
+                var objCost = VAEDB.DueDiligenceCosts.Where(m => m.DueDiligenceType == objdue.EnquiryType.ToString()).FirstOrDefault();
                 //objdue.Cost = objCost.Cost;
                 objdue.TimeLine = obj.TimeLine;
                 objdue.ReplyStatus = true;
-                db.SaveChanges();
+                VAEDB.SaveChanges();
                 MailSend objMail = new MailSend();
-                var objAd = db.UserAddressDetails.Where(m=>m.UserId==objdue.UserId).FirstOrDefault();
-                var objUP = db.UserProfiles.Find(objdue.UserId);
+                var objAd = VAEDB.UserAddressDetails.Where(m => m.UserId == objdue.UserId).FirstOrDefault();
+                var objUP = VAEDB.UserProfiles.Find(objdue.UserId);
                 FullName = objAd.FirstName + " " + objAd.LastName;
                 EmailAddress = objUP.EmailAddress;
                 // Mail Notification For Due Diligence User 
-                objMail.EnquiryReplyNotificationForDueUser(FullName, EmailAddress,  obj.TimeLine.ToString(), obj.Cost.ToString(), ConfigurationManager.AppSettings["ApplicationTitle"].ToString(), Common.Helper.GetBaseUrl());
-
+                objMail.EnquiryReplyNotificationForDueUser(FullName, EmailAddress, obj.TimeLine.ToString(), obj.Cost.ToString(), ConfigurationManager.AppSettings["ApplicationTitle"].ToString(), Common.Helper.GetBaseUrl());
             }
             catch (Exception ex)
             {
                 ErrorLog.LogThisError(ex);
             }
-
             return RedirectToAction("InquiryList", "DueDiligence");
         }
+        #endregion
 
+        #region AttachReport
         public ActionResult AttachReport(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             DueDiligenceAttachViewModel obj = new DueDiligenceAttachViewModel();
-            obj.getAllEnquiryType = objData.getAllEnquiryType();
-            var objresult = db.DueDiligenceEnquiries.Find(id);
+            obj.getAllEnquiryType = new VirtualAdvocateData().getAllEnquiryType();
+            var objresult = VAEDB.DueDiligenceEnquiries.Find(id);
             if (objresult != null)
             {
                 obj.CreatedDate = objresult.CreatedDate;
@@ -540,20 +555,23 @@ namespace VirtualAdvocate.Controllers
                 obj.ReportDocument = objresult.ReportDocument;
             }
 
-            return View(obj);           
+            return View(obj);
         }
+        #endregion
+
+        #region AttachReport
         [HttpPost]
         public ActionResult AttachReport(DueDiligenceAttachViewModel obj)
         {
             var newFilename = "";
-            var path = "";           
+            var path = "";
             if (ModelState.IsValid)
             {
                 try
                 {
                     DueDiligenceEnquiry objdue;
-                    objdue = db.DueDiligenceEnquiries.Find(obj.EnquiryId);
-                 
+                    objdue = VAEDB.DueDiligenceEnquiries.Find(obj.EnquiryId);
+
                     bool exists = System.IO.Directory.Exists(Server.MapPath("~/DueReports"));
 
                     if (!exists)
@@ -563,31 +581,34 @@ namespace VirtualAdvocate.Controllers
                     {
                         obj.ReportDocument = Path.GetFileName(obj.AttachFile.FileName);
                         Random rnd = new Random();
-                        newFilename = "U" +obj.UserId + "T" + rnd.Next(1, 999999999) + obj.ReportDocument; // Create New File with unique name
-                         path = Path.Combine(Server.MapPath("~/DueReports"), newFilename);
+                        newFilename = "U" + obj.UserId + "T" + rnd.Next(1, 999999999) + obj.ReportDocument; // Create New File with unique name
+                        path = Path.Combine(Server.MapPath("~/DueReports"), newFilename);
                         if (System.IO.File.Exists(path))
                         {
-                            newFilename= newFilename = "U" + obj.UserId + "T" + rnd.Next(1, 999999999) +"E"+ obj.ReportDocument;
+                            newFilename = newFilename = "U" + obj.UserId + "T" + rnd.Next(1, 999999999) + "E" + obj.ReportDocument;
                             path = Path.Combine(Server.MapPath("~/DueReports"), newFilename);
                         }
                         else
                         {
                             obj.AttachFile.SaveAs(path); // Report document saved into Reports Folder
-                            
+
                         }
                         objdue.ReportDocument = newFilename;
-                        db.SaveChanges();
+                        VAEDB.SaveChanges();
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    ErrorLog.LogThisError(ex);                   
+                    ErrorLog.LogThisError(ex);
                 }
 
             }
             return RedirectToAction("InquiryList", "DueDiligence");
-        }
+        } 
+        #endregion
 
-    }
-}
+    } 
+    #endregion
+} 
+#endregion

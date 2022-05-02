@@ -1,26 +1,27 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Text;
-using System.Globalization;
-using System.Security.Cryptography;
-using System.IO;
-using System.Configuration;
-using System.Web.Helpers;
-using System.Data.Entity.Infrastructure;
-using VirtualAdvocate.Models;
-using System.Web.Mvc;
-using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Infrastructure;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
-
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
+using VirtualAdvocate.Models;
+#endregion
+#region VirtualAdvocate.Common
 namespace VirtualAdvocate.Common
 {
+    #region Helper
     public static class Helper
     {
-        static byte[] bytes = ASCIIEncoding.ASCII.GetBytes("ZeroCool");
+        #region Global Variables
+        static byte[] bytes = ASCIIEncoding.ASCII.GetBytes("ZeroCool"); 
+        #endregion
 
+        #region RetrievePassword
         public static string RetrievePassword()
         {
             StringBuilder builder = new StringBuilder();
@@ -31,7 +32,9 @@ namespace VirtualAdvocate.Common
             return builder.ToString();
 
         }
+        #endregion
 
+        #region RandomString
         public static string RandomString(int size, bool lowercase)
         {
             StringBuilder builder = new StringBuilder();
@@ -50,13 +53,17 @@ namespace VirtualAdvocate.Common
                 return builder.ToString().ToLower(CultureInfo.CurrentCulture);
             return builder.ToString();
         }
+        #endregion
 
+        #region RandomNumber
         public static int RandomNumber(int min, int max)
         {
             Random random = new Random();
             return random.Next(min, max);
         }
+        #endregion
 
+        #region RandomSpecialCharacters
         public static string RandomSpecialCharacters()
         {
             int val = ((DateTime.Now.Second) / 4);
@@ -65,7 +72,9 @@ namespace VirtualAdvocate.Common
 
             return strSplChr[val];
         }
+        #endregion
 
+        #region ComputeHash
         /// <summary>
         /// Accepts the password, generates a eight byte salt value and password hash using SHA512. 
         /// </summary>
@@ -133,19 +142,25 @@ namespace VirtualAdvocate.Common
             // Return the result.
             return hashWithSaltBytes;
         }
+        #endregion
 
+        #region Encrypt
         public static string Encrypt(string originalString)
         {
             byte[] data_byte = Encoding.UTF8.GetBytes(originalString);
             return HttpUtility.UrlEncode(Convert.ToBase64String(data_byte));
         }
+        #endregion
 
+        #region Decrypt
         public static string Decrypt(string cryptedString)
         {
             byte[] data_byte = Convert.FromBase64String(HttpUtility.UrlDecode(cryptedString));
             return Encoding.UTF8.GetString(data_byte);
         }
+        #endregion
 
+        #region GetBaseUrl
         public static string GetBaseUrl()
         {
             var request = HttpContext.Current.Request;
@@ -154,7 +169,9 @@ namespace VirtualAdvocate.Common
 
             return baseUrl;
         }
+        #endregion
 
+        #region GetUtcDate
         /// <summary>
         /// To return the dbDate
         /// </summary>
@@ -167,7 +184,9 @@ namespace VirtualAdvocate.Common
 
             return dbDate;
         }
+        #endregion
 
+        #region GetDateFromUtc
         /// <summary>
         /// To convert utc datetime to local datetime
         /// </summary>
@@ -186,9 +205,12 @@ namespace VirtualAdvocate.Common
             else
                 return utcDate.ToLocalTime();
         }
+        #endregion
 
+        #region ValidateAtLeastOneCheckedAttribute
         public class ValidateAtLeastOneCheckedAttribute : ValidationAttribute
         {
+            #region IsValid
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
                 Type type = value.GetType();
@@ -204,8 +226,12 @@ namespace VirtualAdvocate.Common
                 }
 
                 return new ValidationResult(base.ErrorMessageString);
-            }
-        }
+            } 
+            #endregion
+        } 
+        #endregion
 
-    }
-}
+    } 
+    #endregion
+} 
+#endregion

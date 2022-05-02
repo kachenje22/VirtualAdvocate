@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<VirtualAdvocate.Models.Department>
 
-@{
-    ViewBag.MenuActive = "Department";
-    Layout = "~/Views/Shared/_Layoutmain.cshtml";
-}
+@{ ViewBag.MenuActive = "Department";
+    Layout = "~/Views/Shared/_Layoutmain.cshtml"; }
 
 <h2>Department list</h2>
 
@@ -18,20 +16,18 @@
         <div class="navbar-form navbar-right blue-color">
             @if (ViewBag.Enable == "Active")
             {
-                <input type="radio" name="editList" id="Active" value="Active" checked="checked" />
+<input type="radio" name="editList" id="Active" value="Active" checked="checked" />
                 <label for="Active" class="radio-color">Active</label>
 
-                <input type="radio" name="editList" id="Inactive" value="Inactive" />
-                <label for="Inactive" class="radio-color">In active</label>
-            }
-            else
-            {
-                <input type="radio" name="editList" id="Active" value="Active" />
-                    <label for="Active" class="radio-color">Active</label>
+                                <input type="radio" name="editList" id="Inactive" value="Inactive" />
+                                                <label for="Inactive" class="radio-color">In active</label> }
+                                            else
+                                            {
+                                <input type="radio" name="editList" id="Active" value="Active" />
+                                                <label for="Active" class="radio-color">Active</label>
 
-                    <input type="radio" name="editList" id="Inactive" value="Inactive" checked="checked" />
-                    <label for="Inactive" class="radio-color">In active</label>
-            }
+                                                                <input type="radio" name="editList" id="Inactive" value="Inactive" checked="checked" />
+                                                                                <label for="Inactive" class="radio-color">In active</label>}
 
         </div>
         <div class="navbar-form navbar-right" role="search">
@@ -69,23 +65,22 @@
                 ustatus = "Inactive";
                 msg = "activate";
             }
-            <tr>
-                <td>@rowNo</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    <a href="@Url.Action("EditDepartment","Department",new { id = item.Id })" title="Edit" class="fa fa-edit gray-color" onsubmit = "showProgress()"></a>&nbsp;|
-                    &nbsp;
-                    <a href="javascript:;" name="Edit" title="@ustatus" class="@css" onclick="ChangeStatus(@item.Id,'@msg')"></a>
+<tr>
+    <td>@rowNo</td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        <a href="@Url.Action("EditDepartment","Department",new { id = item.Id })" title="Edit" class="fa fa-edit gray-color" onsubmit="showProgress()"></a>&nbsp;|
+        &nbsp;
+        <a href="javascript:;" name="Edit" title="@ustatus" class="@css" onclick="ChangeStatus(@item.Id,'@msg')"></a>
 
-                </td>
-            </tr>
-
-        }
+    </td>
+</tr>
+}
 
     </tbody>
 </table>
@@ -108,8 +103,8 @@
 
                 });
 
-                function ChangeStatus(id, msg) {
-                    if (msg == "deactivate") {
+        function ChangeStatus(id, msg) {
+           if (msg == "deactivate") {
                         showProgress();
                         $.ajax({
                             url: '@Url.Content("~/Department/CheckDepartmentData")',
@@ -140,7 +135,7 @@
                                                     data: { id: id },
                                                     dataType: 'json',
                                                     success: function (result) { location.reload(); },
-                                                    error: function () { alert('Error!'); }
+                                                    error: function () { bootbox.alert('Error!'); }
                                                 });
                                             }
                                         }
@@ -148,13 +143,10 @@
                                 }
                                 else { bootbox.alert("This Department has assigned to User,Documents or Organization. So you can not deactivate this department"); }
                             },
-                            error: function () { alert('Error!'); }
+                            error: function () { bootbox.alert('Error!'); }
                         });
-
-
-
                     }
-                    else {
+           else {
                        bootbox.confirm({
                                         title: 'Department Activate / Deactivate',
                                         message: 'Are you sure you want to ' + msg + ' this Department?',
@@ -177,7 +169,7 @@
                                                     data: { id: id },
                                                     dataType: 'json',
                                                     success: function (result) { location.reload(); },
-                                                    error: function () { alert('Error!'); }
+                                                    error: function () { bootbox.alert('Error!'); }
                                                 });
                                             }
                                         }
@@ -185,8 +177,8 @@
                     }
 
 
-
-                }
+            hideProgress();
+        }
 
         $("input[name='editList']").change(function () {
 

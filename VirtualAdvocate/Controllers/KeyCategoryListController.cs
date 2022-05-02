@@ -1,33 +1,28 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Data;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using VirtualAdvocate.Common;
-using VirtualAdvocate.DAL;
 using VirtualAdvocate.Models;
-using EntityFramework.Extensions;
-
-using System.Data;
-using ClosedXML.Excel;
-using System.Web.Script.Serialization;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
-    public class KeyCategoryListController : Controller
+    #region KeyCategoryListController
+    public class KeyCategoryListController : BaseController
     {
-
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-        private VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
+        #region Index
         // GET: KeyCategoryList
         public ActionResult Index()
         {
             return View();
         }
+        #endregion
 
+        #region KeyCategoryList
         public ActionResult KeyCategoryList(string enable)
         {
             bool active;
@@ -47,15 +42,19 @@ namespace VirtualAdvocate.Controllers
             ViewBag.Enable = enable;
 
             List<KeyCategoryModel> objCat = new List<KeyCategoryModel>();
-            objCat = (from k  in db.KeyCategories where k.IsEnabled==active select  new KeyCategoryModel {ID=k.Id,CategoryName=k.CategoryName,CategoryDescription=k.CategoryDescription,IsEnabled=k.IsEnabled,Order=k.CategoryOrder }).ToList();
+            objCat = (from k in VAEDB.KeyCategories where k.IsEnabled == active select new KeyCategoryModel { ID = k.Id, CategoryName = k.CategoryName, CategoryDescription = k.CategoryDescription, IsEnabled = k.IsEnabled, Order = k.CategoryOrder }).ToList();
             return View(objCat);
         }
+        #endregion
 
+        #region AddkeyCategory
         public ActionResult AddkeyCategory()
         {
             return View();
         }
+        #endregion
 
+        #region AddKeyCategory
         [HttpPost]
         public ActionResult AddKeyCategory(KeyCategoryModel objCM)
         {
@@ -67,8 +66,8 @@ namespace VirtualAdvocate.Controllers
                 obj.CategoryDescription = objCM.CategoryDescription;
                 obj.CategoryOrder = objCM.Order;
                 obj.CanAddInsurance = objCM.CanAddInsurance;
-                db.KeyCategories.Add(obj);
-                db.SaveChanges();
+                VAEDB.KeyCategories.Add(obj);
+                VAEDB.SaveChanges();
                 int result = obj.Id;
 
                 // Log Insert
@@ -79,8 +78,8 @@ namespace VirtualAdvocate.Controllers
                 objLog.KeywordCategoryId = result;
                 objLog.Action = "Insert";
                 objLog.Name = objCM.CategoryName;
-                db.LogKeywordCategories.Add(objLog);
-                db.SaveChanges();
+                VAEDB.LogKeywordCategories.Add(objLog);
+                VAEDB.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -88,11 +87,13 @@ namespace VirtualAdvocate.Controllers
             }
             return RedirectToAction("KeyCategoryList", "KeyCategoryList");
         }
+        #endregion
 
+        #region CheckKeyCategory
         [HttpGet]
         public JsonResult CheckKeyCategory(string CategoryName)
         {
-            var chkExisting = db.KeyCategories.Where(a => a.CategoryName == CategoryName.Trim()).FirstOrDefault();
+            var chkExisting = VAEDB.KeyCategories.Where(a => a.CategoryName == CategoryName.Trim()).FirstOrDefault();
 
             if (chkExisting != null)
             {
@@ -103,11 +104,13 @@ namespace VirtualAdvocate.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region CheckKeyCategoryName
         [HttpGet]
         public ActionResult CheckKeyCategoryName(string CategoryName)
         {
-            var chkexisting = db.KeyCategories.Where(a => a.CategoryName == CategoryName.Trim()).FirstOrDefault();
+            var chkexisting = VAEDB.KeyCategories.Where(a => a.CategoryName == CategoryName.Trim()).FirstOrDefault();
             bool result = false;
             if (chkexisting != null)
             {
@@ -120,7 +123,9 @@ namespace VirtualAdvocate.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region EditKeyCategory
         [HttpGet]
         public ActionResult EditKeyCategory(int? id)
         {
@@ -129,7 +134,7 @@ namespace VirtualAdvocate.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             KeyCategory dc = new KeyCategory();
-            var cat = db.KeyCategories.Where(d => d.Id == id).FirstOrDefault();
+            var cat = VAEDB.KeyCategories.Where(d => d.Id == id).FirstOrDefault();
             EditKeyCategoryModel obj = new EditKeyCategoryModel();
             obj.CategoryName = cat.CategoryName;
             obj.CategoryDescription = cat.CategoryDescription;
@@ -138,20 +143,22 @@ namespace VirtualAdvocate.Controllers
             obj.ID = cat.Id;
             return View(obj);
         }
+        #endregion
 
+        #region EditKeyCategory
         [HttpPost]
         public ActionResult EditKeyCategory(EditKeyCategoryModel obj)
         {
             try
             {
                 KeyCategory dc = new KeyCategory();
-                var cat = db.KeyCategories.Where(d => d.Id == obj.ID).FirstOrDefault();
+                var cat = VAEDB.KeyCategories.Where(d => d.Id == obj.ID).FirstOrDefault();
 
                 cat.CategoryName = obj.CategoryName;
                 cat.CategoryDescription = obj.CategoryDescription;
                 cat.CategoryOrder = obj.Order;
                 cat.CanAddInsurance = obj.CanAddInsurance;
-                db.SaveChanges();
+                VAEDB.SaveChanges();
 
                 ////Log Insert
                 LogKeywordCategory objLog = new LogKeywordCategory();
@@ -161,8 +168,8 @@ namespace VirtualAdvocate.Controllers
                 objLog.Action = "Update";
                 objLog.LogId = obj.ID;
                 objLog.Name = obj.CategoryName;
-                db.LogKeywordCategories.Add(objLog);
-                db.SaveChanges();
+                VAEDB.LogKeywordCategories.Add(objLog);
+                VAEDB.SaveChanges();
 
             }
             catch (Exception ex)
@@ -171,7 +178,9 @@ namespace VirtualAdvocate.Controllers
             }
             return RedirectToAction("KeyCategoryList", "KeyCategoryList");
         }
+        #endregion
 
+        #region ActivateKeyCategory
         [AllowAnonymous]
         [HttpPost]
         public JsonResult ActivateKeyCategory(int? id)
@@ -182,7 +191,7 @@ namespace VirtualAdvocate.Controllers
             LogKeywordCategory objLog = new LogKeywordCategory();
             try
             {
-                var obj = db.KeyCategories.Find(id);
+                var obj = VAEDB.KeyCategories.Find(id);
                 if (obj != null)
                 {
                     if (obj.IsEnabled == true)
@@ -207,8 +216,8 @@ namespace VirtualAdvocate.Controllers
                 objLog.Description = obj.CategoryDescription;
                 objLog.LogId = obj.Id;
                 objLog.ModifiedDate = DateTime.Now;
-                db.LogKeywordCategories.Add(objLog);
-                db.SaveChanges();
+                VAEDB.LogKeywordCategories.Add(objLog);
+                VAEDB.SaveChanges();
 
             }
             catch (Exception ex)
@@ -221,7 +230,10 @@ namespace VirtualAdvocate.Controllers
 
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
 
-        }
+        } 
+        #endregion
 
-    }
-}
+    } 
+    #endregion
+} 
+#endregion

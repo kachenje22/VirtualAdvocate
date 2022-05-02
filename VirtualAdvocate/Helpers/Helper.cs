@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 #endregion
-
 #region VirtualAdvocate.Helpers
 namespace VirtualAdvocate.Helpers
 {
@@ -13,11 +12,12 @@ namespace VirtualAdvocate.Helpers
     public enum UserRoles
     {
         SuperAdmin = 1,
-        AccountAdmin,
-        IndividualUser,
-        CompanyUser,
-        DepartmentAdmin,
-        DueDiligenceUser
+        AccountAdmin = 2,
+        IndividualUser = 3,
+        CompanyUser = 5,
+        DepartmentAdmin = 6,
+        DueDiligenceUser = 7
+
     }
     #endregion
 

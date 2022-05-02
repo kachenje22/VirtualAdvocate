@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,21 +9,27 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
+    #region ProbationTrackerController
     public class ProbationTrackerController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
+        #region Global Variables
         public int userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
         public int orgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         public int deptID = Convert.ToInt32(System.Web.HttpContext.Current.Session["DepartmentID"]);
         public int roleId = Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]);
+
+        #endregion
+
+        #region Index
         // GET: ProbationTracker
         public ActionResult Index(int? flagForNotification)
         {
             var probations = new List<ProbationViewModel>();
-            foreach (var item in db.ProbationDetails.Include("CustomerDetail").Where(m => m.Status && m.CustomerDetail.OrganizationId == orgId && m.CustomerDetail.Department == deptID))
+            foreach (var item in VAEDB.ProbationDetails.Include("CustomerDetail").Where(m => m.Status && m.CustomerDetail.OrganizationId == orgId && m.CustomerDetail.Department == deptID))
             {
                 probations.Add(new ProbationViewModel
                 {
@@ -57,7 +64,9 @@ namespace VirtualAdvocate.Controllers
 
             return View(probations);
         }
+        #endregion
 
+        #region Details
         // GET: ProbationTracker/Details/5
         public ActionResult Details(int? id)
         {
@@ -65,18 +74,20 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
+            ProbationDetail probationDetail = VAEDB.ProbationDetails.Find(id);
             if (probationDetail == null)
             {
                 return HttpNotFound();
             }
             return View(probationDetail);
         }
+        #endregion
 
+        #region Create
         // GET: ProbationTracker/Create
         public ActionResult Create()
         {
-            ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID), "CustomerId", "CustomerName");
+            ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID), "CustomerId", "CustomerName");
             List<Month> months = new List<Month>();
 
             for (int i = 1; i <= Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ExtendExpiryLimit"]); i++)
@@ -86,7 +97,9 @@ namespace VirtualAdvocate.Controllers
             ViewBag.ProbationPeriod = new SelectList(months, "Label", "Label");
             return View();
         }
+        #endregion
 
+        #region Create
         // POST: ProbationTracker/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -97,10 +110,10 @@ namespace VirtualAdvocate.Controllers
             List<Month> months = new List<Month>();
             if (ModelState.IsValid)
             {
-                var probationData = db.ProbationDetails.Where(m => m.CustomerId == probationDetail.CustomerId && m.Status);
+                var probationData = VAEDB.ProbationDetails.Where(m => m.CustomerId == probationDetail.CustomerId && m.Status);
                 if (probationData.Count() > 0)
                 {
-                    ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName");
+                    ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName");
 
 
                     for (int i = 1; i <= Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ExtendExpiryLimit"]); i++)
@@ -125,12 +138,12 @@ namespace VirtualAdvocate.Controllers
                     Status = true,
                     UserId = userID
                 };
-                db.ProbationDetails.Add(probation);
-                db.SaveChanges();
+                VAEDB.ProbationDetails.Add(probation);
+                VAEDB.SaveChanges();
 
                 return RedirectToAction("Index");
             }
-            ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName");
+            ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName");
             //List<Month> months = new List<Month>();
 
             for (int i = 1; i <= Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ExtendExpiryLimit"]); i++)
@@ -141,7 +154,9 @@ namespace VirtualAdvocate.Controllers
 
             return View(probationDetail);
         }
+        #endregion
 
+        #region Edit
         // GET: ProbationTracker/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -149,7 +164,7 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var probationDetail = db.ProbationDetails.Find(id);
+            var probationDetail = VAEDB.ProbationDetails.Find(id);
             ProbationViewModel probation = new ProbationViewModel()
             {
                 Id = probationDetail.Id,
@@ -172,11 +187,13 @@ namespace VirtualAdvocate.Controllers
             }
             ViewBag.ProbationPeriod = new SelectList(months, "Label", "Label", probation.ProbationPeriod);
             ViewBag.ExtendExpiry = new SelectList(months, "Label", "Label");
-            ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName", probation.CustomerId);
+            ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId), "CustomerId", "CustomerName", probation.CustomerId);
 
             return View(probation);
         }
+        #endregion
 
+        #region Edit
         // POST: ProbationTracker/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -189,17 +206,19 @@ namespace VirtualAdvocate.Controllers
 
             if (ModelState.IsValid)
             {
-                var probationDetail = db.ProbationDetails.FirstOrDefault(x => x.Id == probationModel.Id);
+                var probationDetail = VAEDB.ProbationDetails.FirstOrDefault(x => x.Id == probationModel.Id);
                 probationDetail.DateOfJoining = DateTime.ParseExact(probationModel.DateOfJoining, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 probationDetail.DateOfExpiry = probationDetail.DateOfExpiry.AddMonths(probationModel.ExtendExpiry);
 
-                db.Entry(probationDetail).State = EntityState.Modified;
-                db.SaveChanges();
+                VAEDB.Entry(probationDetail).State = EntityState.Modified;
+                VAEDB.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(probationModel);
         }
+        #endregion
 
+        #region ExtendExpiry
         [HttpPost]
         public JsonResult ExtendExpiry(IEnumerable<Extend> months)
         {
@@ -209,12 +228,12 @@ namespace VirtualAdvocate.Controllers
                 {
                     foreach (var item in months)
                     {
-                        var probation = db.ProbationDetails.FirstOrDefault(m => m.Id == item.Id);
+                        var probation = VAEDB.ProbationDetails.FirstOrDefault(m => m.Id == item.Id);
                         probation.DateOfExpiry = probation.DateOfExpiry.AddMonths(item.Month);
-                        db.Entry(probation).State = EntityState.Modified;
+                        VAEDB.Entry(probation).State = EntityState.Modified;
 
                     }
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
 
                 return Json("Success", JsonRequestBehavior.AllowGet);
@@ -225,12 +244,16 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
 
+        #region BulkProbationUpload
         public ActionResult BulkProbationUpload()
         {
             return View();
         }
+        #endregion
 
+        #region PostBulkProbationUpload
         [HttpPost]
         public JsonResult PostBulkProbationUpload()
         {
@@ -261,8 +284,8 @@ namespace VirtualAdvocate.Controllers
                                     var timeZoneDt = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 
                                     joiningDate = timeZoneDt.ToString("dd-MM-yyyy");
-                                    
-                                }                               
+
+                                }
                                 else
                                 {
                                     try
@@ -318,13 +341,13 @@ namespace VirtualAdvocate.Controllers
                                 RecordNumber = i,
                                 Description = "All fields are mandatory.",
                                 Name = dr[0].ToString().Trim(),
-                                DateOfJoining = DateTime.TryParse(dr[1].ToString(), out date) ? 
+                                DateOfJoining = DateTime.TryParse(dr[1].ToString(), out date) ?
                                 DateTime.FromOADate(Convert.ToDouble(dr[1].ToString().Trim())).ToString("dd-MM-yyyy") : string.Empty,
 
                                 ProbationPeriod = dr[2].ToString().Trim()
                             });
                         }
-                        else if(string.IsNullOrEmpty(joiningDate))
+                        else if (string.IsNullOrEmpty(joiningDate))
                         {
                             //date is not in correct format
                             bulkInsuranceJsonResponse.Failure++;
@@ -342,7 +365,7 @@ namespace VirtualAdvocate.Controllers
                             if (!string.IsNullOrEmpty(dr[0].ToString()))
                             {
                                 var custName = dr[0].ToString().Trim().ToLower();
-                                var customer = db.CustomerDetails.Where(m => m.CustomerName.ToLower() == custName && m.OrganizationId == orgId && m.Department == deptID);
+                                var customer = VAEDB.CustomerDetails.Where(m => m.CustomerName.ToLower() == custName && m.OrganizationId == orgId && m.Department == deptID);
 
                                 if (customer != null && customer.Count() > 1)
                                 {
@@ -375,7 +398,7 @@ namespace VirtualAdvocate.Controllers
                                     if (customer != null)
                                     {
                                         var dateOfJoining = DateTime.ParseExact(joiningDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                                        var isAlreadyExist = db.ProbationDetails
+                                        var isAlreadyExist = VAEDB.ProbationDetails
                                             .Include("CustomerDetail")
                                             .Where(m => m.CustomerDetail.CustomerName.ToLower() == custName && m.DateOfJoining == dateOfJoining && m.Status).Count() > 0 ? true : false;
 
@@ -395,7 +418,7 @@ namespace VirtualAdvocate.Controllers
                                         else
                                         {
                                             var probationPeriod = Convert.ToInt32(dr[2].ToString().Trim());
-                                            var existingProbation = db.ProbationDetails
+                                            var existingProbation = VAEDB.ProbationDetails
                                             .Include("CustomerDetail")
                                             .FirstOrDefault(m => m.CustomerId == customer.FirstOrDefault().CustomerId && m.Status);
 
@@ -406,7 +429,7 @@ namespace VirtualAdvocate.Controllers
                                                 existingProbation.DateOfExpiry = dateOfJoining.AddMonths(probationPeriod);
                                                 existingProbation.ProbationPeriod = probationPeriod;
 
-                                                db.Entry(existingProbation).State = EntityState.Modified;
+                                                VAEDB.Entry(existingProbation).State = EntityState.Modified;
                                             }
                                             else
                                             {
@@ -421,7 +444,7 @@ namespace VirtualAdvocate.Controllers
                                                     UserId = userID,
                                                 };
 
-                                                db.ProbationDetails.Add(probation);
+                                                VAEDB.ProbationDetails.Add(probation);
 
                                             }
                                             bulkInsuranceJsonResponse.Success++;
@@ -456,7 +479,7 @@ namespace VirtualAdvocate.Controllers
                                     ProbationPeriod = dr[2].ToString().Trim()
                                 });
                             }
-                            
+
                         }
                     }
                     catch (Exception ex)
@@ -475,7 +498,7 @@ namespace VirtualAdvocate.Controllers
                     i++;
                 }
 
-                db.SaveChanges();
+                VAEDB.SaveChanges();
 
                 return Json(bulkInsuranceJsonResponse);
             }
@@ -484,7 +507,9 @@ namespace VirtualAdvocate.Controllers
                 return Json("error");
             }
         }
+        #endregion
 
+        #region Delete
         // GET: ProbationTracker/Delete/5
         public JsonResult Delete(int id)
         {
@@ -492,10 +517,10 @@ namespace VirtualAdvocate.Controllers
             {
                 if (id != 0)
                 {
-                    ProbationDetail probation = db.ProbationDetails.Find(id);
+                    ProbationDetail probation = VAEDB.ProbationDetails.Find(id);
                     probation.Status = false;
-                    db.Entry(probation).State = EntityState.Modified;
-                    db.SaveChanges();
+                    VAEDB.Entry(probation).State = EntityState.Modified;
+                    VAEDB.SaveChanges();
                 }
                 else
                 {
@@ -509,166 +534,32 @@ namespace VirtualAdvocate.Controllers
                 return Json(500, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region DeleteConfirmed
         // POST: ProbationTracker/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
-            db.ProbationDetails.Remove(probationDetail);
-            db.SaveChanges();
+            ProbationDetail probationDetail = VAEDB.ProbationDetails.Find(id);
+            VAEDB.ProbationDetails.Remove(probationDetail);
+            VAEDB.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                VAEDB.Dispose();
             }
             base.Dispose(disposing);
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }
-
-
-
-//using System.Collections.Generic;
-//using System.Data.Entity;
-//using System.Linq;
-//using System.Net;
-//using System.Web.Mvc;
-//using VirtualAdvocate.Models;
-
-//namespace VirtualAdvocate.Controllers
-//{
-//    public class ProbationTrackerController : BaseController
-//    {
-//        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-
-//        // GET: ProbationTracker
-//        public ActionResult Index()
-//        {
-//            var probations = new List<ProbationViewModel>();
-//            foreach (var item in db.ProbationDetails)
-//            {
-//                probations.Add(new ProbationViewModel
-//                {
-//                    //Name = item.EmployeeName,
-//                    DateOfJoining = item.DateOfJoining,
-//                    ProbationPeriod = item.ProbationPeriod,
-//                    ProbationPeriodExpiredOn = item.DateOfExpiry,
-//                    NoOfDaysExpired = 0,
-//                    Status = "Test"
-
-//                });
-//            }
-//            return View(probations);
-//        }
-
-//        // GET: ProbationTracker/Details/5
-//        public ActionResult Details(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
-//            if (probationDetail == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(probationDetail);
-//        }
-
-//        // GET: ProbationTracker/Create
-//        public ActionResult Create()
-//        {
-//            return View();
-//        }
-
-//        // POST: ProbationTracker/Create
-//        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-//        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Create([Bind(Include = "Id,EmployeeName,DateOfJoining,ProbationPeriod,DateOfExpiry")] ProbationDetail probationDetail)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                db.ProbationDetails.Add(probationDetail);
-//                db.SaveChanges();
-//                return RedirectToAction("Index");
-//            }
-
-//            return View(probationDetail);
-//        }
-
-//        // GET: ProbationTracker/Edit/5
-//        public ActionResult Edit(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
-//            if (probationDetail == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(probationDetail);
-//        }
-
-//        // POST: ProbationTracker/Edit/5
-//        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-//        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Edit([Bind(Include = "Id,EmployeeName,DateOfJoining,ProbationPeriod,DateOfExpiry")] ProbationDetail probationDetail)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                db.Entry(probationDetail).State = EntityState.Modified;
-//                db.SaveChanges();
-//                return RedirectToAction("Index");
-//            }
-//            return View(probationDetail);
-//        }
-
-//        // GET: ProbationTracker/Delete/5
-//        public ActionResult Delete(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
-//            if (probationDetail == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(probationDetail);
-//        }
-
-//        // POST: ProbationTracker/Delete/5
-//        [HttpPost, ActionName("Delete")]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult DeleteConfirmed(int id)
-//        {
-//            ProbationDetail probationDetail = db.ProbationDetails.Find(id);
-//            db.ProbationDetails.Remove(probationDetail);
-//            db.SaveChanges();
-//            return RedirectToAction("Index");
-//        }
-
-//        protected override void Dispose(bool disposing)
-//        {
-//            if (disposing)
-//            {
-//                db.Dispose();
-//            }
-//            base.Dispose(disposing);
-//        }
-//    }
-//}
+#endregion

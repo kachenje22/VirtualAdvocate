@@ -1,14 +1,15 @@
-﻿using System;
+﻿#region NameSpaces
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Data;
 using System.Reflection;
-
+#endregion
+#region VirtualAdvocate.DAL
 namespace VirtualAdvocate.DAL
-{   
+{
+    #region ListToDataTable
     public class ListToDataTable
     {
+        #region ToDataTable
         public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
@@ -31,6 +32,9 @@ namespace VirtualAdvocate.DAL
             }
             //put a breakpoint here and check datatable
             return dataTable;
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

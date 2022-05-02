@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿#region NameSpaces
 using System.Web.Mvc;
 using System.Web.Routing;
-
+#endregion
+#region VirtualAdvocate
 namespace VirtualAdvocate
 {
+    #region RouteConfig
     public class RouteConfig
     {
+        #region RegisterRoutes
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -28,6 +28,9 @@ namespace VirtualAdvocate
                 url: "{controller}/{action}/{id}",
               defaults: new { controller = "UsersRegistration", action = "Registration", id = UrlParameter.Optional }
             );
-        }
-    }
-}
+        } 
+        #endregion
+    } 
+    #endregion
+} 
+#endregion

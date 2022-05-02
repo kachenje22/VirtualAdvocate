@@ -1,10 +1,13 @@
-﻿using System.Web;
+﻿#region NameSpaces
 using System.Web.Optimization;
-
+#endregion
+#region VirtualAdvocate
 namespace VirtualAdvocate
 {
+    #region BundleConfig
     public class BundleConfig
     {
+        #region RegisterBundles
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
@@ -52,6 +55,9 @@ namespace VirtualAdvocate
                         "~/Scripts/buttons.html5.min.js",
                         "~/Scripts/buttons.print.min.js"));
 
-        }
+        } 
+        #endregion
     }
+    #endregion
 }
+#endregion

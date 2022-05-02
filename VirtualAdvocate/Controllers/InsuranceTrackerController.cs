@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,36 +9,40 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
     public class InsuranceTrackerController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
+        #region Global Variables
         public int userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
         public int orgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         public int deptID = Convert.ToInt32(System.Web.HttpContext.Current.Session["DepartmentID"]);
         public int roleId = Convert.ToInt32(System.Web.HttpContext.Current.Session["RoleId"]);
 
+        #endregion
+
+        #region Index
         // GET: InsuranceTracker
         public ActionResult Index(int? flagForNotification)
         {
             var insurances = new List<InsuranceViewModel>();
-            var users = db.UserProfiles.Where(m => m.OrganizationId == orgId && m.Department == deptID).ToList();
-            var insuranceDetails = db.Insurances
+            var users = VAEDB.UserProfiles.Where(m => m.OrganizationId == orgId && m.Department == deptID).ToList();
+            var insuranceDetails = VAEDB.Insurances
                 .Include("Property")
                 .Include("Property.FilledTemplateDetail")
                 .ToList()
                 .Where(m => m.Status && users.Exists(e => e.UserID == m.Property.FilledTemplateDetail.UserId));
             foreach (var item in insuranceDetails)
             {
-                var docTitle = db.DocumentTemplates.FirstOrDefault(m => m.TemplateId == item.Property.FilledTemplateDetail.TemplateId).DocumentTitle;
+                var docTitle = VAEDB.DocumentTemplates.FirstOrDefault(m => m.TemplateId == item.Property.FilledTemplateDetail.TemplateId).DocumentTitle;
                 insurances.Add(new InsuranceViewModel
                 {
                     Id = item.Id,
                     DocumentTitle = docTitle,
-                    CustomerName = db.CustomerDetails.FirstOrDefault(m => m.CustomerId == item.Property.FilledTemplateDetail.CustomerId).CustomerName,
-                    AssetInsured = db.Properties.FirstOrDefault(m => m.Id == item.PropertyId).PropertyName,
+                    CustomerName = VAEDB.CustomerDetails.FirstOrDefault(m => m.CustomerId == item.Property.FilledTemplateDetail.CustomerId).CustomerName,
+                    AssetInsured = VAEDB.Properties.FirstOrDefault(m => m.Id == item.PropertyId).PropertyName,
                     Insurer = item.Insurer,
                     AmountInsured = item.AmountInsured,
                     DateOfExpiry = item.DateOfExpiry.ToString("dd-MM-yyyy"),
@@ -68,7 +73,9 @@ namespace VirtualAdvocate.Controllers
 
             return View(insurances);
         }
+        #endregion
 
+        #region Details
         // GET: InsuranceTracker/Details/5
         public ActionResult Details(int? id)
         {
@@ -76,23 +83,27 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Insurance insurance = db.Insurances.Find(id);
+            Insurance insurance = VAEDB.Insurances.Find(id);
             if (insurance == null)
             {
                 return HttpNotFound();
             }
             return View(insurance);
         }
+        #endregion
 
+        #region Create
         // GET: InsuranceTracker/Create
         public ActionResult Create()
         {
-            ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID), "CustomerId", "CustomerName");
+            ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID), "CustomerId", "CustomerName");
             ViewBag.DocumentId = new SelectList(new List<FilledTemplateDetail>(), "RowId", "FilledTemplateName");
             ViewBag.Asset = new SelectList(new List<Property>(), "Id", "PropertyName");
             return View();
         }
+        #endregion
 
+        #region Create
         // POST: InsuranceTracker/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -106,7 +117,7 @@ namespace VirtualAdvocate.Controllers
                 ModelState.Remove("CustomerId");
                 if (ModelState.IsValid)
                 {
-                    var data = db.Insurances.Where(m => m.PropertyId == insuranceViewModel.Asset && m.Status);
+                    var data = VAEDB.Insurances.Where(m => m.PropertyId == insuranceViewModel.Asset && m.Status);
 
                     if (data != null && data.Count() > 0)
                     {
@@ -127,8 +138,8 @@ namespace VirtualAdvocate.Controllers
                             UserId = userID,
                             Currency = insuranceViewModel.Currency
                         };
-                        db.Insurances.Add(insurance);
-                        db.SaveChanges();
+                        VAEDB.Insurances.Add(insurance);
+                        VAEDB.SaveChanges();
                         return RedirectToAction("Index");
                     }
 
@@ -139,15 +150,15 @@ namespace VirtualAdvocate.Controllers
 
             }
 
-            ViewBag.CustomerId = new SelectList(db.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID),
+            ViewBag.CustomerId = new SelectList(VAEDB.CustomerDetails.Where(m => m.OrganizationId == orgId && m.Department == deptID),
                 "CustomerId",
                 "CustomerName",
                 insuranceViewModel.CustomerId == 0 ? "" : insuranceViewModel.CustomerId.ToString());
 
             if (insuranceViewModel.CustomerId != 0)
             {
-                var templates = from document in db.FilledTemplateDetails.Where(m => m.CustomerId == insuranceViewModel.CustomerId)
-                                join template in db.DocumentTemplates
+                var templates = from document in VAEDB.FilledTemplateDetails.Where(m => m.CustomerId == insuranceViewModel.CustomerId)
+                                join template in VAEDB.DocumentTemplates
                                 on document.TemplateId equals template.TemplateId
                                 select new { template.TemplateId, template.DocumentTitle };
 
@@ -163,8 +174,8 @@ namespace VirtualAdvocate.Controllers
 
             if (insuranceViewModel.DocumentId != 0 && insuranceViewModel.CustomerId != 0)
             {
-                var properties = from document in db.FilledTemplateDetails.Where(m => m.TemplateId == insuranceViewModel.DocumentId)
-                                 join property in db.Properties
+                var properties = from document in VAEDB.FilledTemplateDetails.Where(m => m.TemplateId == insuranceViewModel.DocumentId)
+                                 join property in VAEDB.Properties
                                  on document.RowId equals property.DocumentId
                                  where document.CustomerId == insuranceViewModel.CustomerId
                                  select new { property.Id, property.PropertyName };
@@ -182,6 +193,9 @@ namespace VirtualAdvocate.Controllers
             return View(insuranceViewModel);
         }
 
+        #endregion
+
+        #region Edit
         // GET: InsuranceTracker/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -189,8 +203,8 @@ namespace VirtualAdvocate.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Insurance insurance = db.Insurances.Include(m => m.Property).Include(m => m.Property.FilledTemplateDetail).FirstOrDefault(m => m.Id == id);
-            var template = db.DocumentTemplates.FirstOrDefault(m => m.TemplateId == insurance.Property.FilledTemplateDetail.TemplateId);
+            Insurance insurance = VAEDB.Insurances.Include(m => m.Property).Include(m => m.Property.FilledTemplateDetail).FirstOrDefault(m => m.Id == id);
+            var template = VAEDB.DocumentTemplates.FirstOrDefault(m => m.TemplateId == insurance.Property.FilledTemplateDetail.TemplateId);
             var insuranceViewModel = new InsuranceViewModel
             {
                 Id = insurance.Id,
@@ -198,7 +212,7 @@ namespace VirtualAdvocate.Controllers
                 DocumentTitle = template.DocumentTitle,
                 AmountInsured = insurance.AmountInsured,
                 AssetInsured = insurance.Property.PropertyName,
-                CustomerName = db.CustomerDetails.FirstOrDefault(m => m.CustomerId == insurance.Property.FilledTemplateDetail.CustomerId).CustomerName,
+                CustomerName = VAEDB.CustomerDetails.FirstOrDefault(m => m.CustomerId == insurance.Property.FilledTemplateDetail.CustomerId).CustomerName,
                 DateOfExpiry = insurance.DateOfExpiry.ToString("dd-MM-yyyy"),
                 DateOfInsurance = insurance.DateOfInsurance.ToString("dd-MM-yyyy"),
                 Insurer = insurance.Insurer,
@@ -216,10 +230,12 @@ namespace VirtualAdvocate.Controllers
                 months.Add(new Month { Label = i });
             }
             ViewBag.ExtendedMonths = new SelectList(months, "Label", "Label");
-            ViewBag.PropertyId = new SelectList(db.Properties, "Id", "PropertyName", insurance.PropertyId);
+            ViewBag.PropertyId = new SelectList(VAEDB.Properties, "Id", "PropertyName", insurance.PropertyId);
             return View(insuranceViewModel);
         }
+        #endregion
 
+        #region Edit
         // POST: InsuranceTracker/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -231,7 +247,7 @@ namespace VirtualAdvocate.Controllers
             ModelState.Remove("ExtendedMonths");
             if (ModelState.IsValid)
             {
-                var insurance = db.Insurances.FirstOrDefault(m => m.Id == insuranceViewModel.Id);
+                var insurance = VAEDB.Insurances.FirstOrDefault(m => m.Id == insuranceViewModel.Id);
                 insurance.Insurer = insuranceViewModel.Insurer;
                 insurance.AmountInsured = insuranceViewModel.AmountInsured;
                 insurance.DateOfInsurance = DateTime.ParseExact(insuranceViewModel.DateOfInsurance, "dd-MM-yyyy", CultureInfo.InvariantCulture);
@@ -242,11 +258,11 @@ namespace VirtualAdvocate.Controllers
                     insurance.DateOfExpiry = insurance.DateOfExpiry.AddMonths(insuranceViewModel.ExtendedMonths);
                 }
 
-                db.Entry(insurance).State = EntityState.Modified;
-                db.SaveChanges();
+                VAEDB.Entry(insurance).State = EntityState.Modified;
+                VAEDB.SaveChanges();
                 return RedirectToAction("Index");
             }
-            //ViewBag.PropertyId = new SelectList(db.Properties, "Id", "PropertyName", insurance.PropertyId);
+            //ViewBag.PropertyId = new SelectList(VAEDB.Properties, "Id", "PropertyName", insurance.PropertyId);
             List<Month> months = new List<Month>();
 
             for (int i = 1; i <= Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ExtendExpiryLimit"]); i++)
@@ -257,11 +273,16 @@ namespace VirtualAdvocate.Controllers
             return View();
         }
 
+        #endregion
+
+        #region BulkInsuranceUpload
         public ActionResult BulkInsuranceUpload()
         {
             return View();
         }
+        #endregion
 
+        #region PostBulkInsuranceUpload
         [HttpPost]
         public JsonResult PostBulkInsuranceUpload()
         {
@@ -279,8 +300,8 @@ namespace VirtualAdvocate.Controllers
                 Insurance insuranceDetail = new Insurance();
                 DateTime date = DateTime.Now;
                 double res;
-                //var user = db.UserProfiles.FirstOrDefault(m => m.UserID == userID);
-                //var users = db.UserProfiles.Where(m => m.Department == deptID && m.OrganizationId == orgId)
+                //var user = VAEDB.UserProfiles.FirstOrDefault(m => m.UserID == userID);
+                //var users = VAEDB.UserProfiles.Where(m => m.Department == deptID && m.OrganizationId == orgId)
                 //    .Select(s => new { s.UserID, s.OrganizationId, s.Department });
 
                 foreach (DataRow dr in fileData.Rows)
@@ -295,7 +316,7 @@ namespace VirtualAdvocate.Controllers
                             doi = Utility.GetDate(dr[5].ToString());
                             doe = Utility.GetDate(dr[6].ToString());
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             doi = string.Empty;
                             doe = string.Empty;
@@ -434,27 +455,27 @@ namespace VirtualAdvocate.Controllers
                         if (!string.IsNullOrEmpty(dr[0].ToString()))
                         {
                             var custName = dr[0].ToString().ToLower().Trim();
-                            var customer = db.CustomerDetails.FirstOrDefault(m => m.CustomerName.ToLower() == custName && m.OrganizationId == orgId && m.Department == deptID);
+                            var customer = VAEDB.CustomerDetails.FirstOrDefault(m => m.CustomerName.ToLower() == custName && m.OrganizationId == orgId && m.Department == deptID);
                             var propertyName = dr[2].ToString().Trim().ToLower();
                             if (customer != null)
                             {
                                 if (!string.IsNullOrEmpty(dr[1].ToString()))
                                 {
                                     var docName = dr[1].ToString().Trim().ToLower();
-                                    var templates = db.DocumentTemplates.Where(m => m.DocumentTitle.ToLower() == docName && m.DepartmentID == deptID).FirstOrDefault();
+                                    var templates = VAEDB.DocumentTemplates.Where(m => m.DocumentTitle.ToLower() == docName && m.DepartmentID == deptID).FirstOrDefault();
                                     List<FilledTemplateDetail> documents = new List<FilledTemplateDetail>();
                                     var property = new Property();
                                     int docCount = 0;
                                     if (templates != null)
                                     {
-                                        documents = db.FilledTemplateDetails.Where(m => m.TemplateId == templates.TemplateId && m.CustomerId == customer.CustomerId).ToList();
+                                        documents = VAEDB.FilledTemplateDetails.Where(m => m.TemplateId == templates.TemplateId && m.CustomerId == customer.CustomerId).ToList();
                                     }
 
                                     if (documents != null && documents.Count() > 0)
                                     {
                                         foreach (var doc in documents)
                                         {
-                                            var tempProperty = db.Properties.FirstOrDefault(m => m.DocumentId == doc.RowId && m.PropertyName.ToLower() == propertyName);
+                                            var tempProperty = VAEDB.Properties.FirstOrDefault(m => m.DocumentId == doc.RowId && m.PropertyName.ToLower() == propertyName);
                                             if (tempProperty != null)
                                             {
                                                 property = tempProperty;
@@ -482,9 +503,9 @@ namespace VirtualAdvocate.Controllers
                                             if (property != null)
                                             {
                                                 var customerName = dr[0].ToString().Trim();
-                                                //var customer = db.CustomerDetails.FirstOrDefault(m => m.CustomerName == customerName);
+                                                //var customer = VAEDB.CustomerDetails.FirstOrDefault(m => m.CustomerName == customerName);
 
-                                                var insurance = db.Insurances.Where(m => m.PropertyId == property.Id && m.Status);
+                                                var insurance = VAEDB.Insurances.Where(m => m.PropertyId == property.Id && m.Status);
 
                                                 if (insurance != null && insurance.Count() > 0)
                                                 {
@@ -511,8 +532,8 @@ namespace VirtualAdvocate.Controllers
                                                     insuranceDetail.Status = true;
                                                     insuranceDetail.UserId = userID;
 
-                                                    db.Insurances.Add(insuranceDetail);
-                                                    db.SaveChanges();
+                                                    VAEDB.Insurances.Add(insuranceDetail);
+                                                    VAEDB.SaveChanges();
                                                     bulkInsuranceJsonResponse.Success++;
                                                 }
                                             }
@@ -564,13 +585,13 @@ namespace VirtualAdvocate.Controllers
                                     //var propertyName = dr[2].ToString().ToLower();
                                     Property property = null;
                                     int docCount = 0;
-                                    var documents = db.FilledTemplateDetails.Where(m => m.CustomerId == customer.CustomerId);
+                                    var documents = VAEDB.FilledTemplateDetails.Where(m => m.CustomerId == customer.CustomerId);
 
                                     if (documents != null && documents.Count() > 0)
                                     {
                                         foreach (var doc in documents)
                                         {
-                                            var tempProperty = db.Properties.FirstOrDefault(m => m.DocumentId == doc.RowId && m.PropertyName.ToLower() == propertyName);
+                                            var tempProperty = VAEDB.Properties.FirstOrDefault(m => m.DocumentId == doc.RowId && m.PropertyName.ToLower() == propertyName);
                                             if (tempProperty != null)
                                             {
                                                 property = tempProperty;
@@ -598,9 +619,9 @@ namespace VirtualAdvocate.Controllers
                                             if (property != null)
                                             {
                                                 var customerName = dr[0].ToString().Trim();
-                                                //var customer = db.CustomerDetails.FirstOrDefault(m => m.CustomerName == customerName);
+                                                //var customer = VAEDB.CustomerDetails.FirstOrDefault(m => m.CustomerName == customerName);
 
-                                                var insurance = db.Insurances.Where(m => m.PropertyId == property.Id && m.Status);
+                                                var insurance = VAEDB.Insurances.Where(m => m.PropertyId == property.Id && m.Status);
 
                                                 if (insurance != null && insurance.Count() > 0)
                                                 {
@@ -627,8 +648,8 @@ namespace VirtualAdvocate.Controllers
                                                     insuranceDetail.Status = true;
                                                     insuranceDetail.UserId = userID;
 
-                                                    db.Insurances.Add(insuranceDetail);
-                                                    db.SaveChanges();
+                                                    VAEDB.Insurances.Add(insuranceDetail);
+                                                    VAEDB.SaveChanges();
                                                     bulkInsuranceJsonResponse.Success++;
                                                 }
                                             }
@@ -713,19 +734,20 @@ namespace VirtualAdvocate.Controllers
                 return Json("Message: " + ex.Message + "\nStack Trace: " + ex.StackTrace);
             }
         }
+        #endregion
 
-
+        #region GetDocumentsByCustomer
         public JsonResult GetDocumentsByCustomer(int id)
         {
             try
             {
-                var templates = (from filled in db.FilledTemplateDetails
-                                 join template in db.DocumentTemplates
+                var templates = (from filled in VAEDB.FilledTemplateDetails
+                                 join template in VAEDB.DocumentTemplates
                                  on filled.TemplateId equals template.TemplateId
                                  where filled.CustomerId == id
                                  select new { template.TemplateId, template.DocumentTitle })
                                 .Distinct();
-                //var documents = db.FilledTemplateDetails.Where(m => m.CustomerId == id)
+                //var documents = VAEDB.FilledTemplateDetails.Where(m => m.CustomerId == id)
                 //    .Select(s => new { s.RowId, s.FilledTemplateName })
                 //    .ToList();
 
@@ -736,19 +758,21 @@ namespace VirtualAdvocate.Controllers
                 return Json("Error", JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region GetAssetsByDocument
         public JsonResult GetAssetsByDocument(AssetParam param)
         {
             try
             {
-                var assets = from doc in db.FilledTemplateDetails.Where(m => m.TemplateId == param.Id)
-                             join property in db.Properties
+                var assets = from doc in VAEDB.FilledTemplateDetails.Where(m => m.TemplateId == param.Id)
+                             join property in VAEDB.Properties
                              on doc.RowId equals property.DocumentId
                              where doc.CustomerId == param.CustomerId
                              select new { property.Id, property.PropertyName };
 
-                //var documents = db.FilledTemplateDetails.Where(m => m.TemplateId == id);
-                //var assets = db.Properties.Where(m => m.DocumentId == id)
+                //var documents = VAEDB.FilledTemplateDetails.Where(m => m.TemplateId == id);
+                //var assets = VAEDB.Properties.Where(m => m.DocumentId == id)
                 //    .Select(s => new { s.Id, s.PropertyName })
                 //    .ToList();
 
@@ -759,7 +783,9 @@ namespace VirtualAdvocate.Controllers
                 return Json("Error", JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region ExtendExpiry
         [HttpPost]
         public JsonResult ExtendExpiry(IEnumerable<Extend> months)
         {
@@ -769,12 +795,12 @@ namespace VirtualAdvocate.Controllers
                 {
                     foreach (var item in months)
                     {
-                        var insurance = db.Insurances.FirstOrDefault(m => m.Id == item.Id);
+                        var insurance = VAEDB.Insurances.FirstOrDefault(m => m.Id == item.Id);
                         insurance.DateOfExpiry = insurance.DateOfExpiry.AddMonths(item.Month);
-                        db.Entry(insurance).State = EntityState.Modified;
+                        VAEDB.Entry(insurance).State = EntityState.Modified;
 
                     }
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
 
                 return Json("Success", JsonRequestBehavior.AllowGet);
@@ -785,7 +811,9 @@ namespace VirtualAdvocate.Controllers
             }
 
         }
+        #endregion
 
+        #region Delete
         // GET: InsuranceTracker/Delete/5
         public JsonResult Delete(int id)
         {
@@ -793,10 +821,10 @@ namespace VirtualAdvocate.Controllers
             {
                 if (id != 0)
                 {
-                    Insurance insurance = db.Insurances.Find(id);
+                    Insurance insurance = VAEDB.Insurances.Find(id);
                     insurance.Status = false;
-                    db.Entry(insurance).State = EntityState.Modified;
-                    db.SaveChanges();
+                    VAEDB.Entry(insurance).State = EntityState.Modified;
+                    VAEDB.SaveChanges();
                 }
                 else
                 {
@@ -810,25 +838,31 @@ namespace VirtualAdvocate.Controllers
                 return Json(500, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
+        #region DeleteConfirmed
         // POST: InsuranceTracker/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Insurance insurance = db.Insurances.Find(id);
-            db.Insurances.Remove(insurance);
-            db.SaveChanges();
+            Insurance insurance = VAEDB.Insurances.Find(id);
+            VAEDB.Insurances.Remove(insurance);
+            VAEDB.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                VAEDB.Dispose();
             }
             base.Dispose(disposing);
-        }
+        } 
+        #endregion
     }
-}
+} 
+#endregion

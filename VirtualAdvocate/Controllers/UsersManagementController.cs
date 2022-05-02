@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region NameSpaces
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,19 +12,24 @@ using VirtualAdvocate.BLL;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
 using VirtualAdvocate.Models;
-
+#endregion
+#region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
+    #region UsersManagementController
     public class UsersManagementController : BaseController
     {
-        private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
-        private VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
+        //private VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
+
+        #region Index
         // GET: UsersManagement
         public ActionResult Index()
         {
             return View();
         }
+        #endregion
 
+        #region UserList
         public ActionResult UserList(string enable)
         {
             Session["re"] = "Yes";
@@ -48,9 +54,9 @@ namespace VirtualAdvocate.Controllers
             {
                 if (active)
                 {
-                    var obj = (from ua in db.UserAddressDetails
-                               join up in db.UserProfiles on ua.UserId equals up.UserID
-                               join rol in db.Roles on up.RoleId equals rol.RoleId
+                    var obj = (from ua in VAEDB.UserAddressDetails
+                               join up in VAEDB.UserProfiles on ua.UserId equals up.UserID
+                               join rol in VAEDB.Roles on up.RoleId equals rol.RoleId
                                where up.IsEnabled == active && up.UnusedUser != active
 
                                select new AllUserList { EmailAddress = up.EmailAddress, FirstName = ua.FirstName, LastName = ua.LastName, RoleDescription = rol.RoleDescription, UserID = up.UserID, IsEnabled = up.IsEnabled, CreatedDate = up.CreatedDate, IsLocked = up.UnusedUser }).ToList().OrderByDescending(y => y.CreatedDate).OrderBy(x => x.IsEnabled);
@@ -58,9 +64,9 @@ namespace VirtualAdvocate.Controllers
                 }
                 else
                 {
-                    var obj = (from ua in db.UserAddressDetails
-                               join up in db.UserProfiles on ua.UserId equals up.UserID
-                               join rol in db.Roles on up.RoleId equals rol.RoleId
+                    var obj = (from ua in VAEDB.UserAddressDetails
+                               join up in VAEDB.UserProfiles on ua.UserId equals up.UserID
+                               join rol in VAEDB.Roles on up.RoleId equals rol.RoleId
                                where up.IsEnabled == active || up.UnusedUser != active
 
                                select new AllUserList { EmailAddress = up.EmailAddress, FirstName = ua.FirstName, LastName = ua.LastName, RoleDescription = rol.RoleDescription, UserID = up.UserID, IsEnabled = up.IsEnabled, CreatedDate = up.CreatedDate, IsLocked = up.UnusedUser }).ToList().OrderByDescending(y => y.CreatedDate).OrderBy(x => x.IsEnabled);
@@ -72,9 +78,9 @@ namespace VirtualAdvocate.Controllers
             {
                 int Department = Convert.ToInt32(Session["DepartmentID"]);
                 int orgID = Convert.ToInt32(Session["OrgId"]);
-                var obj = (from ua in db.UserAddressDetails
-                           join up in db.UserProfiles on ua.UserId equals up.UserID
-                           join rol in db.Roles on up.RoleId equals rol.RoleId
+                var obj = (from ua in VAEDB.UserAddressDetails
+                           join up in VAEDB.UserProfiles on ua.UserId equals up.UserID
+                           join rol in VAEDB.Roles on up.RoleId equals rol.RoleId
                            where rol.RoleId != 1 && up.OrganizationId == orgID && (Department == 0 || (Department != 0 && up.Department == Department)) && up.IsEnabled == active &&
                           ((myRoleID == 6 && up.RoleId == 5)
                           ||
@@ -86,10 +92,10 @@ namespace VirtualAdvocate.Controllers
             {
                 int userId;
                 userId = Convert.ToInt32(Session["UserId"]);
-                var obj = (from ua in db.UserAddressDetails
-                           join up in db.UserProfiles on ua.UserId equals up.UserID
-                           join rol in db.Roles on up.RoleId equals rol.RoleId
-                           join org in db.OrganizationDetails on up.OrganizationId equals org.OrganizationId
+                var obj = (from ua in VAEDB.UserAddressDetails
+                           join up in VAEDB.UserProfiles on ua.UserId equals up.UserID
+                           join rol in VAEDB.Roles on up.RoleId equals rol.RoleId
+                           join org in VAEDB.OrganizationDetails on up.OrganizationId equals org.OrganizationId
                            where up.UserID == userId && up.IsEnabled == active && up.UnusedUser != active
                            select new AllUserList { EmailAddress = up.EmailAddress, FirstName = ua.FirstName, LastName = ua.LastName, RoleDescription = rol.RoleDescription, UserID = up.UserID, IsEnabled = up.IsEnabled, CreatedDate = up.CreatedDate, IsLocked = up.UnusedUser }).ToList().OrderByDescending(y => y.CreatedDate).OrderBy(x => x.IsEnabled);
                 return View(obj.ToList());
@@ -97,7 +103,9 @@ namespace VirtualAdvocate.Controllers
 
 
         }
+        #endregion
 
+        #region ActivateProfile
         [AllowAnonymous]
         [HttpPost]
         public JsonResult ActivateProfile(int? id)
@@ -110,7 +118,7 @@ namespace VirtualAdvocate.Controllers
             {
                 VirtualAdvocateData objData = new VirtualAdvocateData();
                 LogRegistration objLog = new LogRegistration();
-                var obj = db.UserProfiles.Where(ua => ua.UserID == id).FirstOrDefault();
+                var obj = VAEDB.UserProfiles.Where(ua => ua.UserID == id).FirstOrDefault();
                 if (obj != null)
                 {
 
@@ -132,7 +140,7 @@ namespace VirtualAdvocate.Controllers
                         objLoginLog.Status = 1;
                         objLoginLog.UserId = obj.UserID;
 
-                        db.LoginHistories.Add(objLoginLog);
+                        VAEDB.LoginHistories.Add(objLoginLog);
 
                         LogSts = true;
                         objLog.Action = "Active";
@@ -141,11 +149,11 @@ namespace VirtualAdvocate.Controllers
                         obj.UnusedUser = false;
                         obj.HasActivated = true;
                         message = "User profile activated successfully";
-                        var objAddress = db.UserAddressDetails.Where(x => x.UserId == id).FirstOrDefault();
+                        var objAddress = VAEDB.UserAddressDetails.Where(x => x.UserId == id).FirstOrDefault();
                         MailSend objMail = new MailSend();
                         objMail.ActivationNotificationEmail(objAddress.FirstName + " " + objAddress.LastName, obj.EmailAddress, ConfigurationManager.AppSettings["ApplicationTitle"].ToString(), Common.Helper.GetBaseUrl());
                     }
-                    var objUserRegistration = db.UserAddressDetails.Where(ua => ua.UserId == id).FirstOrDefault();
+                    var objUserRegistration = VAEDB.UserAddressDetails.Where(ua => ua.UserId == id).FirstOrDefault();
 
                     // Assign Values for Log
                     objLog.UserId = id.Value;
@@ -175,7 +183,7 @@ namespace VirtualAdvocate.Controllers
 
 
                 }
-                db.SaveChanges();
+                VAEDB.SaveChanges();
                 test = 1;
             }
             catch (Exception ex)
@@ -190,13 +198,15 @@ namespace VirtualAdvocate.Controllers
             else
                 return Json(new { ErrorMessage = "not saved" }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region ActivateProfile
         //public ActionResult ActivateProfile(int? id)
         //{
         //    var message = string.Empty;
         //    try
         //    {
-        //        var obj = db.UserProfiles.Where(ua => ua.UserID == id).FirstOrDefault();
+        //        var obj = VAEDB.UserProfiles.Where(ua => ua.UserID == id).FirstOrDefault();
         //        if (obj != null)
         //        {
         //            if (obj.IsEnabled == true && obj.HasActivated == true)
@@ -212,7 +222,7 @@ namespace VirtualAdvocate.Controllers
         //                //message = "User profiles activated successfully";
         //            }
 
-        //            db.SaveChanges();
+        //            VAEDB.SaveChanges();
         //        }
         //        else
         //        {
@@ -227,17 +237,21 @@ namespace VirtualAdvocate.Controllers
 
         //    }
         //    return RedirectToAction("UserList", "UsersManagement");
-        //}
+        //} 
+        #endregion
 
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                VAEDB.Dispose();
             }
             base.Dispose(disposing);
         }
+        #endregion
 
+        #region OrganizationList
         /// <summary>
         /// Dispaly all the Organization list for CRUD
         /// </summary>
@@ -250,9 +264,6 @@ namespace VirtualAdvocate.Controllers
             }
             else
             {
-
-
-
                 bool active;
                 if (string.IsNullOrEmpty(enable))
                 {
@@ -271,7 +282,7 @@ namespace VirtualAdvocate.Controllers
 
                 List<SelectListItem> listInfo = new List<SelectListItem>();
 
-                //var services = db.AccountServices.Where(s => s.IsEnabled == true).ToList();
+                //var services = VAEDB.AccountServices.Where(s => s.IsEnabled == true).ToList();
 
                 //foreach (AccountService s in services)
                 //{
@@ -282,9 +293,9 @@ namespace VirtualAdvocate.Controllers
                 ViewBag.Services = models;
 
 
-                var obj = (from ua in db.UserAddressDetails
-                           join od in db.OrganizationDetails on ua.UserId equals od.UserId
-                           join up in db.UserProfiles on od.UserId equals up.UserID
+                var obj = (from ua in VAEDB.UserAddressDetails
+                           join od in VAEDB.OrganizationDetails on ua.UserId equals od.UserId
+                           join up in VAEDB.UserProfiles on od.UserId equals up.UserID
 
                            where od.UserAccountsType != null && od.IsEnabled == active
                            select new AllOrganizationList
@@ -305,7 +316,9 @@ namespace VirtualAdvocate.Controllers
                 return View(obj.ToList());
             }
         }
+        #endregion
 
+        #region ActivateOrganization
         /// <summary>
         /// Enable or disable the Organization
         /// </summary>
@@ -316,34 +329,34 @@ namespace VirtualAdvocate.Controllers
             var message = string.Empty;
             try
             {
-                var obj = db.OrganizationDetails.Where(ua => ua.OrganizationId == id).FirstOrDefault();
+                var obj = VAEDB.OrganizationDetails.Where(ua => ua.OrganizationId == id).FirstOrDefault();
                 if (obj != null)
                 {
                     if (obj.IsEnabled == true)
                     {
                         obj.IsEnabled = false;
 
-                        var category = db.DocumentCategories.Where(d => d.ServiceId == id).ToList();
+                        var category = VAEDB.DocumentCategories.Where(d => d.ServiceId == id).ToList();
 
                         category.ForEach(d => d.IsEnabled = false);
 
                         foreach (DocumentCategory catObj in category)
                         {
-                            var subCategoryobj = db.DocumentSubCategories.Where(s => s.DocumentCategoryId == catObj.DocumentCategoryId).ToList();
+                            var subCategoryobj = VAEDB.DocumentSubCategories.Where(s => s.DocumentCategoryId == catObj.DocumentCategoryId).ToList();
 
                             subCategoryobj.ForEach((a) =>
                             {
                                 a.IsEnabled = false;
                             });
 
-                            var cateuserObj = db.DocumentTemplates.Where(d => d.DocumentCategory == catObj.DocumentCategoryId).ToList();
+                            var cateuserObj = VAEDB.DocumentTemplates.Where(d => d.DocumentCategory == catObj.DocumentCategoryId).ToList();
 
                             cateuserObj.ForEach((a) =>
                             {
                                 a.IsEnabled = false;
                             });
 
-                            var associateddocument = db.AssociateTemplateDetails.Where(s => s.AssociateTemplateId == id).ToList();
+                            var associateddocument = VAEDB.AssociateTemplateDetails.Where(s => s.AssociateTemplateId == id).ToList();
                             associateddocument.ForEach((a) =>
                             {
                                 a.IsEnabled = false;
@@ -352,7 +365,7 @@ namespace VirtualAdvocate.Controllers
                             foreach (DocumentSubCategory catsubObj in subCategoryobj)
                             {
 
-                                var subsubCategoryobj = db.DocumentSubSubCategories.Where(s => s.DocumentSubCategoryId == catsubObj.DocumentSubCategoryId).ToList();
+                                var subsubCategoryobj = VAEDB.DocumentSubSubCategories.Where(s => s.DocumentSubCategoryId == catsubObj.DocumentSubCategoryId).ToList();
 
                                 subsubCategoryobj.ForEach((a) =>
                                 {
@@ -360,7 +373,7 @@ namespace VirtualAdvocate.Controllers
                                 });
 
 
-                                var subuserObj = db.DocumentTemplates.Where(d => d.DocumentSubCategory == catsubObj.DocumentSubCategoryId).ToList();
+                                var subuserObj = VAEDB.DocumentTemplates.Where(d => d.DocumentSubCategory == catsubObj.DocumentSubCategoryId).ToList();
 
                                 subuserObj.ForEach((a) =>
                                 {
@@ -368,7 +381,7 @@ namespace VirtualAdvocate.Controllers
                                 });
                             }
                         }
-                        var usr = db.UserProfiles.Where(u => u.OrganizationId == id).ToList();
+                        var usr = VAEDB.UserProfiles.Where(u => u.OrganizationId == id).ToList();
 
                         usr.ForEach((a) =>
                         {
@@ -382,7 +395,7 @@ namespace VirtualAdvocate.Controllers
                         obj.IsEnabled = true;
                     }
 
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
                 else
                 {
@@ -399,7 +412,9 @@ namespace VirtualAdvocate.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
             //return RedirectToAction("OrganizationList", "UsersManagement");
         }
+        #endregion
 
+        #region ManageOrganization
         [HttpGet]
         public ActionResult ManageOrganization(int? id)
         {
@@ -411,8 +426,8 @@ namespace VirtualAdvocate.Controllers
             OrganizationViewModel objOrg = new OrganizationViewModel();
             try
             {
-                OrganizationDetail organizationDetail = db.OrganizationDetails.Find(id);
-                objOrg.userAccountTypes = db.UserAccountTypes.ToList();
+                OrganizationDetail organizationDetail = VAEDB.OrganizationDetails.Find(id);
+                objOrg.userAccountTypes = VAEDB.UserAccountTypes.ToList();
                 VirtualAdvocateData objData = new VirtualAdvocateData();
                 List<OptionsModel> objOrgType = new List<OptionsModel>();
                 if (organizationDetail.OrganizationTypeId == null)
@@ -442,11 +457,11 @@ namespace VirtualAdvocate.Controllers
                         objOrg.userId = Convert.ToInt32(organizationDetail.UserId);
                         objOrg.UserAccountsType = Convert.ToInt32(organizationDetail.UserAccountsType);
                         objOrg.OrganizationTypeId = Convert.ToInt32(organizationDetail.OrganizationTypeId);
-                        var departments = from d in db.Departments where d.IsEnabled == true select new DepartmentModel { Department = d.Name, Id = d.Id };
+                        var departments = from d in VAEDB.Departments where d.IsEnabled == true select new DepartmentModel { Department = d.Name, Id = d.Id };
                         objOrg.AvailableDepartment = departments;
-                        var selectedDepartment = from s in db.SelectedDepartments join d in db.Departments on s.DepartmentID equals d.Id where (s.OrgID == organizationDetail.OrganizationId) select new DepartmentModel { Department = d.Name, Id = d.Id };
+                        var selectedDepartment = from s in VAEDB.SelectedDepartments join d in VAEDB.Departments on s.DepartmentID equals d.Id where (s.OrgID == organizationDetail.OrganizationId) select new DepartmentModel { Department = d.Name, Id = d.Id };
                         objOrg.SelectedDepartment = selectedDepartment;
-                        objOrg.extraFields = db.ClientWiseCustomerTemplates.Where(d => d.ClientID == id).ToList();
+                        objOrg.extraFields = VAEDB.ClientWiseCustomerTemplates.Where(d => d.ClientID == id).ToList();
                     }
                     else
                     {
@@ -462,13 +477,15 @@ namespace VirtualAdvocate.Controllers
 
             return View(objOrg);
         }
+        #endregion
 
+        #region ManageOrganization
         [HttpPost]
         public ActionResult ManageOrganization(OrganizationViewModel organizationDetail)
         {
             try
             {
-                OrganizationDetail objOrg = db.OrganizationDetails.Find(organizationDetail.OrganizationId);
+                OrganizationDetail objOrg = VAEDB.OrganizationDetails.Find(organizationDetail.OrganizationId);
                 objOrg.OrganizationId = organizationDetail.OrganizationId;
                 objOrg.OrgName = organizationDetail.OrgName;
                 objOrg.OrgPhoneNumber = organizationDetail.OrgPhoneNumber;
@@ -482,7 +499,7 @@ namespace VirtualAdvocate.Controllers
                 if (organizationDetail.UserAccountsType != 0)
                 {
                     objOrg.UserAccountsType = organizationDetail.UserAccountsType;
-                    UserProfile objUp = db.UserProfiles.Find(organizationDetail.userId);
+                    UserProfile objUp = VAEDB.UserProfiles.Find(organizationDetail.userId);
                     if (organizationDetail.UserAccountsType == 2 && objUp.RoleId == 3)
                     {
                         objUp.RoleId = 2;
@@ -492,22 +509,22 @@ namespace VirtualAdvocate.Controllers
 
                 //Remove selected departmentsfor perticular organization
 
-                db.SelectedDepartments.RemoveRange(db.SelectedDepartments.Where(c => c.OrgID == organizationDetail.OrganizationId));
-                db.SaveChanges();
+                VAEDB.SelectedDepartments.RemoveRange(VAEDB.SelectedDepartments.Where(c => c.OrgID == organizationDetail.OrganizationId));
+                VAEDB.SaveChanges();
 
                 //Adding customer Template
                 if (organizationDetail.extraFields.Count() > 0)
                 {
 
-                    db.ClientWiseCustomerTemplates.Where(r => r.ClientID == organizationDetail.OrganizationId)
-           .ToList().ForEach(p => db.ClientWiseCustomerTemplates.Remove(p));
-                    db.SaveChanges();
+                    VAEDB.ClientWiseCustomerTemplates.Where(r => r.ClientID == organizationDetail.OrganizationId)
+           .ToList().ForEach(p => VAEDB.ClientWiseCustomerTemplates.Remove(p));
+                    VAEDB.SaveChanges();
 
                     foreach (ClientWiseCustomerTemplate item in organizationDetail.extraFields)
                     {
-                        var customerKey = db.TemplateKeywords.Where(t => t.TemplateKeyValue == item.KeyName.Replace(" ", "_")).FirstOrDefault();
+                        var customerKey = VAEDB.TemplateKeywords.Where(t => t.TemplateKeyValue == item.KeyName.Replace(" ", "_")).FirstOrDefault();
 
-                        var key = db.ClientWiseCustomerTemplates.Where(c => c.ClientID == organizationDetail.OrganizationId && c.KeyName == item.KeyName).FirstOrDefault();
+                        var key = VAEDB.ClientWiseCustomerTemplates.Where(c => c.ClientID == organizationDetail.OrganizationId && c.KeyName == item.KeyName).FirstOrDefault();
                         item.KeyName = item.KeyName == null ? "Name" : item.KeyName;
                         if (key == null)
                         {
@@ -515,7 +532,7 @@ namespace VirtualAdvocate.Controllers
                             objExtra.ClientID = organizationDetail.OrganizationId;
                             objExtra.KeyName = item.KeyName;
                             objExtra.Show = item.Show;
-                            db.ClientWiseCustomerTemplates.Add(objExtra);
+                            VAEDB.ClientWiseCustomerTemplates.Add(objExtra);
                         }
 
                         if (customerKey == null)
@@ -528,9 +545,9 @@ namespace VirtualAdvocate.Controllers
                             keyObj.IsEnabled = true;
                             keyObj.TemplateKeyCategory = 1;
 
-                            db.TemplateKeywords.Add(keyObj);
+                            VAEDB.TemplateKeywords.Add(keyObj);
                         }
-                        db.SaveChanges();
+                        VAEDB.SaveChanges();
                     }
 
 
@@ -555,7 +572,7 @@ namespace VirtualAdvocate.Controllers
 
                     }
 
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -569,18 +586,22 @@ namespace VirtualAdvocate.Controllers
             }
             return RedirectToAction("OrganizationList", "UsersManagement");
         }
+        #endregion
 
+        #region AddOrganization
         public ActionResult AddOrganization()
         {
             int? id = null;
             VirtualAdvocateData objData = new VirtualAdvocateData();
             UserRegistrationModel obj = objData.getDefaultRegistration(id);
             obj.getAllOrganizationTypes = objData.getOrganizationTypesOptionsList();
-            var departments = from d in db.Departments where d.IsEnabled == true select new DepartmentModel { Department = d.Name, Id = d.Id };
+            var departments = from d in VAEDB.Departments where d.IsEnabled == true select new DepartmentModel { Department = d.Name, Id = d.Id };
             obj.AvailableDepartment = departments;
             return View(obj);
         }
+        #endregion
 
+        #region AddUser
         public ActionResult AddUser()
         {
             int? id = null;
@@ -589,6 +610,9 @@ namespace VirtualAdvocate.Controllers
             obj.getAllOrganizationTypes = objData.getOrganizationTypesOptionsList();
             return View(obj);
         }
+        #endregion
+
+        #region AddOrgUser
         public ActionResult AddOrgUser(int? id)
         {
             if (id == null)
@@ -605,6 +629,9 @@ namespace VirtualAdvocate.Controllers
             obj.OrgId = id.Value;
             return View(obj);
         }
+        #endregion
+
+        #region AddOrgUser
         [HttpPost]
         public ActionResult AddOrgUser(OrgUserViewModel objModel, FormCollection fc)
         {
@@ -674,13 +701,13 @@ namespace VirtualAdvocate.Controllers
                         clientID = fc["AvailableService"];
                     else
                     {
-                        var AccountAdmin = db.UserProfiles.Where(u => u.OrganizationId == objModel.OrgId && u.RoleId == 2).FirstOrDefault().UserID;
+                        var AccountAdmin = VAEDB.UserProfiles.Where(u => u.OrganizationId == objModel.OrgId && u.RoleId == 2).FirstOrDefault().UserID;
 
                         //  int AccountAdmin = Convert.ToInt32(Session["UserId"]);
                         try
                         {
                             clientID = "0";
-                            //Convert.ToString(db.SelectedAccountServices.Where(s => s.UserId == AccountAdmin).FirstOrDefault().ServiceId);
+                            //Convert.ToString(VAEDB.SelectedAccountServices.Where(s => s.UserId == AccountAdmin).FirstOrDefault().ServiceId);
                         }
                         catch (Exception ex)
                         {
@@ -694,7 +721,7 @@ namespace VirtualAdvocate.Controllers
                     //    objAC.ServiceId = Convert.ToInt32(clientID);
                     //    objAC.UserId = userId;
                     //    objData.SaveSelectedAccountServices(objAC);
-                    //    db.SaveChanges();
+                    //    VAEDB.SaveChanges();
                     //}
                     //var postedAccServicesIds = new string[0];
                     //if (objModel.PostedServices == null) objModel.PostedServices = new PostedServices();
@@ -756,7 +783,7 @@ namespace VirtualAdvocate.Controllers
                         //        //objData.LogAccountServices(result, userId, Convert.ToInt32(postedAccServicesIds[i]));
                         //    }
                         //}
-                        db.SaveChanges();
+                        VAEDB.SaveChanges();
                         MailSend objMail = new MailSend();
                         objMail.SendMailForUserCreation(objModel, "New Account Created", ConfigurationManager.AppSettings["ApplicationTitle"].ToString(), companyName, Convert.ToInt32(Session["RoleId"]));
                     }
@@ -778,7 +805,9 @@ namespace VirtualAdvocate.Controllers
             }
             return RedirectToAction("OrgUserList", "UsersManagement", new { id = objModel.OrgId });
         }
+        #endregion
 
+        #region OrgUserList
         public ActionResult OrgUserList(string enable, int? id)
         {
             Session["re"] = "No";
@@ -813,7 +842,7 @@ namespace VirtualAdvocate.Controllers
                 return RedirectToAction("LogOff", "UsersRegistration");
             }
 
-            var orgDetails = db.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
+            var orgDetails = VAEDB.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
 
             ViewBag.AccountType = orgDetails.UserAccountsType;
 
@@ -822,9 +851,9 @@ namespace VirtualAdvocate.Controllers
                 Department = Convert.ToInt32(Session["DepartmentID"]);
 
 
-            var obj = (from ua in db.UserAddressDetails
-                       join up in db.UserProfiles on ua.UserId equals up.UserID
-                       join rol in db.Roles on up.RoleId equals rol.RoleId
+            var obj = (from ua in VAEDB.UserAddressDetails
+                       join up in VAEDB.UserProfiles on ua.UserId equals up.UserID
+                       join rol in VAEDB.Roles on up.RoleId equals rol.RoleId
                        where rol.RoleId != 1 && up.OrganizationId == id && (Department == 0 || (Department != 0 && up.Department == Department)) && up.IsEnabled == active &&
                       ((myRoleID == 6 && up.RoleId == 5)
                       ||
@@ -834,7 +863,9 @@ namespace VirtualAdvocate.Controllers
 
 
         }
+        #endregion
 
+        #region ManageProfile
         [HttpGet]
         public ActionResult ManageProfile(int? id)
         {
@@ -881,6 +912,7 @@ namespace VirtualAdvocate.Controllers
                         else if (objUP.RoleId != 7)
                         {
                             obj.Department = 0;
+                            VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
                             obj.getDepartmentList = objData.getDepartmentOptionsList(objUP.OrganizationId.Value);
                             obj.getRoleList = objData.getRoles(Convert.ToInt32(Session["RoleId"]));
 
@@ -897,10 +929,12 @@ namespace VirtualAdvocate.Controllers
             obj.EmailAddress = objUP.EmailAddress;
             obj.roleID = objUP.RoleId;
             if (objUP.OrganizationId != null)
-                obj.getDepartmentList = objData.getDepartmentOptionsList(objUP.OrganizationId.Value);
+                obj.getDepartmentList = new VirtualAdvocateDocumentData().getDepartmentOptionsList(objUP.OrganizationId.Value);
             return View(obj);
         }
+        #endregion
 
+        #region ManageProfile
         [HttpPost]
         public ActionResult ManageProfile(PersonalDetailsViewModel objUser)
         {
@@ -910,10 +944,10 @@ namespace VirtualAdvocate.Controllers
             {
                 VirtualAdvocateData objData = new VirtualAdvocateData();
                 result = objData.EditPersonalDetails(objUser);
-                var obj = db.UserProfiles.Where(ua => ua.UserID == objUser.UserId).FirstOrDefault();
+                var obj = VAEDB.UserProfiles.Where(ua => ua.UserID == objUser.UserId).FirstOrDefault();
                 if (objUser.Department != 0)
                     obj.Department = objUser.Department;
-                db.SaveChanges();
+                VAEDB.SaveChanges();
                 if (obj.RoleId == 4)
                 {
                     objData.LogDuePersonalDetails(objUser, Convert.ToInt32(Session["UserId"]));//Log After Modification
@@ -935,7 +969,9 @@ namespace VirtualAdvocate.Controllers
             else
                 return RedirectToAction("Dashboard", "DocumentManagement");
         }
+        #endregion
 
+        #region EditOrganization
         public ActionResult EditOrganization(int? id)
         {
             if (id == null)
@@ -943,14 +979,17 @@ namespace VirtualAdvocate.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             OrganizationDetail od = new OrganizationDetail();
-            od = db.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
+            od = VAEDB.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
             UserAccountType objAcType = new UserAccountType();
             if (od != null)
             {
-                objAcType = db.UserAccountTypes.Where(at => at.UserAccountTypeId == od.UserAccountsType).FirstOrDefault();
+                objAcType = VAEDB.UserAccountTypes.Where(at => at.UserAccountTypeId == od.UserAccountsType).FirstOrDefault();
             }
             return View();
         }
+        #endregion
+
+        #region EditProfile
         public ActionResult EditProfile(int? id)
         {
             if (Session["re"] != null && Session["re"].ToString() == "Yes")
@@ -964,10 +1003,10 @@ namespace VirtualAdvocate.Controllers
 
             Session["AccountUser"] = 0;
             UserAddressDetail ua = new UserAddressDetail();
-            ua = db.UserAddressDetails.Where(u => u.UserId == id).FirstOrDefault();
+            ua = VAEDB.UserAddressDetails.Where(u => u.UserId == id).FirstOrDefault();
             UserProfile objUp = new UserProfile();
-            objUp = db.UserProfiles.Where(up => up.UserID == id).FirstOrDefault();
-            var department = (objUp != null) ? db.Departments.Where(d => d.Id == objUp.Department).FirstOrDefault() : null;
+            objUp = VAEDB.UserProfiles.Where(up => up.UserID == id).FirstOrDefault();
+            var department = (objUp != null) ? VAEDB.Departments.Where(d => d.Id == objUp.Department).FirstOrDefault() : null;
             ProfileViewModel objProfile = new ProfileViewModel();
 
             if (ua.FirstName != null) { objProfile.FirstName = ua.FirstName; } else { objProfile.FirstName = "not entered"; }
@@ -982,7 +1021,7 @@ namespace VirtualAdvocate.Controllers
             if (ua.BlockNumber != null) { objProfile.BlockNo = ua.BlockNumber; } else { objProfile.BlockNo = "not entered"; }
             if (ua.Designation != null) { objProfile.Designation = ua.Designation; } else { objProfile.Designation = "not entered"; }
             if (department != null) { objProfile.Department = department.Name; } else { objProfile.Department = "not entered"; }
-            Role objrole = db.Roles.Find(objUp.RoleId);
+            Role objrole = VAEDB.Roles.Find(objUp.RoleId);
             objProfile.RoleDescription = objrole.RoleDescription;
             objProfile.RoleId = objUp.RoleId;
 
@@ -997,9 +1036,9 @@ namespace VirtualAdvocate.Controllers
             }
             //objProfile.getSelectedService
 
-            //var objSelectedService = (from accser in db.AccountServices
-            //                          join selser in db.SelectedAccountServices on accser.ServiceId equals selser.ServiceId
-            //                          join usp in db.UserProfiles on selser.UserId equals usp.UserID
+            //var objSelectedService = (from accser in VAEDB.AccountServices
+            //                          join selser in VAEDB.SelectedAccountServices on accser.ServiceId equals selser.ServiceId
+            //                          join usp in VAEDB.UserProfiles on selser.UserId equals usp.UserID
             //                          where usp.UserID == ua.UserId 
             //                          select accser
             //                        );
@@ -1009,9 +1048,9 @@ namespace VirtualAdvocate.Controllers
             {
                 Session["AccountUser"] = 1;
             }
-            var objSelectedPayment = (from pm in db.PaymentMethods
-                                      join selpm in db.SelectedPaymentMethods on pm.PaymentTypeId equals selpm.PaymentTypeId
-                                      join usrp in db.UserProfiles on selpm.UserId equals usrp.UserID
+            var objSelectedPayment = (from pm in VAEDB.PaymentMethods
+                                      join selpm in VAEDB.SelectedPaymentMethods on pm.PaymentTypeId equals selpm.PaymentTypeId
+                                      join usrp in VAEDB.UserProfiles on selpm.UserId equals usrp.UserID
                                       where usrp.UserID == ua.UserId
                                       select pm
                 );
@@ -1033,7 +1072,9 @@ namespace VirtualAdvocate.Controllers
 
             return View(objProfile);
         }
+        #endregion
 
+        #region EditAcService
         public ActionResult EditAcService(int? id)
         {
             if (id == null)
@@ -1085,7 +1126,9 @@ namespace VirtualAdvocate.Controllers
             obj.userId = id.Value;
             return View(obj);
         }
+        #endregion
 
+        #region EditAcService
         [HttpPost]
         public ActionResult EditAcService(AccountServiceModel objmodel, FormCollection fc)
         {
@@ -1096,7 +1139,7 @@ namespace VirtualAdvocate.Controllers
 
             var selectedServices = new List<AccountServicesModel>();
 
-            var objtop = db.LogRegistrations
+            var objtop = VAEDB.LogRegistrations
                .Where(m => m.UserId == objmodel.userId)
                .OrderByDescending(n => n.LogId)
                .FirstOrDefault();
@@ -1119,27 +1162,29 @@ namespace VirtualAdvocate.Controllers
             }
             return RedirectToAction("EditProfile", "UsersManagement", new { id = objmodel.userId });
         }
+        #endregion
 
+        #region EditPayment
         public ActionResult EditPayment(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VirtualAdvocateData objData = new VirtualAdvocateData();
-            EditPaymentMethodeModel obj = objData.getPayments(id);
+            EditPaymentMethodeModel obj = new VirtualAdvocateData().getPayments(id);
             obj.userId = id.Value;
             return View(obj);
         }
+        #endregion
 
-
+        #region EditRole
         public ActionResult EditRole(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var userRole = db.UserProfiles.Where(u => u.UserID == id).FirstOrDefault().RoleId;
+            var userRole = VAEDB.UserProfiles.Where(u => u.UserID == id).FirstOrDefault().RoleId;
             VirtualAdvocateDocumentData objData = new VirtualAdvocateDocumentData();
             EditUserRoleModel obj = new EditUserRoleModel();
             obj.userId = id.Value;
@@ -1147,7 +1192,9 @@ namespace VirtualAdvocate.Controllers
             obj.UserRole = userRole;
             return View(obj);
         }
+        #endregion
 
+        #region EditPayment
         [HttpPost]
         public ActionResult EditPayment(EditPaymentMethodeModel objmodel)
         {
@@ -1160,15 +1207,15 @@ namespace VirtualAdvocate.Controllers
 
             int res = objData.DeleteSelectedPaymentMethods(objmodel.userId);
             // save selected ids
-            //var obj = (from logdue in db.LogDueDiligenceUsers
+            //var obj = (from logdue in VAEDB.LogDueDiligenceUsers
             //           where logdue.UserId == objmodel.userId
             //           orderby logdue.LogId
-            //           select logdue).Take(1); //db.LogDueDiligenceUsers.OrderByDescending(m => m.UserId == objmodel.userId).FirstOrDefault();
-            var objtop = db.LogDueDiligenceUsers
+            //           select logdue).Take(1); //VAEDB.LogDueDiligenceUsers.OrderByDescending(m => m.UserId == objmodel.userId).FirstOrDefault();
+            var objtop = VAEDB.LogDueDiligenceUsers
                 .Where(m => m.UserId == objmodel.userId)
                 .OrderByDescending(n => n.LogId)
                 .FirstOrDefault();
-            var objUP = db.UserProfiles.Find(objmodel.userId);
+            var objUP = VAEDB.UserProfiles.Find(objmodel.userId);
             if (objmodel.PostedPaymentMethods.PaymentTypeIds != null)
             {
                 SelectedPaymentMethod objAC = new SelectedPaymentMethod();
@@ -1201,14 +1248,19 @@ namespace VirtualAdvocate.Controllers
 
             return RedirectToAction("EditProfile", "UsersManagement", new { id = objmodel.userId });
         }
+        #endregion
 
+        #region Development
         public ActionResult Development()
         {
             return View();
         }
+        #endregion
 
+        #region HandleExceptionAttribute
         public class HandleExceptionAttribute : HandleErrorAttribute
         {
+            #region OnException
             public override void OnException(ExceptionContext filterContext)
             {
                 if (filterContext.HttpContext.Request.IsAjaxRequest() && filterContext.Exception != null)
@@ -1229,38 +1281,41 @@ namespace VirtualAdvocate.Controllers
                 {
                     base.OnException(filterContext);
                 }
-            }
+            } 
+            #endregion
         }
+        #endregion
 
+        #region EditUserRole
         [AllowAnonymous]
         [HttpPost]
         public ActionResult EditUserRole(EditUserRoleModel usrObj)
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
             var message = string.Empty;
-            var obj = db.UserProfiles.Find(usrObj.userId);
+            var obj = VAEDB.UserProfiles.Find(usrObj.userId);
             try
             {
 
-                var objDisable = db.UserProfiles.Where(ua => ua.UserID == usrObj.userId).FirstOrDefault();
+                var objDisable = VAEDB.UserProfiles.Where(ua => ua.UserID == usrObj.userId).FirstOrDefault();
                 if (objDisable != null)
                 {
                     objDisable.RoleId = usrObj.UserRole;
 
-                    db.SaveChanges();
+                    VAEDB.SaveChanges();
                 }
-                //var objDisable = db.UserProfiles.Where(ua => ua.OrganizationId == obj.OrganizationId && ua.RoleId == 2).FirstOrDefault();
+                //var objDisable = VAEDB.UserProfiles.Where(ua => ua.OrganizationId == obj.OrganizationId && ua.RoleId == 2).FirstOrDefault();
                 //if (objDisable != null)
                 //{
                 //    objDisable.RoleId = 5;
                 //    objDisable.IsEnabled = false;
                 //    objDisable.HasActivated = false;
-                //    db.SaveChanges();
+                //    VAEDB.SaveChanges();
                 //}
 
 
                 //obj.RoleId = 2;
-                //db.SaveChanges();
+                //VAEDB.SaveChanges();
 
                 //message = "User role changed as admin";
             }
@@ -1274,7 +1329,9 @@ namespace VirtualAdvocate.Controllers
 
             return RedirectToAction("EditProfile", "UsersManagement", new { id = obj.UserID });
         }
+        #endregion
 
+        #region Checkservicename
         //public ActionResult Checkservicename(Int64 id)
         //{
         //    using (VirtualAdvocateEntities objContext = new VirtualAdvocateEntities())
@@ -1299,8 +1356,8 @@ namespace VirtualAdvocate.Controllers
         //{
         //    try
         //    {
-        //        var userid = db.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
-        //        var obj = db.SelectedAccountServices.Where(u => u.UserId == userid.UserId).FirstOrDefault();
+        //        var userid = VAEDB.OrganizationDetails.Where(o => o.OrganizationId == id).FirstOrDefault();
+        //        var obj = VAEDB.SelectedAccountServices.Where(u => u.UserId == userid.UserId).FirstOrDefault();
 
         //        string[] services = selectedservices.Split(',');
 
@@ -1313,9 +1370,9 @@ namespace VirtualAdvocate.Controllers
         //                addservice.UserId =Convert.ToInt32( userid.UserId);
         //                addservice.ServiceId = Convert.ToInt32(services[i]);
 
-        //                db.SelectedAccountServices.Add(addservice);
+        //                VAEDB.SelectedAccountServices.Add(addservice);
         //            }
-        //            db.SaveChanges();
+        //            VAEDB.SaveChanges();
         //        }
 
         //        return Json(true, JsonRequestBehavior.AllowGet);
@@ -1326,13 +1383,15 @@ namespace VirtualAdvocate.Controllers
         //        ErrorLog.LogThisError(ex);
         //        return Json(false, JsonRequestBehavior.AllowGet);
         //    }
-        //}
+        //} 
+        #endregion
 
+        #region UserActivation
         public ActionResult UserActivation(Int32 Id)
         {
-            // var userID = db.SelectedAccountServices.Where(d => d.UserId == Id).ToList();
-            var user = db.UserProfiles.Where(u => u.UserID == Id).FirstOrDefault();
-            var org = db.OrganizationDetails.Where(o => o.OrganizationId == user.OrganizationId).FirstOrDefault();
+            // var userID = VAEDB.SelectedAccountServices.Where(d => d.UserId == Id).ToList();
+            var user = VAEDB.UserProfiles.Where(u => u.UserID == Id).FirstOrDefault();
+            var org = VAEDB.OrganizationDetails.Where(o => o.OrganizationId == user.OrganizationId).FirstOrDefault();
 
             if ((user.RoleId != 7 && user.RoleId != 3) && !org.IsEnabled)
             {
@@ -1345,11 +1404,12 @@ namespace VirtualAdvocate.Controllers
             else
             { return Json("true", JsonRequestBehavior.AllowGet); }
         }
+        #endregion
 
-
+        #region OrgActivation
         public ActionResult OrgActivation(Int32 Id)
         {
-            var org = db.SelectedDepartments.Where(o => o.OrgID == Id).FirstOrDefault();
+            var org = VAEDB.SelectedDepartments.Where(o => o.OrgID == Id).FirstOrDefault();
 
             if (org == null)
             {
@@ -1357,7 +1417,10 @@ namespace VirtualAdvocate.Controllers
             }
             else
             { return Json("true", JsonRequestBehavior.AllowGet); }
-        }
+        } 
+        #endregion
 
-    }
-}
+    } 
+    #endregion
+} 
+#endregion

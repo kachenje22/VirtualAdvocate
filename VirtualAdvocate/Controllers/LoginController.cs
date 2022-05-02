@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
+using VirtualAdvocate.Helpers;
 using VirtualAdvocate.Models;
 #endregion
 #region VirtualAdvocate.Controllers
@@ -250,6 +251,7 @@ namespace VirtualAdvocate.Controllers
                             CurrentUser.UserId = user.UserID;
                             CurrentUser.RoleId = user.RoleId;
                             CurrentUser.DepartmentId = user.Department;
+                            CurrentUser.Role = (UserRoles)(Enum.Parse(typeof(UserRoles), user.RoleId.ToString()));
 
                             Session["UserId"] = user.UserID;
                             Session["RoleId"] = user.RoleId;
