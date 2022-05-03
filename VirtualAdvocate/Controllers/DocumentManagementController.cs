@@ -10275,7 +10275,7 @@ namespace VirtualAdvocate.Controllers
                     return Json(new
                     {
                         id = 999,
-                        Message = string.Format("No Of rows Inserted : <b>{0}</b><br><br>" +
+                        Message = string.Format("No of rows Inserted : <b>{0}</b><br><br>" +
                         "No of rows Updated : <b>{1}</b><br><br>", insertedCount, updatedCount)
                     }); ;
                 }
