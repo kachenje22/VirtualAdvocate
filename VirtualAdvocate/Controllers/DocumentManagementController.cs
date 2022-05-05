@@ -8904,89 +8904,91 @@ namespace VirtualAdvocate.Controllers
                 string keywordwithoutnumbers = Regex.Match(keyword, "[^0-9]+").Value;
 
                 var labelName = db.TemplateKeywords.Where(x => keywordwithoutnumbers == x.TemplateKeyValue).FirstOrDefault();
-
-                var duplicates = db.TemplateKeywords.Where(x => x.ClonedFrom == labelName.TemplateKeyId && x.IsEnabled == true).ToList();
-
-                if (duplicates != null)
+                if (labelName != null)
                 {
-                    foreach (var d in duplicates)
+                    var duplicates = db.TemplateKeywords.Where(x => x.ClonedFrom == labelName.TemplateKeyId && x.IsEnabled == true).ToList();
+
+                    if (duplicates != null)
                     {
-                        obj.IsEnabled = true;
-                        obj.MultipleKeys = false;
-                        obj.TemplateKeyLabels = d.TemplateKeyLabels;
-                        obj.TemplateKeyDescription = d.TemplateKeyLabels;
-                        obj.TemplateKeyValue = keyword;
-                        obj.AddedByClient = true;
-                        obj.Cloned = true;
-                        db.TemplateKeywords.Add(obj);
-
-
-
-                        TemplateDynamicFormValue dfcValue = db.TemplateDynamicFormValues.
-                            Where(t => t.CustomerId == CustId &&
-                            t.TemplateId == TemplateId &&
-                            string.Compare(t.TemplateKey, keyword, true) == 0).FirstOrDefault();
-
-                        if (dfcValue != null)
+                        foreach (var d in duplicates)
                         {
-                            dfcValue.UserInputs = Request.Form[keyword];
-                            dfcValue.ParentkeyId = d.TemplateKeyValue;
-                            db.Entry(dfcValue).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            TemplateDynamicFormValue objDynamicFormClone = new TemplateDynamicFormValue();
-                            objDynamicFormClone.TemplateId = Convert.ToInt32(templateID);
-                            objDynamicFormClone.TemplateKey = keyword;
-                            objDynamicFormClone.UserId = Convert.ToInt32(Session["UserId"]);
-                            objDynamicFormClone.IsEnabled = true;
-                            //objDynamicFormClone.UserInputs = Request.Form["add_" + keyword];
-                            objDynamicFormClone.UserInputs = Request.Form[keyword];
-                            objDynamicFormClone.CreatedDate = DateTime.Now;
-                            objDynamicFormClone.CustomerId = Convert.ToInt32(customerId);
-                            objDynamicFormClone.ParentkeyId = d.TemplateKeyValue;
-                            db.TemplateDynamicFormValues.Add(objDynamicFormClone);
-                            db.SaveChanges();
+                            obj.IsEnabled = true;
+                            obj.MultipleKeys = false;
+                            obj.TemplateKeyLabels = d.TemplateKeyLabels;
+                            obj.TemplateKeyDescription = d.TemplateKeyLabels;
+                            obj.TemplateKeyValue = keyword;
+                            obj.AddedByClient = true;
+                            obj.Cloned = true;
+                            db.TemplateKeywords.Add(obj);
+
+
+
+                            TemplateDynamicFormValue dfcValue = db.TemplateDynamicFormValues.
+                                Where(t => t.CustomerId == CustId &&
+                                t.TemplateId == TemplateId &&
+                                string.Compare(t.TemplateKey, keyword, true) == 0).FirstOrDefault();
+
+                            if (dfcValue != null)
+                            {
+                                dfcValue.UserInputs = Request.Form[keyword];
+                                dfcValue.ParentkeyId = d.TemplateKeyValue;
+                                db.Entry(dfcValue).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                TemplateDynamicFormValue objDynamicFormClone = new TemplateDynamicFormValue();
+                                objDynamicFormClone.TemplateId = Convert.ToInt32(templateID);
+                                objDynamicFormClone.TemplateKey = keyword;
+                                objDynamicFormClone.UserId = Convert.ToInt32(Session["UserId"]);
+                                objDynamicFormClone.IsEnabled = true;
+                                //objDynamicFormClone.UserInputs = Request.Form["add_" + keyword];
+                                objDynamicFormClone.UserInputs = Request.Form[keyword];
+                                objDynamicFormClone.CreatedDate = DateTime.Now;
+                                objDynamicFormClone.CustomerId = Convert.ToInt32(customerId);
+                                objDynamicFormClone.ParentkeyId = d.TemplateKeyValue;
+                                db.TemplateDynamicFormValues.Add(objDynamicFormClone);
+                                db.SaveChanges();
+                            }
                         }
                     }
-                }
 
-                obj.IsEnabled = true;
-                obj.MultipleKeys = false;
-                obj.TemplateKeyLabels = labelName.TemplateKeyLabels;
-                obj.TemplateKeyDescription = labelName.TemplateKeyLabels;
-                obj.TemplateKeyValue = keyword;
-                obj.AddedByClient = true;
-                db.TemplateKeywords.Add(obj);
+                    obj.IsEnabled = true;
+                    obj.MultipleKeys = false;
+                    obj.TemplateKeyLabels = labelName.TemplateKeyLabels;
+                    obj.TemplateKeyDescription = labelName.TemplateKeyLabels;
+                    obj.TemplateKeyValue = keyword;
+                    obj.AddedByClient = true;
+                    db.TemplateKeywords.Add(obj);
 
-                TemplateDynamicFormValue dfc = db.TemplateDynamicFormValues.
-                            Where(t => t.CustomerId == CustId &&
-                            t.TemplateId == TemplateId &&
-                            string.Compare(t.TemplateKey, keyword, true) == 0)
-                  .FirstOrDefault();
+                    TemplateDynamicFormValue dfc = db.TemplateDynamicFormValues.
+                                Where(t => t.CustomerId == CustId &&
+                                t.TemplateId == TemplateId &&
+                                string.Compare(t.TemplateKey, keyword, true) == 0)
+                      .FirstOrDefault();
 
-                if (dfc != null)
-                {
-                    dfc.UserInputs = Request.Form[keyword];
-                    dfc.ParentkeyId = labelName.TemplateKeyValue;
-                    db.Entry(dfc).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    TemplateDynamicFormValue objDynamicForm = new TemplateDynamicFormValue();
-                    objDynamicForm.TemplateId = Convert.ToInt32(templateID);
-                    objDynamicForm.TemplateKey = keyword;
-                    objDynamicForm.UserId = Convert.ToInt32(Session["UserId"]);
-                    objDynamicForm.IsEnabled = true;
-                    //objDynamicForm.UserInputs = Request.Form["add_" + keyword];
-                    objDynamicForm.UserInputs = Request.Form[keyword];
-                    objDynamicForm.CreatedDate = DateTime.Now;
-                    objDynamicForm.CustomerId = Convert.ToInt32(customerId);
-                    objDynamicForm.ParentkeyId = labelName.TemplateKeyValue;
-                    db.TemplateDynamicFormValues.Add(objDynamicForm);
-                    db.SaveChanges();
+                    if (dfc != null)
+                    {
+                        dfc.UserInputs = Request.Form[keyword];
+                        dfc.ParentkeyId = labelName.TemplateKeyValue;
+                        db.Entry(dfc).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        TemplateDynamicFormValue objDynamicForm = new TemplateDynamicFormValue();
+                        objDynamicForm.TemplateId = Convert.ToInt32(templateID);
+                        objDynamicForm.TemplateKey = keyword;
+                        objDynamicForm.UserId = Convert.ToInt32(Session["UserId"]);
+                        objDynamicForm.IsEnabled = true;
+                        //objDynamicForm.UserInputs = Request.Form["add_" + keyword];
+                        objDynamicForm.UserInputs = Request.Form[keyword];
+                        objDynamicForm.CreatedDate = DateTime.Now;
+                        objDynamicForm.CustomerId = Convert.ToInt32(customerId);
+                        objDynamicForm.ParentkeyId = labelName.TemplateKeyValue;
+                        db.TemplateDynamicFormValues.Add(objDynamicForm);
+                        db.SaveChanges();
+                    }
                 }
             }
         }
