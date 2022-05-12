@@ -289,10 +289,6 @@
       <HintPath>..\packages\sautinsoft.pdffocus.6.0.12.29\lib\net45\SautinSoft.PdfFocus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Select.HtmlToPdf, Version=2.4.0.1, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
-      <HintPath>..\packages\Select.HtmlToPdf.2.4.0.1\lib\net40\Select.HtmlToPdf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Spire.Doc, Version=10.4.5.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
       <HintPath>..\packages\Spire.Doc.10.4.5\lib\net40\Spire.Doc.dll</HintPath>
     </Reference>

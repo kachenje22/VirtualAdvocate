@@ -1,7 +1,10 @@
 #region NameSpaces
 using Code7248.word_reader;
+using DocumentFormat.OpenXml.Packaging;
 using EntityFramework.Extensions;
 using Microsoft.Office.Interop.Word;
+using OpenXmlPowerTools;
+using SelectPdf;
 using Spire.Doc;
 using Spire.Doc.Documents;
 using System;
@@ -10,14 +13,18 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.OleDb;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 using VirtualAdvocate.Common;
 using VirtualAdvocate.DAL;
 using VirtualAdvocate.Helpers;
@@ -25,12 +32,13 @@ using VirtualAdvocate.Models;
 using Document = Spire.Doc.Document;
 using Paragraph = Spire.Doc.Documents.Paragraph;
 using Section = Spire.Doc.Section;
+using Word = Microsoft.Office.Interop.Word;
 #endregion
 #region VirtualAdvocate.Controllers
 namespace VirtualAdvocate.Controllers
 {
-    #region DocumentManagementController
-    public class DocumentManagementController : BaseController
+    #region DocumentManagementBackupController
+    public class DocumentManagementBackupController : BaseController
     {
         #region NameSpaces
         private VirtualAdvocateEntities db = new VirtualAdvocateEntities();
@@ -925,6 +933,227 @@ namespace VirtualAdvocate.Controllers
                 }
             }
 
+        }
+        #endregion
+
+        #region EditTemplates_old
+        public ActionResult EditTemplates_old(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            EditDocumentUploadModel obj = new EditDocumentUploadModel();
+            try
+            {
+                DocumentTemplate objTemplates = db.DocumentTemplates.Where(dc => dc.TemplateId == id).FirstOrDefault();
+                obj.TemplateId = id;
+                obj.TemplateName = objTemplates.TemplateFileName;
+                obj.DocumentType = objTemplates.DocumentType;
+                obj.DocumentTitle = objTemplates.DocumentTitle;
+                obj.DocumentCategoryId = objTemplates.DocumentCategory;
+                obj.DocumentSubCategoryId = objTemplates.DocumentSubCategory;
+                obj.DocumentSubSubCategoryId = objTemplates.DocumentSubSubCategory;
+                obj.DocumentDescription = objTemplates.DocumentDescription;
+                obj.Cost = Convert.ToDecimal(objTemplates.TemplateCost);
+                obj.AssociateTemplateId = objTemplates.AssociateTemplateId;
+                List<OptionsModel> objOptions = new List<OptionsModel>();
+                obj.getAllCategory = objData.getCategoryOptionsList();
+                if (objTemplates.DocumentCategory != 0)
+                {
+                    obj.getAllSubCategory = objData.getSubCategoryOptionsList(objTemplates.DocumentCategory);
+                    obj.getDocumentList = objData.getTemplateList(objTemplates.DocumentCategory).Where(x => x.ID != id.Value);
+                }
+                else
+                {
+                    obj.getAllSubCategory = objOptions;
+                    obj.getDocumentList = objOptions;
+                }
+                if (obj.DocumentSubCategoryId != null)
+                {
+                    obj.getAllSubSubCategory = objData.getSubSubCategoryOptionsList(obj.DocumentSubCategoryId);
+                }
+                else
+                {
+                    obj.getAllSubSubCategory = objOptions;
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+            }
+
+
+            return View(obj);
+        }
+        #endregion
+
+        #region EditTemplates_old
+        [HttpPost]
+        public ActionResult EditTemplates_old(EditDocumentUploadModel objTemplates)
+        {
+            var err = 1;
+            string filename = "";
+            DocumentTemplate obj = new DocumentTemplate();
+            try
+            {
+                obj = getTemplateDetails(objTemplates);
+                filename = objTemplates.TemplateName;
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+                return RedirectToAction("EditTemplates", "DocumentManagement", new { Id = objTemplates.TemplateId });
+            }
+            try
+            {
+
+                if (objTemplates.TemplateFile != null && objTemplates.TemplateFile.ContentLength > 0)
+                {
+                    string extension = Path.GetExtension(Request.Files[0].FileName).ToLower();
+                    //obj.TemplateFileName = Path.GetFileName(objTemplates.TemplateFile.FileName);
+                    filename = Path.GetFileName(objTemplates.TemplateFile.FileName);
+                    var path = Path.Combine(Server.MapPath("~/TemplateFiles/"), Path.GetFileName(objTemplates.TemplateFile.FileName));
+                    var existFilepath = Path.Combine(Server.MapPath("~/TemplateFiles/"), obj.TemplateFileName);
+                    var path1 = Path.Combine(Server.MapPath("~/TemplateFiles/Archive"), Path.GetFileName(objTemplates.TemplateFile.FileName));
+                    if (System.IO.File.Exists(path) && (obj.TemplateFileName != Path.GetFileName(objTemplates.TemplateFile.FileName)))
+                    {
+                        this.ModelState.AddModelError("TemplateFile", "File Name Already exists. Please Upload With Differnt File Name");
+                        err = 0;
+                    }
+                    else if (extension != ".doc" && extension != ".docx")
+                    {
+                        ModelState.AddModelError("TemplateFile", "Invalid File.Supported file extensions: doc, docx");
+                    }
+                    else
+                    {
+                        if (System.IO.File.Exists(path1))
+                        {
+                            System.IO.File.Delete(path1); //Delete Old Archive File 
+                        }
+                        if (System.IO.File.Exists(existFilepath))
+                        {
+                            System.IO.File.Copy(existFilepath, path1, true); // Existing File copy to Archive Folder
+                            System.IO.File.Delete(existFilepath); //Delete Old File From TemplateFiles Folder
+                        }
+
+                        obj.TemplateFileName = Path.GetFileName(objTemplates.TemplateFile.FileName);
+                        objTemplates.TemplateFile.SaveAs(path); // New File saving to TemplateFiles Folder
+                        err = 1;
+                        List<string> lst = new List<string>();
+                        lst = getKeyFields(obj.TemplateFileName); // Getting List of keywords from the document
+                        TemplateKeysPointer objTKP = new TemplateKeysPointer();
+                        objTKP.TemplateId = obj.TemplateId;
+                        var objDisableTKP = db.TemplateKeysPointers.Where(d => d.TemplateId == obj.TemplateId); //Getting previous key value id's for roll back process
+
+                        //ArchiveTemplateKeysPointer objATKP = new ArchiveTemplateKeysPointer();
+                        ////Export key id's into archive table for exception Rollback
+                        //foreach (var dis in objDisableTKP)
+                        //{
+                        //    objATKP.TemplateId = dis.TemplateId;
+                        //    objATKP.TemplateKeyId = dis.TemplateKeyId;
+                        //    objATKP.IsEnabled = dis.IsEnabled;
+                        //    db.SaveChanges();
+                        //}
+
+                        //Delete previous key value id's
+                        db.TemplateKeysPointers.Where(d => d.TemplateId == obj.TemplateId).Delete();//All Key id's deleted before update
+                        int errCount = 0;
+                        foreach (var li in lst)
+                        {
+                            var TempKeyobj = objData.getKeyFieldId(li.Trim(new Char[] { '<', '>' })); // Fetch Keyword Id and save it
+                            if (TempKeyobj != null)
+                            {
+                                objTKP.TemplateKeyId = Convert.ToInt32(TempKeyobj.TemplateKeyId);
+                                objTKP.IsEnabled = true;
+                                db.TemplateKeysPointers.Add(objTKP);
+                                db.SaveChanges(); // All the Key Id with Template Id 
+                            }
+                            else
+                            {
+                                errCount = errCount + 1;
+                                if (errCount == 1)
+                                    ModelState.AddModelError("", "The Following Keyword's doesn't exist. Please Create The Keyword Before Uploading This Template.");
+                                ModelState.AddModelError("TemplateFile", li);
+                                err = 0;
+                            }
+                        }
+                        if (err == 0) // If any exceptions (Rollback) - Delete Created Template Details 
+                        {
+                            System.IO.File.Delete(path); //Delete New File
+                            System.IO.File.Copy(path1, existFilepath, true); // Existing File Copy From Archive Folder                           
+                            RestoreTempKeyValues(objDisableTKP.ToList()); // Restore existing key values
+                        }
+                    }
+
+                }
+                //else {err = 1; }
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+                err = 0;
+            }
+
+            if (err == 1)
+            {
+                //int result = objData.EditTemplate(obj);
+
+                LogTemplateUpload objLog = new LogTemplateUpload();
+                objLog.Action = "Update";
+                objLog.DocumentTitle = obj.DocumentTitle;
+                objLog.DocumentDescription = obj.DocumentDescription;
+                objLog.DocumentType = obj.DocumentType;
+                objLog.TemplateCost = obj.TemplateCost;
+                objLog.DocumentCategory = obj.DocumentCategory;
+                objLog.DocumentSubCategory = obj.DocumentSubCategory;
+                objLog.DocumentSubSubCategory = obj.DocumentSubSubCategory;
+                objLog.AssociateTemplateId = obj.AssociateTemplateId;
+                objLog.IsEnabled = true;
+                objLog.Mandatory = obj.Mandatory;
+                objLog.ModifiedDate = DateTime.Now;
+                objLog.TemplateFileName = filename;
+                objLog.TemplateId = obj.TemplateId;
+                db.LogTemplateUploads.Add(objLog);
+                db.SaveChanges();
+                return RedirectToAction("Templates", "DocumentManagement");
+            }
+            else
+            {
+                try
+                {
+
+                    List<OptionsModel> objOptions = new List<OptionsModel>();
+                    objTemplates.getAllCategory = objData.getCategoryOptionsList();
+                    if (objTemplates.getAllCategory != null)
+                    {
+                        objTemplates.getAllSubCategory = objData.getSubCategoryOptionsList(objTemplates.DocumentCategoryId);
+                        objTemplates.getDocumentList = objData.getTemplateList(objTemplates.DocumentCategoryId);
+                    }
+                    else
+                    {
+                        objTemplates.getAllSubCategory = objOptions;
+                        objTemplates.getDocumentList = objOptions;
+                    }
+                    if (objTemplates.getAllSubCategory != null)
+                    {
+                        objTemplates.getAllSubSubCategory = objData.getSubSubCategoryOptionsList(objTemplates.DocumentSubCategoryId);
+                    }
+                    else
+                    {
+                        objTemplates.getAllSubSubCategory = objOptions;
+                    }
+                    return View(objTemplates);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.LogThisError(ex);
+                }
+            }
+
+            return RedirectToAction("Templates", "DocumentManagement", new { Id = objTemplates.TemplateId });
         }
         #endregion
 
@@ -3532,624 +3761,624 @@ namespace VirtualAdvocate.Controllers
         #endregion
 
 
-        //public ActionResult PreviewDocument(int? id)
-        //{
-        //    var template = db.DocumentTemplates.Where(c => c.TemplateId == id).FirstOrDefault();
-        //    int categoryID = template.DocumentCategory;
+        public ActionResult PreviewDocument(int? id)
+        {
+            var template = db.DocumentTemplates.Where(c => c.TemplateId == id).FirstOrDefault();
+            int categoryID = template.DocumentCategory;
 
-        //    var clauselist = (from obj in db.ClouseandCategoryMapings
+            var clauselist = (from obj in db.ClouseandCategoryMapings
 
-        //                      join c in db.Clice on obj.clouseID equals c.Id into g
-        //                      from subset in g.DefaultIfEmpty()
-        //                      where obj.categoryID == categoryID && subset.IsEnabled == true
-        //                      select new PreviewClauses { Clause = subset.Clouse1, ClauseID = obj.clouseID }
-        //            );
+                              join c in db.Clice on obj.clouseID equals c.Id into g
+                              from subset in g.DefaultIfEmpty()
+                              where obj.categoryID == categoryID && subset.IsEnabled == true
+                              select new PreviewClauses { Clause = subset.Clouse1, ClauseID = obj.clouseID }
+                    );
 
-        //    string wordContent = "";
-        //    ViewBag.WordContent = "";
-        //    if (id == null || id == 0)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
+            string wordContent = "";
+            ViewBag.WordContent = "";
+            if (id == null || id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-        //    ViewBag.TemplateId = id;
-        //    Session["CurrentTempAId"] = id;
-        //    Session["CurrentEditId"] = id;
-        //    // Checking associate template
-        //    var objAssociate = db.DocumentTemplates.Find(id);
-        //    if (objAssociate != null)
-        //    {
-        //        ViewBag.Title = "Preview Filled Form  " + objAssociate.DocumentTitle;
-        //        if (objAssociate.AssociateTemplateId != null)
-        //        {
-        //            ViewBag.NxtBtnValue = "Next";
-        //            ViewBag.AssociateId = objAssociate.AssociateTemplateId;
-        //        }
-        //    }
-        //    ViewBag.TemplateId = id;
-        //    int userId = Convert.ToInt32(Session["UserId"]);
-        //    int customerID = 0;
-        //    if (Session["customerId"] != null)
-        //    {
-        //        customerID = Convert.ToInt32(Session["customerId"]);
-        //    }
-        //    try
-        //    {
-        //        var objTemplate = db.DocumentTemplates.Find(id);
-        //        wordContent = getWordContent(objTemplate.TemplateFileName);
-        //        char[] alpha = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
-        //        ////Code for Table
-        //        var keystable = (from k in db.AssociatedKeyGroups
-        //                         join t in db.TemplateKeywords on k.KeyID equals t.TemplateKeyId
-        //                         where k.TemplateID == id && k.Statement == false
-        //                         select new
-        //                         {
-        //                             keyID = t.TemplateKeyId,
-        //                             keyValue = t.TemplateKeyValue,
-        //                             order = k.KeyOrder,
-        //                             Group = k.GroupName
-        //                         }).ToList();
+            ViewBag.TemplateId = id;
+            Session["CurrentTempAId"] = id;
+            Session["CurrentEditId"] = id;
+            // Checking associate template
+            var objAssociate = db.DocumentTemplates.Find(id);
+            if (objAssociate != null)
+            {
+                ViewBag.Title = "Preview Filled Form  " + objAssociate.DocumentTitle;
+                if (objAssociate.AssociateTemplateId != null)
+                {
+                    ViewBag.NxtBtnValue = "Next";
+                    ViewBag.AssociateId = objAssociate.AssociateTemplateId;
+                }
+            }
+            ViewBag.TemplateId = id;
+            int userId = Convert.ToInt32(Session["UserId"]);
+            int customerID = 0;
+            if (Session["customerId"] != null)
+            {
+                customerID = Convert.ToInt32(Session["customerId"]);
+            }
+            try
+            {
+                var objTemplate = db.DocumentTemplates.Find(id);
+                wordContent = getWordContent(objTemplate.TemplateFileName);
+                char[] alpha = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+                ////Code for Table
+                var keystable = (from k in db.AssociatedKeyGroups
+                                 join t in db.TemplateKeywords on k.KeyID equals t.TemplateKeyId
+                                 where k.TemplateID == id && k.Statement == false
+                                 select new
+                                 {
+                                     keyID = t.TemplateKeyId,
+                                     keyValue = t.TemplateKeyValue,
+                                     order = k.KeyOrder,
+                                     Group = k.GroupName
+                                 }).ToList();
 
-        //        //for statement 
-        //        var keys = (from k in db.AssociatedKeyGroups
-        //                    join t in db.TemplateKeywords on k.KeyID equals t.TemplateKeyId
-        //                    where k.TemplateID == id && k.Statement == true
-        //                    select new
-        //                    {
-        //                        keyID = t.TemplateKeyId,
-        //                        keyValue = t.TemplateKeyValue,
-        //                        order = k.KeyOrder,
-        //                        Group = k.GroupName
-        //                    }).ToList();
-        //        //logic for table
-        //        if (keystable != null && keystable.Count > 0)
-        //        {
-        //            var groups = keystable.GroupBy(x => x.Group)
-        //          .Select(g => g.First());
-        //            string groupName = string.Empty;
-        //            StringBuilder htmlTable = new StringBuilder();
-        //            htmlTable.Append("<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 9pt;font-family:Arial'>");
-        //            int chkloop = 0;
-        //            foreach (var g in groups)
-        //            {
-        //                string statement = string.Empty;
-        //                bool isNumeric = false;
-        //                int startsFrom = 0;
-        //                groupName = g.Group;
-        //                var groupKeys = keystable.Where(k => k.Group == g.Group).OrderBy(o => o.order).ToList();
-        //                int key1 = groupKeys.FirstOrDefault().keyID;
-        //                string key1Value = groupKeys.FirstOrDefault().keyValue;
-        //                int count = 0;
-        //                int countm = 0;
-        //                foreach (var p in groupKeys)
-        //                {
-        //                    if (chkloop == 0)
-        //                    {
-        //                        for (int th = 0; th < groupKeys.Count; th++)
-        //                        {
-        //                            string d = groupKeys[th].keyValue;
-        //                            var keyID2 = db.TemplateKeywords.Where(k => k.TemplateKeyValue == d && k.Cloned != true).FirstOrDefault();
-        //                            if (keyID2 != null)
-        //                            {
-        //                                htmlTable.Append("<th style='border: 1px solid #ccc'>" + keyID2.TemplateKeyLabels + "</th>");
+                //for statement 
+                var keys = (from k in db.AssociatedKeyGroups
+                            join t in db.TemplateKeywords on k.KeyID equals t.TemplateKeyId
+                            where k.TemplateID == id && k.Statement == true
+                            select new
+                            {
+                                keyID = t.TemplateKeyId,
+                                keyValue = t.TemplateKeyValue,
+                                order = k.KeyOrder,
+                                Group = k.GroupName
+                            }).ToList();
+                //logic for table
+                if (keystable != null && keystable.Count > 0)
+                {
+                    var groups = keystable.GroupBy(x => x.Group)
+                  .Select(g => g.First());
+                    string groupName = string.Empty;
+                    StringBuilder htmlTable = new StringBuilder();
+                    htmlTable.Append("<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 9pt;font-family:Arial'>");
+                    int chkloop = 0;
+                    foreach (var g in groups)
+                    {
+                        string statement = string.Empty;
+                        bool isNumeric = false;
+                        int startsFrom = 0;
+                        groupName = g.Group;
+                        var groupKeys = keystable.Where(k => k.Group == g.Group).OrderBy(o => o.order).ToList();
+                        int key1 = groupKeys.FirstOrDefault().keyID;
+                        string key1Value = groupKeys.FirstOrDefault().keyValue;
+                        int count = 0;
+                        int countm = 0;
+                        foreach (var p in groupKeys)
+                        {
+                            if (chkloop == 0)
+                            {
+                                for (int th = 0; th < groupKeys.Count; th++)
+                                {
+                                    string d = groupKeys[th].keyValue;
+                                    var keyID2 = db.TemplateKeywords.Where(k => k.TemplateKeyValue == d && k.Cloned != true).FirstOrDefault();
+                                    if (keyID2 != null)
+                                    {
+                                        htmlTable.Append("<th style='border: 1px solid #ccc'>" + keyID2.TemplateKeyLabels + "</th>");
 
-        //                            }
-        //                            //else
-        //                            //{
-        //                            //    var keyIDcloned = db.TemplateKeywords.Where(k => k.TemplateKeyValue == d).FirstOrDefault();
-        //                            //    htmlTable.Append("<th style='border: 1px solid #ccc'>" + keyIDcloned.TemplateKeyLabels + "</th>");
-        //                            //}
-        //                            chkloop = 1;
-        //                        }
-        //                    }
-        //                    var inputs = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.TemplateKey == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).FirstOrDefault();
-        //                    if (inputs != null)
-        //                    {
-        //                        if (count == 0)
-        //                            htmlTable.Append("<tr>");
-        //                        htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + inputs.UserInputs + "</td>");
-        //                        count++;
-        //                        if (count == groupKeys.Count)
-        //                        {
-        //                            htmlTable.Append("</tr>");
-        //                            count = 0;
-        //                        }
+                                    }
+                                    //else
+                                    //{
+                                    //    var keyIDcloned = db.TemplateKeywords.Where(k => k.TemplateKeyValue == d).FirstOrDefault();
+                                    //    htmlTable.Append("<th style='border: 1px solid #ccc'>" + keyIDcloned.TemplateKeyLabels + "</th>");
+                                    //}
+                                    chkloop = 1;
+                                }
+                            }
+                            var inputs = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.TemplateKey == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).FirstOrDefault();
+                            if (inputs != null)
+                            {
+                                if (count == 0)
+                                    htmlTable.Append("<tr>");
+                                htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + inputs.UserInputs + "</td>");
+                                count++;
+                                if (count == groupKeys.Count)
+                                {
+                                    htmlTable.Append("</tr>");
+                                    count = 0;
+                                }
 
-        //                    }
-
-
-
-        //                }
-
-        //                var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == key1Value && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-        //                //var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId != null && w.CustomerId == customerID && w.IsEnabled == true).GroupBy(w=>w.ParentkeyId).ToList();
-        //                //to check keys total count to make no of rows
-        //                var chknull = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).FirstOrDefault();
-        //                int countkeystotal = 0;
-        //                if (chknull != null)
-        //                {
-        //                    var countkey = db.TemplateDynamicFormValues.
-        //                      Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).
-        //                      GroupBy(w => w.ParentkeyId).OrderByDescending(t => t.Count()).FirstOrDefault();
-        //                    countkeystotal = countkey.Count();
-        //                    if (multivalues != null && multivalues.Count() > 0)
-        //                    {
-        //                        List<PreviewRowID> Rowids = new List<PreviewRowID>();
-        //                        int f = 2;
-        //                        int j = 1;
-        //                        // foreach (var m in multivalues)
-        //                        for (int cnt = 0; cnt <= countkeystotal - 1; cnt++)
-        //                        {
-        //                            htmlTable.Append("<tr>");
-        //                            foreach (var p in groupKeys)
-        //                            {
-        //                                List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
-        //                                var multiKeyvalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-
-        //                                for (int i = 0; i <= multiKeyvalues.Count - 1; i++)
-        //                                {
-
-        //                                    if (keyvalues.Count > 0)
-        //                                    {
-
-        //                                        if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
-        //                                        {
-        //                                            if (keyvalues.All(x => x.ToString() != multiKeyvalues[i].TemplateKey))
-        //                                            {
-        //                                                keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
-        //                                                //  keyvalues.Add(.ToString());
-        //                                            }
-        //                                        }
-
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
-        //                                        {
-        //                                            //htmlTable = htmlTable.Append("<tr>");
-
-        //                                            keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
-        //                                        }
-        //                                    }
-        //                                }
-        //                                if (keyvalues.Count == 0)
-        //                                {
-        //                                    htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + "" + "</td>");
-        //                                }
-        //                                else
-        //                                {
-        //                                    foreach (var t in keyvalues)
-        //                                    {
-        //                                        Rowids.Add(new PreviewRowID { RowId = t.RowId });
-        //                                        var uservalue = db.TemplateDynamicFormValues.Where(x => x.CustomerId == customerID && x.IsEnabled == true && x.TemplateKey == t.TemplateKey).FirstOrDefault();
-        //                                        // statement = statement + " " + uservalue.UserInputs;
-        //                                        htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + uservalue.UserInputs + "</td>");
-        //                                        break;
-        //                                    }
-        //                                }
-        //                                //htmlTable.Append("</tr>");
-        //                                //keyvalues.Remove(t);
-
-        //                            }
-        //                            htmlTable.Append("</tr>");
-        //                            // if (isNumeric ? j - 1 != multivalues.Count() : j != multivalues.Count())
-        //                            if (isNumeric ? j - 1 != cnt : j != cnt)
-        //                                //htmlTable = htmlTable.Append(+ groupName.ToString() + "_" + f + ">");
-        //                                j++;
-        //                        }
-        //                        htmlTable.Append("</table>");
-        //                        wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + htmlTable.ToString() + "</i>");
-
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    // htmlTable.Append("<tr>");
-        //                    //..statement = alpha[0] + ". " + statement;
-        //                    htmlTable.Append("</table>");
-        //                    wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + htmlTable.ToString() + "</i>");
-        //                }
+                            }
 
 
 
+                        }
 
-        //            }
-        //            //cloning
-        //            //for cloning table
-        //            StringBuilder htmlTablecloning = new StringBuilder();
-        //            htmlTablecloning.Append("<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 9pt;font-family:Arial'>");
+                        var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == key1Value && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+                        //var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId != null && w.CustomerId == customerID && w.IsEnabled == true).GroupBy(w=>w.ParentkeyId).ToList();
+                        //to check keys total count to make no of rows
+                        var chknull = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).FirstOrDefault();
+                        int countkeystotal = 0;
+                        if (chknull != null)
+                        {
+                            var countkey = db.TemplateDynamicFormValues.
+                              Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).
+                              GroupBy(w => w.ParentkeyId).OrderByDescending(t => t.Count()).FirstOrDefault();
+                            countkeystotal = countkey.Count();
+                            if (multivalues != null && multivalues.Count() > 0)
+                            {
+                                List<PreviewRowID> Rowids = new List<PreviewRowID>();
+                                int f = 2;
+                                int j = 1;
+                                // foreach (var m in multivalues)
+                                for (int cnt = 0; cnt <= countkeystotal - 1; cnt++)
+                                {
+                                    htmlTable.Append("<tr>");
+                                    foreach (var p in groupKeys)
+                                    {
+                                        List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
+                                        var multiKeyvalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).ToList();
 
-        //            var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
-        //            var objDynamicFormsingle = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).FirstOrDefault();
-        //            htmlTablecloning.Append("<tr>");
-        //            foreach (var temp in objDynamicForm)
-        //            {
-        //                //for cloned templatekey
-        //                var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
-        //                if (keyID != null)
-        //                {
-        //                    var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
-        //                    if (duplicateKeys.Count != 0)
-        //                    {
-        //                        foreach (var cloned in duplicateKeys)
-        //                        {
-        //                            htmlTablecloning.Append("<td style='width:100px;border: 1px solid #ccc'>" + temp.UserInputs + "</td>");
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            htmlTablecloning.Append("<tr>");
-        //            htmlTablecloning.Append("</table>");
-        //            wordContent = wordContent.Replace(objDynamicFormsingle.TemplateKey, "<i>" + htmlTablecloning.ToString() + "</i>");
-        //            wordContent = wordContent.Replace(objDynamicFormsingle.TemplateKey, string.Empty);
+                                        for (int i = 0; i <= multiKeyvalues.Count - 1; i++)
+                                        {
 
-        //            //end cloning
-        //        }
+                                            if (keyvalues.Count > 0)
+                                            {
 
-        //        //logic for Statement
+                                                if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
+                                                {
+                                                    if (keyvalues.All(x => x.ToString() != multiKeyvalues[i].TemplateKey))
+                                                    {
+                                                        keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
+                                                        //  keyvalues.Add(.ToString());
+                                                    }
+                                                }
 
+                                            }
+                                            else
+                                            {
+                                                if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
+                                                {
+                                                    //htmlTable = htmlTable.Append("<tr>");
 
-        //        else if (keys != null && keys.Count > 0)
-        //        {
-        //            var groups = keys.GroupBy(x => x.Group)
+                                                    keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
+                                                }
+                                            }
+                                        }
+                                        if (keyvalues.Count == 0)
+                                        {
+                                            htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + "" + "</td>");
+                                        }
+                                        else
+                                        {
+                                            foreach (var t in keyvalues)
+                                            {
+                                                Rowids.Add(new PreviewRowID { RowId = t.RowId });
+                                                var uservalue = db.TemplateDynamicFormValues.Where(x => x.CustomerId == customerID && x.IsEnabled == true && x.TemplateKey == t.TemplateKey).FirstOrDefault();
+                                                // statement = statement + " " + uservalue.UserInputs;
+                                                htmlTable.Append("<td style='width:100px;border: 1px solid #ccc'>" + uservalue.UserInputs + "</td>");
+                                                break;
+                                            }
+                                        }
+                                        //htmlTable.Append("</tr>");
+                                        //keyvalues.Remove(t);
 
-        //            .Select(g => g.First());
+                                    }
+                                    htmlTable.Append("</tr>");
+                                    // if (isNumeric ? j - 1 != multivalues.Count() : j != multivalues.Count())
+                                    if (isNumeric ? j - 1 != cnt : j != cnt)
+                                        //htmlTable = htmlTable.Append(+ groupName.ToString() + "_" + f + ">");
+                                        j++;
+                                }
+                                htmlTable.Append("</table>");
+                                wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + htmlTable.ToString() + "</i>");
 
-        //            string groupName = string.Empty;
-        //            foreach (var g in groups)
-        //            {
-        //                string statement = string.Empty;
-        //                Roman r = new Roman();
-        //                bool isNumeric = false;
-        //                bool isRoman = false;
-        //                string roman = "I";
-        //                int startsFrom = 0;
-        //                var groupAutoNo = db.AssociatedKeyGroups.Where(gp => gp.GroupName == g.Group && gp.AutoNumberStartsFrom != null).FirstOrDefault();
-        //                if (groupAutoNo != null)
-        //                {
-        //                    if (groupAutoNo.AutoNumberStartsFrom != null)
-        //                    {
-        //                        var chkRoman = groupAutoNo.AutoNumberStartsFrom;
-        //                        if (chkRoman == "#R")
-        //                            isRoman = true;
-        //                        else
-        //                        {
-        //                            isNumeric = int.TryParse(groupAutoNo.AutoNumberStartsFrom, out startsFrom);
-        //                            if (!isNumeric)
-        //                            {
-        //                                string alphabets = "abcdefghijklmnopqrstuvwxyz";
-        //                                string ext = "";
-        //                                if (alphabets.Contains(groupAutoNo.AutoNumberStartsFrom))
-        //                                {
-        //                                    ext = alphabets.Substring(alphabets.IndexOf(groupAutoNo.AutoNumberStartsFrom));//, alphabets.Length - 1);
-        //                                }
-        //                                else
-        //                                {
-        //                                    alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        //                                    ext = alphabets.Substring(alphabets.IndexOf(groupAutoNo.AutoNumberStartsFrom));//, alphabets.Length - 1);
-        //                                }
-        //                                alpha = ext.ToCharArray();
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    isNumeric = false;
-        //                    alpha = "abcdefghijklmnopqrstuvwxyz".ToArray();
-        //                }
-
-        //                groupName = g.keyValue;
-        //                var groupKeys = keys.Where(k => k.Group == g.Group).OrderBy(o => o.order).ToList();
-        //                int key1 = groupKeys.FirstOrDefault().keyID;
-        //                string key1Value = groupKeys.FirstOrDefault().keyValue;
-        //                foreach (var p in groupKeys)
-        //                {
-        //                    var inputs = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.TemplateKey == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).FirstOrDefault();
-        //                    if (inputs != null)
-        //                        statement = statement + " " + inputs.UserInputs;
-
-        //                    //for cloning
-        //                    var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
-        //                    foreach (var temp in objDynamicForm)
-        //                    {
-        //                        //for uncloned templatekey
-        //                        var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
-        //                        if (keyID != null)
-        //                        {
-        //                            var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
-        //                            if (duplicateKeys.Count != 0)
-        //                            {
-        //                                foreach (var cloned in duplicateKeys)
-        //                                {
-        //                                    //wordContent = wordContent.Replace("&lt;" + cloned.TemplateKey + "&gt;", "<i>" + inputs.UserInputs + "</i>");
-        //                                    wordContent = wordContent.Replace("&lt;" + cloned.TemplateKeyValue + "&gt;", "<i>" + temp.UserInputs + "</i>");
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-
-        //                var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-        //                //to check keys total count to make no of rows
-        //                var chknull = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).FirstOrDefault();
-        //                int countkeystotal = 0;
-        //                if (chknull != null)
-        //                {
-        //                    {
-        //                        var keyvalues = groupKeys.Select(x => x.keyValue);
-        //                        var countkey = db.TemplateDynamicFormValues.
-        //                      Where(w => w.TemplateId == id && w.CustomerId == customerID && keyvalues.Contains(w.ParentkeyId) && w.IsEnabled == true && w.ParentkeyId != null)
-        //                      .GroupBy(w => w.ParentkeyId).OrderByDescending(t => t.Count()).FirstOrDefault();
-        //                        countkeystotal = countkey.Count();
-        //                    }
-        //                    if (multivalues != null && multivalues.Count() > 0)
-        //                        if (isNumeric)
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + startsFrom + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
-        //                        else if (isRoman)
-
-        //                        {
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + r.ToRomanNumber(1) + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
-        //                        }
-        //                        else
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[0] + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
-
-        //                    wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "" + statement + "");
-
-        //                    //SearchAndReplace(groupName, statement, filepath);
-        //                    List<PreviewRowID> Rowids = new List<PreviewRowID>();
-        //                    groupName = groupName + "_1";
-        //                    int f = 2;
-        //                    int j = 1;
-        //                    if (isNumeric)
-
-        //                        j = startsFrom + 1;
-        //                    else if (isRoman)
-        //                    {
-        //                        j = 2;
-        //                    }
-        //                    else
-        //                        j = 1;
-        //                    //foreach (var m in multivalues)
-        //                    for (int cn = 0; cn <= countkeystotal - 1; cn++)
-        //                    {
-        //                        if (isNumeric)
-        //                        {
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + j + ".</span> ";
-        //                        }
-        //                        else if (isRoman)
-        //                        {
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + r.ToRomanNumber(j) + ".</span> ";
-        //                        }
-        //                        else
-        //                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[j] + ".</span> ";
-
-        //                        foreach (var p in groupKeys)
-        //                        {
-        //                            List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
-        //                            var multiKeyvalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-
-        //                            for (int i = 0; i <= multiKeyvalues.Count - 1; i++)
-        //                            {
-
-        //                                if (keyvalues.Count > 0)
-        //                                {
-
-        //                                    if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
-        //                                    {
-        //                                        if (keyvalues.All(x => x.ToString() != multiKeyvalues[i].TemplateKey))
-        //                                        {
-        //                                            keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
-        //                                            //  keyvalues.Add(.ToString());
-        //                                        }
-        //                                    }
-
-        //                                }
-        //                                else
-        //                                {
-        //                                    if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
-        //                                    {
-        //                                        keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
-        //                                    }
-        //                                }
-        //                            }
-        //                            foreach (var t in keyvalues)
-        //                            {
-        //                                Rowids.Add(new PreviewRowID { RowId = t.RowId });
-        //                                var uservalue = db.TemplateDynamicFormValues.Where(x => x.CustomerId == customerID && x.IsEnabled == true && x.TemplateKey == t.TemplateKey).FirstOrDefault();
-
-        //                                statement = statement + " <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + uservalue.UserInputs + "</i></span></p>";
-        //                                //keyvalues.Remove(t);
-        //                                break;
-        //                            }
-        //                        }
-        //                        //if (isNumeric ? j - 1 != multivalues.Count() : j != multivalues.Count())
-        //                        if (isNumeric ? j - 1 != cn : j != cn)
-        //                            statement = statement + "  <" + groupName + "_" + f + ">";
-        //                        wordContent = wordContent.Replace("<" + groupName + ">", statement);
-        //                        groupName = groupName + "_" + f;
-        //                        j++;
-        //                        //AsciicharforAutoNumber++;
-        //                    }
-        //                    //code for replace uncloned template
-        //                    var keyvalues1 = groupKeys.Select(x => x.keyValue);
-        //                    var UnclonedTemplate = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && !keyvalues1.Contains(b.ParentkeyId) && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID && !keyvalues1.Contains(b.TemplateKey)).ToList().OrderByDescending(x => x.RowId);
-        //                    int resetfirstkey = 0;
-        //                    foreach (var temp in UnclonedTemplate)
-        //                    {
-        //                        //var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).ToList();
-        //                        List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
-        //                        var inputsofParent = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == null && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-        //                        //  wordContent = source.Replace("<" + oldValue + ">", "<i>" + oldValue + "</i>");
-        //                        if (resetfirstkey == 0)
-        //                        {
-        //                            //wordContent = wordContent.ReplacewithIndex(temp.TemplateKey, temp.UserInputs);
-        //                            //resetfirstkey = 0; 
-        //                            resetfirstkey = 1;
-        //                        }
-
-        //                        var inputs = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == temp.TemplateKey && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-        //                        var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
-        //                        if (keyID != null)
-        //                        {
-        //                            for (int u = 0; u < inputs.Count; u++)
-        //                            {
-        //                                wordContent = wordContent.ReplacewithIndex(temp.TemplateKey, inputs[u].UserInputs);
-        //                            }
-        //                        }
-        //                        //to remove <template> which having no input
-        //                        break;
-        //                    }
-        //                    foreach (var tempkey in UnclonedTemplate)
-        //                    {
-        //                        wordContent = wordContent.ReplacewithIndex(tempkey.TemplateKey, string.Empty);
-        //                    }
-        //                    //end uncloned
-        //                    groupName = g.Group;
-        //                }
-        //                else
-        //                {
-
-        //                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[0] + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p>";
-
-        //                    wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + statement + "</i>");
-        //                }
-
-        //            }
-        //        }
-        //        //code for not groupassociated template
-
-        //        else
-
-        //        {
-        //            var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
-
-        //            var maxlength = db.GetMaxlengthOfUserInputs(customerID, id).ToList();
-
-        //            var statementKeys = db.AssociatedKeyGroups.Where(t => t.TemplateID == id && t.DesignType == "Statement").Select(k => k.KeyID).ToList();
-
-        //            //char[] alpha = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
-
-        //            foreach (var temp in objDynamicForm)
-        //            {
-        //                var inputs = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == temp.TemplateKey && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
-
-        //                var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
-        //                if (keyID != null)
-        //                {
-        //                    if (!statementKeys.Contains(keyID.TemplateKeyId))
-        //                    {
-        //                        if (inputs != null && inputs.Count > 0)
-        //                        {
-        //                            bool serialNumber = false;
-        //                            int p = 1;
-        //                            // temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
-        //                            var hasAssociatedGroup = (from a in db.AssociatedKeyGroups
-        //                                                      join k in db.TemplateKeywords on a.KeyID equals k.TemplateKeyId
-        //                                                      where k.TemplateKeyValue == temp.TemplateKey && a.TemplateID == temp.TemplateId
-        //                                                      select new { groupName = a.GroupName, firstColumn = a.FirstColumn }).ToList();
-        //                            if (hasAssociatedGroup != null && hasAssociatedGroup.Count() > 0)
-        //                            {
-        //                                string groupName = hasAssociatedGroup.FirstOrDefault().groupName;
+                            }
+                        }
+                        else
+                        {
+                            // htmlTable.Append("<tr>");
+                            //..statement = alpha[0] + ". " + statement;
+                            htmlTable.Append("</table>");
+                            wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + htmlTable.ToString() + "</i>");
+                        }
 
 
-        //                                for (int u = 0; u < inputs.Count; u++)
-        //                                {
-        //                                    if (hasAssociatedGroup.Count() > 0)
-        //                                    {
-        //                                        if (hasAssociatedGroup.FirstOrDefault().firstColumn == "First")
-        //                                        {
-        //                                            var isFirstkey = db.AssociatedKeyGroups.Where(k => k.KeyID == keyID.TemplateKeyId && k.TemplateID == temp.TemplateId && k.KeyOrder == 1).FirstOrDefault();
-        //                                            if (isFirstkey != null)
-        //                                            {
-        //                                                serialNumber = true;
-        //                                                if (p == 1)
-        //                                                    temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
-        //                                            }
 
-        //                                        }
-        //                                        else
-        //                                        {
-        //                                            serialNumber = true;
-        //                                            if (p == 1)
-        //                                                temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
-        //                                        }
-        //                                        var length = maxlength.Where(g => g.groupname == groupName).FirstOrDefault().lettercount;
-        //                                        int maximumlength = length != null ? Convert.ToInt32(length) : 0;
-        //                                        //long length = maxlength.FirstOrDefault().Value;
 
-        //                                        if (p == 1 && temp.UserInputs.Length < length)
-        //                                        {
-        //                                            StringBuilder appendText1 = new StringBuilder();
-        //                                            appendText1.Append("".PadLeft((maximumlength - temp.UserInputs.Length), ' ').Replace(" ", " "));
-        //                                            temp.UserInputs = temp.UserInputs + " " + appendText1;
-        //                                        }
-        //                                        if (inputs[u].UserInputs.Length < length)
-        //                                        {
-        //                                            Int32 tobeadded = maximumlength - inputs[u].UserInputs.Length;
-        //                                            StringBuilder appendText = new StringBuilder();
-        //                                            appendText.Append("".PadRight(tobeadded, ' ').Replace(" ", " "));
-        //                                            if (serialNumber)
-        //                                                temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs + "  " + appendText;
-        //                                            //.PadRight(Convert.ToInt32(tobeadded + 2)) + "\t";
-        //                                            else
-        //                                                temp.UserInputs = temp.UserInputs + "<br/> " + inputs[u].UserInputs + "  " + appendText;
-        //                                        }
-        //                                        else
-        //                                        {
-        //                                            if (serialNumber)
-        //                                                temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs;
-        //                                            else
-        //                                                temp.UserInputs = temp.UserInputs + "<br/> " + inputs[u].UserInputs;
-        //                                        }
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        if (p == 1)
-        //                                            temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
-        //                                        temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs;
-        //                                    }
-        //                                    p++;
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                int q = 1;
-        //                                for (int u = 0; u < inputs.Count; u++)
-        //                                {
+                    }
+                    //cloning
+                    //for cloning table
+                    StringBuilder htmlTablecloning = new StringBuilder();
+                    htmlTablecloning.Append("<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 9pt;font-family:Arial'>");
 
-        //                                    temp.UserInputs = temp.UserInputs + "<br/> " + alpha[q] + ". " + inputs[u].UserInputs;
-        //                                    q++;
-        //                                }
-        //                            }
-        //                        }
-        //                        wordContent = wordContent.Replace("&lt;" + temp.TemplateKey + "&gt;", "<i>" + temp.UserInputs + "</i>");
-        //                        // wordContent = wordContent.Replace("\n", "<br></br>");
-        //                    }
-        //                    //changed by vai
-        //                    //var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
+                    var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
+                    var objDynamicFormsingle = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).FirstOrDefault();
+                    htmlTablecloning.Append("<tr>");
+                    foreach (var temp in objDynamicForm)
+                    {
+                        //for cloned templatekey
+                        var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
+                        if (keyID != null)
+                        {
+                            var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
+                            if (duplicateKeys.Count != 0)
+                            {
+                                foreach (var cloned in duplicateKeys)
+                                {
+                                    htmlTablecloning.Append("<td style='width:100px;border: 1px solid #ccc'>" + temp.UserInputs + "</td>");
+                                }
+                            }
+                        }
+                    }
+                    htmlTablecloning.Append("<tr>");
+                    htmlTablecloning.Append("</table>");
+                    wordContent = wordContent.Replace(objDynamicFormsingle.TemplateKey, "<i>" + htmlTablecloning.ToString() + "</i>");
+                    wordContent = wordContent.Replace(objDynamicFormsingle.TemplateKey, string.Empty);
 
-        //                    //foreach (var cloned in duplicateKeys)
-        //                    //{
-        //                    //    wordContent = wordContent.Replace("&lt;" + cloned.TemplateKeyValue + "&gt;", "<i>" + temp.UserInputs + "</i>");
-        //                    //}
-        //                    // end changed by vaishali
-        //                    //wordContent = wordContent.Replace("&lt;" + temp.TemplateKey + "&gt;", "<i>" + temp.UserInputs + "</i>");
-        //                }
-        //            }
-        //        }
+                    //end cloning
+                }
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ErrorLog.LogThisError(ex);
-        //    }
-        //    ViewBag.WordContent = wordContent;
-        //    ViewBag.ClientID = Session["ServiceID"];
-        //    ViewBag.customerID = customerID;
-        //    TempData.Keep();
-        //    return View(clauselist.ToList());
-        //}
+                //logic for Statement
+
+
+                else if (keys != null && keys.Count > 0)
+                {
+                    var groups = keys.GroupBy(x => x.Group)
+
+                    .Select(g => g.First());
+
+                    string groupName = string.Empty;
+                    foreach (var g in groups)
+                    {
+                        string statement = string.Empty;
+                        Roman r = new Roman();
+                        bool isNumeric = false;
+                        bool isRoman = false;
+                        string roman = "I";
+                        int startsFrom = 0;
+                        var groupAutoNo = db.AssociatedKeyGroups.Where(gp => gp.GroupName == g.Group && gp.AutoNumberStartsFrom != null).FirstOrDefault();
+                        if (groupAutoNo != null)
+                        {
+                            if (groupAutoNo.AutoNumberStartsFrom != null)
+                            {
+                                var chkRoman = groupAutoNo.AutoNumberStartsFrom;
+                                if (chkRoman == "#R")
+                                    isRoman = true;
+                                else
+                                {
+                                    isNumeric = int.TryParse(groupAutoNo.AutoNumberStartsFrom, out startsFrom);
+                                    if (!isNumeric)
+                                    {
+                                        string alphabets = "abcdefghijklmnopqrstuvwxyz";
+                                        string ext = "";
+                                        if (alphabets.Contains(groupAutoNo.AutoNumberStartsFrom))
+                                        {
+                                            ext = alphabets.Substring(alphabets.IndexOf(groupAutoNo.AutoNumberStartsFrom));//, alphabets.Length - 1);
+                                        }
+                                        else
+                                        {
+                                            alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                                            ext = alphabets.Substring(alphabets.IndexOf(groupAutoNo.AutoNumberStartsFrom));//, alphabets.Length - 1);
+                                        }
+                                        alpha = ext.ToCharArray();
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isNumeric = false;
+                            alpha = "abcdefghijklmnopqrstuvwxyz".ToArray();
+                        }
+
+                        groupName = g.keyValue;
+                        var groupKeys = keys.Where(k => k.Group == g.Group).OrderBy(o => o.order).ToList();
+                        int key1 = groupKeys.FirstOrDefault().keyID;
+                        string key1Value = groupKeys.FirstOrDefault().keyValue;
+                        foreach (var p in groupKeys)
+                        {
+                            var inputs = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.TemplateKey == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).FirstOrDefault();
+                            if (inputs != null)
+                                statement = statement + " " + inputs.UserInputs;
+
+                            //for cloning
+                            var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
+                            foreach (var temp in objDynamicForm)
+                            {
+                                //for uncloned templatekey
+                                var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
+                                if (keyID != null)
+                                {
+                                    var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
+                                    if (duplicateKeys.Count != 0)
+                                    {
+                                        foreach (var cloned in duplicateKeys)
+                                        {
+                                            //wordContent = wordContent.Replace("&lt;" + cloned.TemplateKey + "&gt;", "<i>" + inputs.UserInputs + "</i>");
+                                            wordContent = wordContent.Replace("&lt;" + cloned.TemplateKeyValue + "&gt;", "<i>" + temp.UserInputs + "</i>");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        var multivalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+                        //to check keys total count to make no of rows
+                        var chknull = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.CustomerId == customerID && w.IsEnabled == true && w.ParentkeyId != null).FirstOrDefault();
+                        int countkeystotal = 0;
+                        if (chknull != null)
+                        {
+                            {
+                                var keyvalues = groupKeys.Select(x => x.keyValue);
+                                var countkey = db.TemplateDynamicFormValues.
+                              Where(w => w.TemplateId == id && w.CustomerId == customerID && keyvalues.Contains(w.ParentkeyId) && w.IsEnabled == true && w.ParentkeyId != null)
+                              .GroupBy(w => w.ParentkeyId).OrderByDescending(t => t.Count()).FirstOrDefault();
+                                countkeystotal = countkey.Count();
+                            }
+                            if (multivalues != null && multivalues.Count() > 0)
+                                if (isNumeric)
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + startsFrom + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
+                                else if (isRoman)
+
+                                {
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + r.ToRomanNumber(1) + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
+                                }
+                                else
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[0] + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p><" + groupName + "_1>";
+
+                            wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "" + statement + "");
+
+                            //SearchAndReplace(groupName, statement, filepath);
+                            List<PreviewRowID> Rowids = new List<PreviewRowID>();
+                            groupName = groupName + "_1";
+                            int f = 2;
+                            int j = 1;
+                            if (isNumeric)
+
+                                j = startsFrom + 1;
+                            else if (isRoman)
+                            {
+                                j = 2;
+                            }
+                            else
+                                j = 1;
+                            //foreach (var m in multivalues)
+                            for (int cn = 0; cn <= countkeystotal - 1; cn++)
+                            {
+                                if (isNumeric)
+                                {
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + j + ".</span> ";
+                                }
+                                else if (isRoman)
+                                {
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + r.ToRomanNumber(j) + ".</span> ";
+                                }
+                                else
+                                    statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[j] + ".</span> ";
+
+                                foreach (var p in groupKeys)
+                                {
+                                    List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
+                                    var multiKeyvalues = db.TemplateDynamicFormValues.Where(w => w.TemplateId == id && w.ParentkeyId == p.keyValue && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+
+                                    for (int i = 0; i <= multiKeyvalues.Count - 1; i++)
+                                    {
+
+                                        if (keyvalues.Count > 0)
+                                        {
+
+                                            if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
+                                            {
+                                                if (keyvalues.All(x => x.ToString() != multiKeyvalues[i].TemplateKey))
+                                                {
+                                                    keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
+                                                    //  keyvalues.Add(.ToString());
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            if (Rowids.All(x => x.RowId.ToString() != multiKeyvalues[i].RowId.ToString()))
+                                            {
+                                                keyvalues.Add(new PreviewKeyValue { TemplateKey = multiKeyvalues[i].TemplateKey, RowId = multiKeyvalues[i].RowId });
+                                            }
+                                        }
+                                    }
+                                    foreach (var t in keyvalues)
+                                    {
+                                        Rowids.Add(new PreviewRowID { RowId = t.RowId });
+                                        var uservalue = db.TemplateDynamicFormValues.Where(x => x.CustomerId == customerID && x.IsEnabled == true && x.TemplateKey == t.TemplateKey).FirstOrDefault();
+
+                                        statement = statement + " <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + uservalue.UserInputs + "</i></span></p>";
+                                        //keyvalues.Remove(t);
+                                        break;
+                                    }
+                                }
+                                //if (isNumeric ? j - 1 != multivalues.Count() : j != multivalues.Count())
+                                if (isNumeric ? j - 1 != cn : j != cn)
+                                    statement = statement + "  <" + groupName + "_" + f + ">";
+                                wordContent = wordContent.Replace("<" + groupName + ">", statement);
+                                groupName = groupName + "_" + f;
+                                j++;
+                                //AsciicharforAutoNumber++;
+                            }
+                            //code for replace uncloned template
+                            var keyvalues1 = groupKeys.Select(x => x.keyValue);
+                            var UnclonedTemplate = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && !keyvalues1.Contains(b.ParentkeyId) && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID && !keyvalues1.Contains(b.TemplateKey)).ToList().OrderByDescending(x => x.RowId);
+                            int resetfirstkey = 0;
+                            foreach (var temp in UnclonedTemplate)
+                            {
+                                //var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).ToList();
+                                List<PreviewKeyValue> keyvalues = new List<PreviewKeyValue>();
+                                var inputsofParent = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == null && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+                                //  wordContent = source.Replace("<" + oldValue + ">", "<i>" + oldValue + "</i>");
+                                if (resetfirstkey == 0)
+                                {
+                                    //wordContent = wordContent.ReplacewithIndex(temp.TemplateKey, temp.UserInputs);
+                                    //resetfirstkey = 0; 
+                                    resetfirstkey = 1;
+                                }
+
+                                var inputs = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == temp.TemplateKey && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+                                var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
+                                if (keyID != null)
+                                {
+                                    for (int u = 0; u < inputs.Count; u++)
+                                    {
+                                        wordContent = wordContent.ReplacewithIndex(temp.TemplateKey, inputs[u].UserInputs);
+                                    }
+                                }
+                                //to remove <template> which having no input
+                                break;
+                            }
+                            foreach (var tempkey in UnclonedTemplate)
+                            {
+                                wordContent = wordContent.ReplacewithIndex(tempkey.TemplateKey, string.Empty);
+                            }
+                            //end uncloned
+                            groupName = g.Group;
+                        }
+                        else
+                        {
+
+                            statement = "<p dir='ltr' class='css-000004' style='margin: 0 0 0px;position:relative;font-family:\"Times New Roman\", \"serif\";font-size: 12pt;margin-left: 0.18in;text-indent: -0.18in;'><span class='css-000005'> " + alpha[0] + ".</span>  <span class='css-DefaultParagraphFont-000000'><i class='dynamic-form-clause'>" + statement + "</i> </span></p>";
+
+                            wordContent = wordContent.Replace("&lt;" + groupName + "&gt;", "<i>" + statement + "</i>");
+                        }
+
+                    }
+                }
+                //code for not groupassociated template
+
+                else
+
+                {
+                    var objDynamicForm = db.TemplateDynamicFormValues.Where(b => b.TemplateId == id && b.UserId == userId && b.IsEnabled == true && b.ParentkeyId == null && b.CustomerId == customerID).ToList().OrderByDescending(x => x.RowId);
+
+                    var maxlength = db.GetMaxlengthOfUserInputs(customerID, id).ToList();
+
+                    var statementKeys = db.AssociatedKeyGroups.Where(t => t.TemplateID == id && t.DesignType == "Statement").Select(k => k.KeyID).ToList();
+
+                    //char[] alpha = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+
+                    foreach (var temp in objDynamicForm)
+                    {
+                        var inputs = db.TemplateDynamicFormValues.Where(w => w.ParentkeyId == temp.TemplateKey && w.TemplateId == temp.TemplateId && w.CustomerId == customerID && w.IsEnabled == true).ToList();
+
+                        var keyID = db.TemplateKeywords.Where(k => k.TemplateKeyValue == temp.TemplateKey && k.Cloned != true).FirstOrDefault();
+                        if (keyID != null)
+                        {
+                            if (!statementKeys.Contains(keyID.TemplateKeyId))
+                            {
+                                if (inputs != null && inputs.Count > 0)
+                                {
+                                    bool serialNumber = false;
+                                    int p = 1;
+                                    // temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
+                                    var hasAssociatedGroup = (from a in db.AssociatedKeyGroups
+                                                              join k in db.TemplateKeywords on a.KeyID equals k.TemplateKeyId
+                                                              where k.TemplateKeyValue == temp.TemplateKey && a.TemplateID == temp.TemplateId
+                                                              select new { groupName = a.GroupName, firstColumn = a.FirstColumn }).ToList();
+                                    if (hasAssociatedGroup != null && hasAssociatedGroup.Count() > 0)
+                                    {
+                                        string groupName = hasAssociatedGroup.FirstOrDefault().groupName;
+
+
+                                        for (int u = 0; u < inputs.Count; u++)
+                                        {
+                                            if (hasAssociatedGroup.Count() > 0)
+                                            {
+                                                if (hasAssociatedGroup.FirstOrDefault().firstColumn == "First")
+                                                {
+                                                    var isFirstkey = db.AssociatedKeyGroups.Where(k => k.KeyID == keyID.TemplateKeyId && k.TemplateID == temp.TemplateId && k.KeyOrder == 1).FirstOrDefault();
+                                                    if (isFirstkey != null)
+                                                    {
+                                                        serialNumber = true;
+                                                        if (p == 1)
+                                                            temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    serialNumber = true;
+                                                    if (p == 1)
+                                                        temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
+                                                }
+                                                var length = maxlength.Where(g => g.groupname == groupName).FirstOrDefault().lettercount;
+                                                int maximumlength = length != null ? Convert.ToInt32(length) : 0;
+                                                //long length = maxlength.FirstOrDefault().Value;
+
+                                                if (p == 1 && temp.UserInputs.Length < length)
+                                                {
+                                                    StringBuilder appendText1 = new StringBuilder();
+                                                    appendText1.Append("".PadLeft((maximumlength - temp.UserInputs.Length), ' ').Replace(" ", " "));
+                                                    temp.UserInputs = temp.UserInputs + " " + appendText1;
+                                                }
+                                                if (inputs[u].UserInputs.Length < length)
+                                                {
+                                                    Int32 tobeadded = maximumlength - inputs[u].UserInputs.Length;
+                                                    StringBuilder appendText = new StringBuilder();
+                                                    appendText.Append("".PadRight(tobeadded, ' ').Replace(" ", " "));
+                                                    if (serialNumber)
+                                                        temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs + "  " + appendText;
+                                                    //.PadRight(Convert.ToInt32(tobeadded + 2)) + "\t";
+                                                    else
+                                                        temp.UserInputs = temp.UserInputs + "<br/> " + inputs[u].UserInputs + "  " + appendText;
+                                                }
+                                                else
+                                                {
+                                                    if (serialNumber)
+                                                        temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs;
+                                                    else
+                                                        temp.UserInputs = temp.UserInputs + "<br/> " + inputs[u].UserInputs;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (p == 1)
+                                                    temp.UserInputs = alpha[0] + ". " + temp.UserInputs;
+                                                temp.UserInputs = temp.UserInputs + "<br/> " + alpha[p] + ". " + inputs[u].UserInputs;
+                                            }
+                                            p++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        int q = 1;
+                                        for (int u = 0; u < inputs.Count; u++)
+                                        {
+
+                                            temp.UserInputs = temp.UserInputs + "<br/> " + alpha[q] + ". " + inputs[u].UserInputs;
+                                            q++;
+                                        }
+                                    }
+                                }
+                                wordContent = wordContent.Replace("&lt;" + temp.TemplateKey + "&gt;", "<i>" + temp.UserInputs + "</i>");
+                                // wordContent = wordContent.Replace("\n", "<br></br>");
+                            }
+                            //changed by vai
+                            //var duplicateKeys = db.TemplateKeywords.Where(k => k.Cloned == true && k.ClonedFrom == keyID.TemplateKeyId).ToList();
+
+                            //foreach (var cloned in duplicateKeys)
+                            //{
+                            //    wordContent = wordContent.Replace("&lt;" + cloned.TemplateKeyValue + "&gt;", "<i>" + temp.UserInputs + "</i>");
+                            //}
+                            // end changed by vaishali
+                            //wordContent = wordContent.Replace("&lt;" + temp.TemplateKey + "&gt;", "<i>" + temp.UserInputs + "</i>");
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+            }
+            ViewBag.WordContent = wordContent;
+            ViewBag.ClientID = Session["ServiceID"];
+            ViewBag.customerID = customerID;
+            TempData.Keep();
+            return View(clauselist.ToList());
+        }
 
         public ActionResult PrevDocument(int? id)
         {
@@ -4430,115 +4659,115 @@ namespace VirtualAdvocate.Controllers
 
         //    return totaltext;
         //}
-        //public string getWordContent(string filename)
-        //{
-        //    string path1 = Path.Combine(Server.MapPath("~/TemplateFiles/" + filename));
+        public string getWordContent(string filename)
+        {
+            string path1 = Path.Combine(Server.MapPath("~/TemplateFiles/" + filename));
 
-        //    byte[] byteArray = System.IO.File.ReadAllBytes(path1);
-        //    int imageCounter = 0;
-
-
-        //    // string html = WordToHTMLSautin(path1);
-
-        //    FileInfo fileInfo = new FileInfo(path1);
-        //    string imageDirectoryName = path1 + "_files";
-        //    DirectoryInfo localDirInfo = new DirectoryInfo(path1 + "_files");
-        //    if (!localDirInfo.Exists)
-        //    {
-        //        localDirInfo.Create();
-        //    }
+            byte[] byteArray = System.IO.File.ReadAllBytes(path1);
+            int imageCounter = 0;
 
 
-        //    using (MemoryStream memoryStream = new MemoryStream())
-        //    {
-        //        memoryStream.Write(byteArray, 0, byteArray.Length);
-        //        using (WordprocessingDocument doc = WordprocessingDocument.Open(memoryStream, true))
-        //        {
-        //            HtmlConverterSettings convSettings = new HtmlConverterSettings()
-        //            {
+            // string html = WordToHTMLSautin(path1);
 
-        //                FabricateCssClasses = true,
-        //                CssClassPrefix = "css-",
-        //                RestrictToSupportedLanguages = false,
-        //                RestrictToSupportedNumberingFormats = false,
-        //                ImageHandler = imageInfo =>
-        //                {
-        //                    //DirectoryInfo localDirInfo = new DirectoryInfo(imageDirectoryName);
-        //                    //if (!localDirInfo.Exists)
-        //                    //{
-        //                    //    localDirInfo.Create();
-        //                    //}
+            FileInfo fileInfo = new FileInfo(path1);
+            string imageDirectoryName = path1 + "_files";
+            DirectoryInfo localDirInfo = new DirectoryInfo(path1 + "_files");
+            if (!localDirInfo.Exists)
+            {
+                localDirInfo.Create();
+            }
 
-        //                    ++imageCounter;
-        //                    string extension = imageInfo.ContentType.Split('/')[1].ToLower();
-        //                    ImageFormat imageFormat = null;
-        //                    if (extension == "png")
-        //                    {
-        //                        extension = "jpeg";
-        //                        imageFormat = ImageFormat.Jpeg;
-        //                    }
-        //                    else if (extension == "bmp")
-        //                    {
-        //                        imageFormat = ImageFormat.Bmp;
-        //                    }
-        //                    else if (extension == "jpeg")
-        //                    {
-        //                        imageFormat = ImageFormat.Jpeg;
-        //                    }
-        //                    else if (extension == "tiff")
-        //                    {
-        //                        imageFormat = ImageFormat.Tiff;
-        //                    }
-        //                    else if (extension == "x-wmf")
-        //                    {
-        //                        extension = "wmf";
-        //                        imageFormat = ImageFormat.Wmf;
-        //                    }
 
-        //                    // If the image format is not one that you expect, ignore it,
-        //                    // and do not return markup for the link.
-        //                    if (imageFormat == null)
-        //                    {
-        //                        return null;
-        //                    }
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                memoryStream.Write(byteArray, 0, byteArray.Length);
+                using (WordprocessingDocument doc = WordprocessingDocument.Open(memoryStream, true))
+                {
+                    HtmlConverterSettings convSettings = new HtmlConverterSettings()
+                    {
 
-        //                    string imageFileName = imageDirectoryName + "/image" + imageCounter.ToString() + "." + extension;
+                        FabricateCssClasses = true,
+                        CssClassPrefix = "css-",
+                        RestrictToSupportedLanguages = false,
+                        RestrictToSupportedNumberingFormats = false,
+                        ImageHandler = imageInfo =>
+                        {
+                            //DirectoryInfo localDirInfo = new DirectoryInfo(imageDirectoryName);
+                            //if (!localDirInfo.Exists)
+                            //{
+                            //    localDirInfo.Create();
+                            //}
 
-        //                    try
-        //                    {
-        //                        imageInfo.Bitmap.Save(imageFileName, imageFormat);
-        //                    }
-        //                    catch (System.Runtime.InteropServices.ExternalException)
-        //                    {
-        //                        return null;
-        //                    }
+                            ++imageCounter;
+                            string extension = imageInfo.ContentType.Split('/')[1].ToLower();
+                            ImageFormat imageFormat = null;
+                            if (extension == "png")
+                            {
+                                extension = "jpeg";
+                                imageFormat = ImageFormat.Jpeg;
+                            }
+                            else if (extension == "bmp")
+                            {
+                                imageFormat = ImageFormat.Bmp;
+                            }
+                            else if (extension == "jpeg")
+                            {
+                                imageFormat = ImageFormat.Jpeg;
+                            }
+                            else if (extension == "tiff")
+                            {
+                                imageFormat = ImageFormat.Tiff;
+                            }
+                            else if (extension == "x-wmf")
+                            {
+                                extension = "wmf";
+                                imageFormat = ImageFormat.Wmf;
+                            }
 
-        //                    XElement img = new XElement(Xhtml.img, new XAttribute(NoNamespace.src, imageFileName),
-        //                        imageInfo.ImgStyleAttribute, imageInfo.AltText != null ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
-        //                    return img;
-        //                }
+                            // If the image format is not one that you expect, ignore it,
+                            // and do not return markup for the link.
+                            if (imageFormat == null)
+                            {
+                                return null;
+                            }
 
-        //            };
+                            string imageFileName = imageDirectoryName + "/image" + imageCounter.ToString() + "." + extension;
 
-        //            XElement html = OpenXmlPowerTools.HtmlConverter.ConvertToHtml(doc, convSettings);
-        //            string totaltext = html.ToStringNewLineOnAttributes();
-        //            // string totaltext = html;
-        //            totaltext = totaltext.Replace("</p>", "</p><div id=assigned_attributes class=sortable></div>");
-        //            // totaltext = totaltext.Replace("margin-top", "margin top");
-        //            //totaltext = totaltext.Replace("margin-bottom:", "margin bottom");
-        //            totaltext = totaltext.Replace("pt-DefaultParagraphFont", " ");
-        //            totaltext = totaltext.Replace("span { white - space: pre - wrap; }", " ");
-        //            totaltext = totaltext.Replace("span { white-space: pre-wrap; }", " ");
-        //            totaltext = totaltext.Replace("span {", "test {");
-        //            totaltext = totaltext.Replace("width: 0", "r");
+                            try
+                            {
+                                imageInfo.Bitmap.Save(imageFileName, imageFormat);
+                            }
+                            catch (System.Runtime.InteropServices.ExternalException)
+                            {
+                                return null;
+                            }
 
-        //            totaltext = totaltext.Replace(ConfigurationManager.AppSettings["FolderPath"].ToString(), ConfigurationManager.AppSettings["PublishName"].ToString());
+                            XElement img = new XElement(Xhtml.img, new XAttribute(NoNamespace.src, imageFileName),
+                                imageInfo.ImgStyleAttribute, imageInfo.AltText != null ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
+                            return img;
+                        }
 
-        //            return totaltext;
+                    };
 
-        //        }
-        //    }
-        //}
+                    XElement html = OpenXmlPowerTools.HtmlConverter.ConvertToHtml(doc, convSettings);
+                    string totaltext = html.ToStringNewLineOnAttributes();
+                    // string totaltext = html;
+                    totaltext = totaltext.Replace("</p>", "</p><div id=assigned_attributes class=sortable></div>");
+                    // totaltext = totaltext.Replace("margin-top", "margin top");
+                    //totaltext = totaltext.Replace("margin-bottom:", "margin bottom");
+                    totaltext = totaltext.Replace("pt-DefaultParagraphFont", " ");
+                    totaltext = totaltext.Replace("span { white - space: pre - wrap; }", " ");
+                    totaltext = totaltext.Replace("span { white-space: pre-wrap; }", " ");
+                    totaltext = totaltext.Replace("span {", "test {");
+                    totaltext = totaltext.Replace("width: 0", "r");
+
+                    totaltext = totaltext.Replace(ConfigurationManager.AppSettings["FolderPath"].ToString(), ConfigurationManager.AppSettings["PublishName"].ToString());
+
+                    return totaltext;
+
+                }
+            }
+        }
 
         //public string getWordContent(string filename)
         //{
@@ -5735,6 +5964,59 @@ namespace VirtualAdvocate.Controllers
 
             return docList;
         }
+
+        public void CreateLetterInWordUsingXML(string filepath, CustomerDetail objcustomer, string docList)
+        {
+            string totaltext = "";
+            try
+            {
+                string path1 = Path.Combine(Server.MapPath("~/Resources/coverletter.docx"));
+
+                byte[] byteArray = System.IO.File.ReadAllBytes(path1);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    memoryStream.Write(byteArray, 0, byteArray.Length);
+                    using (WordprocessingDocument doc = WordprocessingDocument.Open(memoryStream, true))
+                    {
+                        HtmlConverterSettings settings = new HtmlConverterSettings()
+                        {
+                        };
+
+                        XElement html = OpenXmlPowerTools.HtmlConverter.ConvertToHtml(doc, settings);
+
+                        totaltext = html.ToStringNewLineOnAttributes();
+
+                    }
+                }
+
+
+                string[] coverKeys = new string[] { "date", "NameandaddressofBank", "nameofBank", "CUSTOMERNAME", "DocumentNameList" };
+                string[] CustomerDetail = new string[5];// { "date", "Name and address of Bank", "name of Bank", "CUSTOMER NAME" };
+                CustomerDetail[0] = DateTime.Now.ToShortDateString();
+                CustomerDetail[1] = objcustomer.Address;
+                CustomerDetail[2] = objcustomer.BankName;
+                CustomerDetail[3] = objcustomer.CustomerName;
+                CustomerDetail[4] = docList;
+                int k = 0;
+                foreach (string tem in coverKeys)
+                {
+                    totaltext = totaltext.Replace("# " + tem + " #", CustomerDetail[k]);
+                    totaltext = totaltext.Replace("#" + tem + "#", CustomerDetail[k]);
+                    k++;
+                }
+
+                filepath = filepath.Replace(".docx", ".pdf");
+                CreateDocumentFromHiQpdf(totaltext, filepath);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogThisError(ex);
+            }
+
+        }
+
+
+
 
         public static void CoverLetterInWord(string filepath, CustomerDetail objcustomer, string docList)
         {
@@ -9841,6 +10123,131 @@ namespace VirtualAdvocate.Controllers
 
             }
         }
+
+        public void CreateSelecHtmlPdf(string html, string filePath)
+        {
+            string pdf_page_size = "A4";
+            int webPageWidth = 1024;
+            int webPageHeight = 0;
+            PdfPageSize pageSize = (PdfPageSize)Enum.Parse(typeof(PdfPageSize), pdf_page_size, true);
+            string pdf_orientation = "Portrait";
+            PdfPageOrientation pdfOrientation = (PdfPageOrientation)Enum.Parse(typeof(PdfPageOrientation), pdf_orientation, true);
+            // instantiate a html to pdf converter object
+            HtmlToPdf converter = new HtmlToPdf();
+            // set converter options
+            converter.Options.PdfPageSize = pageSize;
+            converter.Options.PdfPageOrientation = pdfOrientation;
+            converter.Options.WebPageWidth = webPageWidth;
+            converter.Options.WebPageHeight = webPageHeight;
+            converter.Options.MarginTop = converter.Options.MarginLeft = converter.Options.MarginRight = converter.Options.MarginBottom = 35;
+            // create a new pdf document converting an url
+            PdfDocument doc = converter.ConvertHtmlString(html, "");
+
+            // save pdf document
+            doc.Save(filePath);
+            // close pdf document
+            doc.Close();
+        }
+
+        public void CreateAsposeHtmlPdf(string html, string filePath)
+        {
+            // For complete examples and data files, please go to https://github.com/aspose-pdf/Aspose.PDF-for-.NET
+            // The path to the documents directory.
+            // Initialize HTMLLoadSave Options
+            Aspose.Words.HtmlLoadOptions options = new Aspose.Words.HtmlLoadOptions();
+            // Set Render to single page property
+            //options.IsRenderToSinglePage = true;
+            // Load document
+            Aspose.Words.Document pdfDocument = new Aspose.Words.Document(html, options);
+            // Save
+            pdfDocument.Save(filePath + "RenderContentToSamePage.pdf");
+        }
+
+        public void CreateHtmlToWordFromAPI(string html, string FilePath)
+        {
+            string baseUrl = "http://localhost:61469";
+            String attachApiPath = baseUrl + "/HtmlToWord";
+            string urlParameters = "?FilePath=" + FilePath + "&html=" + "";
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(attachApiPath);
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // List data response.
+            HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call!
+            if (response.IsSuccessStatusCode)
+            {
+                //// Parse the response body. Blocking!
+                //var dataObjects = response.Content.ReadAsAsync<IEnumerable<DataObject>>().Result;
+                //foreach (var d in dataObjects)
+                //{
+                //    Console.WriteLine("{0}", d.Name);
+                //}
+            }
+
+        }
+
+
+        public static void ConvertDocToHtml(object Sourcepath, object TargetPath)
+        {
+
+            Microsoft.Office.Interop.Word._Application newApp = new Microsoft.Office.Interop.Word.Application();
+            Microsoft.Office.Interop.Word.Documents d = newApp.Documents;
+            object Unknown = Type.Missing;
+            Word.Document od = d.Open(ref Sourcepath, ref Unknown,
+                                     ref Unknown, ref Unknown, ref Unknown,
+                                     ref Unknown, ref Unknown, ref Unknown,
+                                     ref Unknown, ref Unknown, ref Unknown,
+                                     ref Unknown, ref Unknown, ref Unknown, ref Unknown);
+            object format = Word.WdSaveFormat.wdFormatDocumentDefault;
+
+
+
+            newApp.ActiveDocument.SaveAs(ref TargetPath, ref format,
+                        ref Unknown, ref Unknown, ref Unknown,
+                        ref Unknown, ref Unknown, ref Unknown,
+                        ref Unknown, ref Unknown, ref Unknown,
+                        ref Unknown, ref Unknown, ref Unknown,
+                        ref Unknown, ref Unknown);
+
+            newApp.Documents.Close(Word.WdSaveOptions.wdDoNotSaveChanges);
+
+
+        }
+
+        //public void CreateHtmlToWordFrom(string html, string FilePath)
+        //{
+        //    using (MemoryStream generatedDocument = new MemoryStream())
+        //    {
+        //        using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+        //        {
+        //            MainDocumentPart mainPart = package.MainDocumentPart;
+        //            if (mainPart == null)
+        //            {
+        //                mainPart = package.AddMainDocumentPart();
+        //                new DocumentFormat.OpenXml.Wordprocessing.Document(new Body()).Save(mainPart);
+        //            }
+
+        //            HtmlConverter converter = new HtmlConverter(mainPart);
+        //            Body body = mainPart.Document.Body;
+
+        //            var paragraphs = converter.Parse(html);
+        //            for (int i = 0; i < paragraphs.Count; i++)
+        //            {
+        //                body.Append(paragraphs[i]);
+        //            }
+
+        //            mainPart.Document.Save();
+        //        }
+
+
+        //        System.IO.File.WriteAllBytes(FilePath, generatedDocument.ToArray());
+
+
+        //    }
 
         public static Byte[] PdfSharpConvert(String html)
         {

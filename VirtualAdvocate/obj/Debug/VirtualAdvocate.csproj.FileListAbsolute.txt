@@ -155,7 +155,7 @@ C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\obj
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.dll
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.pdb
 C:\Surya\Development\Code\Websites\VAE-main\web-95f05f003321\VirtualAdvocate\bin\ExcelDataReader.xml
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.CoreCompileInputs.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Pdf.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\csc.exe
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
@@ -168,6 +168,7 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\Sy
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\vbc.exe
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\VBCSCompiler.exe
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\roslyn\VBCSCompiler.exe.config
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\license.elic.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Microsoft.ApplicationInsights.Extensions.Intercept_x86.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Microsoft.ApplicationInsights.Extensions.Intercept_x64.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\VirtualAdvocate.dll.config
@@ -244,7 +245,6 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\PdfSharp.
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\PdfSharp.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Pulzonic.Multipartial.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\SautinSoft.PdfFocus.dll
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Select.HtmlToPdf.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Doc.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.IO.Packaging.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.Management.Automation.dll
@@ -257,7 +257,6 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.We
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.Web.WebPages.Razor.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\UseOffice.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\WebGrease.dll
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Pdf.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Microsoft.mshtml.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Aspose.Words.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\ClosedXML.xml
@@ -283,8 +282,8 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\NReco.Pdf
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\NUglify.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\PdfSharp.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\PdfSharp.Charting.xml
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Select.HtmlToPdf.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Doc.xml
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Pdf.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.Web.Helpers.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.Web.Mvc.xml
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\System.Web.Optimization.xml
@@ -306,9 +305,8 @@ C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\de\PdfSha
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\de\PdfSharp.Charting.resources.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\HiQPdf.dep
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\HiQPdf.rda
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.AssemblyReference.cache
+C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.CoreCompileInputs.cache
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.CopyComplete
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.dll
 C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.pdb
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\license.elic.xml
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\bin\Spire.Pdf.xml
-C:\Surya\Development\Code\Websites\VirtualAdvocate\VirtualAdvocate\obj\Debug\VirtualAdvocate.csproj.AssemblyReference.cache
